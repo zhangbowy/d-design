@@ -1,0 +1,15 @@
+**/.*
+examples/
+packages/
+node_modules/
+typings/
+sandbox/
+tests/
+utils/
+docs/
+index.html
+jest.config.js
+vite.config.ts
+vite-env.d.ts
+babel.config.js
+commitlint.config.cjs
