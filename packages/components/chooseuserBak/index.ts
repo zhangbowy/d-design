@@ -4,7 +4,7 @@ import { createApp } from 'vue';
 interface Options {
     visible?: boolean
 }
-export default function  ChooseUser(options: Options = {}) {
+export default function ChooseUser(options: Options = {}) {
     // 创建一个节点，并将组件挂载上去
     const mountNode = document.createElement('div')
     document.body.appendChild(mountNode)

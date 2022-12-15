@@ -1,0 +1,70 @@
+.period-overlay {}
+
+.period-card {
+    padding: 0 13px;
+    display: inline-block;
+    border: 1px solid @border;
+    border-radius: @button-radius;
+    cursor: pointer;
+    background-color: @white;
+    transition: border-color 0.5s ease-in;
+    line-height: 35px;
+    height: 35px;
+    min-width: 220px;
+    position: relative;
+
+    &:hover {
+        border-color: @primary-hover;
+    }
+
+    span:nth-child(2) {
+        color: #00000040;
+        right: 15px;
+        top: 17.5px;
+        position: absolute;
+        transform: translateY(-50%);
+    }
+}
+
+.period-pull {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 0;
+    min-width: 220px;
+
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb,
+        {
+        border-radius: 10px;
+        background-color: @border-fail;
+    }
+
+    li {
+        padding: 10px 10px;
+        cursor: pointer;
+        position: relative;
+
+        &:hover {
+            background-color: @border-bg;
+        }
+
+        &.active {
+            background-color: @primary-hover-thin;
+        }
+
+        .outlined {
+            color: @primary-click;
+            right: 10px;
+            top: 50%;
+            position: absolute;
+            transform: translateY(-50%);
+        }
+    }
+}

@@ -9,8 +9,6 @@
         :show-close="true"
         :title="props.title"
         width="720px"
-        @open="getDeptOrUsers"
-        @close="closeDialog"
     >
 <!--        <div class="choose-user-wrapper">-->
 <!--            <div class="choose-user-left">-->
