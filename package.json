@@ -3,12 +3,13 @@
   "version": "0.0.1",
   "description": "",
   "type": "module",
-  "main": "./dist/pu-ui.js",
-  "module": "./dist/pu-ui.js",
+  "main": "./dist/pu-ui.umd.js",
+  "module": "./dist/pu-ui.es.js",
   "types": "./dist/index.d.ts",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vue-tsc --noEmit && vite build",
     "test": "jest",
     "prepare": "husky install"
   },
