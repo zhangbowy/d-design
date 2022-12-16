@@ -4,7 +4,7 @@ import { toRefs, defineComponent, onMounted  } from 'vue';
 import { avatarProps, AvatarProps } from './type';
 
 export default defineComponent({
-    name: 'Avatar',
+    name: 'DaAvatar',
     components: { UserOutlined },
     props: avatarProps,
     setup(props: AvatarProps) {

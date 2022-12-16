@@ -1,178 +1,178 @@
-<template>
-    <a-model :visible="visible" :close-on-click-modal="true" :close-on-press-escape="true"
-        :custom-class="'choose-user-dialog'" :append-to-body="true" :destroy-on-close="true" :show-close="true"
-        :title="title" width="720px" @open="getDeptOrUsers" @close="closeDialog">
-        <div class="choose-user-wrapper">
-            <div class="choose-user-left">
-                <!-- 多选展示部门 -->
-                <template v-if="this.multiSelect">
-                    <div class="input-box">
-                        <input type="text" v-model="keyWord" class="" placeholder="搜索同事"
-                            @compositionstart="compositionstart" @compositionend="compositionend"
-                            @clear="cancelSearchShow" @keyup="throttle">
-                        <span class="iconfont qzz_icon_fill_chacha" v-if="keyWord"
-                            @click="cancelSearchShow"></span>
-                    </div>
-                    <div class="search-result" v-if="baseInfo.showSearchResultList && keyWord">
-                        <ul v-if="baseInfo.searchResultList.length > 0">
-                            <li class="user-type" :class="{ 'user-type-bg': item.isChecked }"
-                                v-for="(item, index) in searchResultList" :key="item" @click="searchAddOne(item)">
-                                <img v-if="item.avatar" class="user-img"
-                                    :src="returnImgUrl(item.avatar, '_60x60.jpg')" />
-                                <span v-else class="user-text">{{ getFirst(item.name) }}</span>
-                                <span class="name">{{ item.name }}<span
-                                        v-if="item.roster">({{ item.roster }})</span></span>
-                            </li>
-                        </ul>
-                        <div v-else class="search-result-empty">暂未搜索到相关人员</div>
-                    </div>
-                    <div class="choose-user-deps">
-                        <div class="choose-user-breadcrumb">
-                            <span class="breadcrumb-item breadcrumb-item-active"
-                                :class="{ 'breadcrumb-item-first': index == 0 }" v-for="(item, index) in breadCrumbList"
-                                :key="item" @click="updateBreadCrumb(item)">
-                                <span class="breadcrumb-item-inner">{{ item.name }}</span>
-                                <span class="breadcrumb-item-separator">/</span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="choose-user-cont">
-                        <template v-if="showCheckbox">
-                            <div class="select-all" @click="selectAll"
-                                v-if="baseInfo.userList?.depts?.length > 0 || baseInfo.userList?.users?.length > 0">
-                                <span v-if="!isSelectAll" class="iconfont qzz_icon_checkbox-weixuan"></span>
-                                <span v-if="isSelectAll" class="iconfont qzz_icon_checkbox-checked1"></span>
-                                <span class="text">全选</span>
-                            </div>
-                        </template>
-                        <ul class="choose-user-list" v-loading="loading"
-                            v-if="baseInfo.userList?.depts?.length > 0 || baseInfo.userList?.users?.length > 0">
-                            <li class="dep-type" :class="{ 'dep-type-selected': i.isChecked }"
-                                v-for="(i, index) in userList.depts" :key="i" @click="selectOne(i, 'dept')">
-                                <template v-if="showCheckbox">
-                                    <span v-if="!i.isChecked"
-                                        class="checkbox iconfont qzz_icon_checkbox-weixuan"></span>
-                                    <span v-if="i.isChecked"
-                                        class="checkbox iconfont qzz_icon_checkbox-checked1"></span>
-                                </template>
-                                <span class="name" :title="i.name">{{ formatText(i.name) }}（{{ i.cnt }}人）</span>
-                                <span class="expand-btn" @click.stop="expandNext(i)">
-                                    <span class="text">下一级</span>
-                                    <span class="iconfont qzz_icon_fill_right"></span>
-                                </span>
-                            </li>
-                            <li class="user-type" v-for="(o, index) in userList.users" :key="o"
-                                @click="selectOne(o, 'user')">
-                                <span v-if="!o.isChecked" class="checkbox iconfont qzz_icon_checkbox-weixuan"></span>
-                                <span v-if="o.isChecked" class="checkbox iconfont qzz_icon_checkbox-checked1"></span>
-                                <img v-if="o.avatar" class="user-img" :src="returnImgUrl(o.avatar, '_60x60.jpg')" />
-                                <span v-else="" class="user-text">{{ getFirst(o.name) }}</span>
-                                <span class="name">{{ o.name }}<span v-if="o.roster">({{ o.roster }})</span></span>
-                            </li>
-                        </ul>
-                        <el-empty v-else description="该部门暂无员工"></el-empty>
-                    </div>
-                </template>
-                <!-- 单选只展示搜索框 -->
-                <template v-else>
-                    <div class="input-box">
-                        <input type="text" v-model="keyWord" class="" placeholder="搜索同事"
-                            @compositionstart="compositionstart" @compositionend="compositionend"
-                            @clear="cancelSearchShow" @keyup="throttle">
-                        <span class="iconfont qzz_icon_fill_chacha" v-if="keyWord"
-                            @click="keyWord = ''"></span>
-                    </div>
-                    <div class="search-result search-result-static" v-if="baseInfo.showSearchResultList">
-                        <ul v-if="baseInfo.searchResultList.length > 0">
-                            <li class="user-type" :class="{ 'user-type-bg': item.isChecked }"
-                                v-for="(item, index) in searchResultList" :key="item" @click="addOneUser(item)">
-                                <img v-if="item.avatar" class="user-img"
-                                    :src="returnImgUrl(item.avatar, '_60x60.jpg')" />
-                                <span v-else="" class="user-text">{{ getFirst(item.name) }}</span>
-                                <span class="name">{{ item.name }}<span
-                                        v-if="item.roster">({{ item.roster }})</span></span>
-                            </li>
-                        </ul>
-                        <el-empty v-else description="暂无数据"></el-empty>
-                    </div>
-                </template>
-            </div>
-            <div class="choose-user-right">
-                <div class="choose-user-selected">
-                    <template v-for="(k, index) in selectList" :key="k.id">
-                        <span class="selected-box">
-                            <span class="text">
-                                {{ k.name }}<template v-if="k.type == 'dept'">({{ k.cnt }})</template>
-                            </span>
-                            <span class="iconfont qzz_icon_line_close" @click="delSelected(k)"></span>
-                        </span>
-                    </template>
-                </div>
-                <div class="choose-user-btns">
-                    <span class="common-btn cancel-btn" @click="closeDialog">取消</span>
-                    <span class="common-btn sure-btn" v-if="selectList.length > 0" @click="saveUsers">确定</span>
-                    <span class="common-btn sure-btn disabled-btn" v-else>确定</span>
-                </div>
-            </div>
-        </div>
-    </a-model>
-</template>
-<script setup lang="ts">
-import { AModal } from 'ant-design-vue'
-import { ref, reactive, onMounted } from 'vue'
-import {
-    SEARCH_USER,
-    SEARCH_ZONE_USER,
-    GET_DEPT_INFO,
-    GET_USERIDS,
-} from '../api'
-const $emit = defineEmits(["updateUserIds", "close"])
-let IS_INPUT_CH = false;
-let G_TIME = null;
-const props = defineProps({
-    visible: {
-        type: Boolean,
-        required: true
-    },
-    filterSelf: {
-        type: Boolean,
-        default: false
-    },
-    searchAllZone: {
-        type: Boolean,
-        default: false
-    },
-    multiSelect: {
-        type: Boolean,
-        default: true
-    },
-    showCheckbox: {
-        type: Boolean,
-        default: true
-    },
-    title: {
-        type: String,
-        default: "请选择人员"
-    },
-    selectedUsers: {
-        type: Array,
-        default() {
-            return []
-        }
-    },
-    corpId: {
-        type: String,
-        default: ""
-    },
-    appId: {
-        type: String,
-        default: ""
-    },
-    userId: { // 当前用户的UserID
-        type: String,
-        default: ""
-    }
-})
+<!--<template>-->
+<!--    <a-model :visible="visible" :close-on-click-modal="true" :close-on-press-escape="true"-->
+<!--        :custom-class="'choose-user-dialog'" :append-to-body="true" :destroy-on-close="true" :show-close="true"-->
+<!--        :title="title" width="720px" @open="getDeptOrUsers" @close="closeDialog">-->
+<!--        <div class="choose-user-wrapper">-->
+<!--            <div class="choose-user-left">-->
+<!--                &lt;!&ndash; 多选展示部门 &ndash;&gt;-->
+<!--                <template v-if="this.multiSelect">-->
+<!--                    <div class="input-box">-->
+<!--                        <input type="text" v-model="keyWord" class="" placeholder="搜索同事"-->
+<!--                            @compositionstart="compositionstart" @compositionend="compositionend"-->
+<!--                            @clear="cancelSearchShow" @keyup="throttle">-->
+<!--                        <span class="iconfont qzz_icon_fill_chacha" v-if="keyWord"-->
+<!--                            @click="cancelSearchShow"></span>-->
+<!--                    </div>-->
+<!--                    <div class="search-result" v-if="baseInfo.showSearchResultList && keyWord">-->
+<!--                        <ul v-if="baseInfo.searchResultList.length > 0">-->
+<!--                            <li class="user-type" :class="{ 'user-type-bg': item.isChecked }"-->
+<!--                                v-for="(item, index) in searchResultList" :key="item" @click="searchAddOne(item)">-->
+<!--                                <img v-if="item.avatar" class="user-img"-->
+<!--                                    :src="returnImgUrl(item.avatar, '_60x60.jpg')" />-->
+<!--                                <span v-else class="user-text">{{ getFirst(item.name) }}</span>-->
+<!--                                <span class="name">{{ item.name }}<span-->
+<!--                                        v-if="item.roster">({{ item.roster }})</span></span>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                        <div v-else class="search-result-empty">暂未搜索到相关人员</div>-->
+<!--                    </div>-->
+<!--                    <div class="choose-user-deps">-->
+<!--                        <div class="choose-user-breadcrumb">-->
+<!--                            <span class="breadcrumb-item breadcrumb-item-active"-->
+<!--                                :class="{ 'breadcrumb-item-first': index == 0 }" v-for="(item, index) in breadCrumbList"-->
+<!--                                :key="item" @click="updateBreadCrumb(item)">-->
+<!--                                <span class="breadcrumb-item-inner">{{ item.name }}</span>-->
+<!--                                <span class="breadcrumb-item-separator">/</span>-->
+<!--                            </span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="choose-user-cont">-->
+<!--                        <template v-if="showCheckbox">-->
+<!--                            <div class="select-all" @click="selectAll"-->
+<!--                                v-if="baseInfo.userList?.depts?.length > 0 || baseInfo.userList?.users?.length > 0">-->
+<!--                                <span v-if="!isSelectAll" class="iconfont qzz_icon_checkbox-weixuan"></span>-->
+<!--                                <span v-if="isSelectAll" class="iconfont qzz_icon_checkbox-checked1"></span>-->
+<!--                                <span class="text">全选</span>-->
+<!--                            </div>-->
+<!--                        </template>-->
+<!--                        <ul class="choose-user-list" v-loading="loading"-->
+<!--                            v-if="baseInfo.userList?.depts?.length > 0 || baseInfo.userList?.users?.length > 0">-->
+<!--                            <li class="dep-type" :class="{ 'dep-type-selected': i.isChecked }"-->
+<!--                                v-for="(i, index) in userList.depts" :key="i" @click="selectOne(i, 'dept')">-->
+<!--                                <template v-if="showCheckbox">-->
+<!--                                    <span v-if="!i.isChecked"-->
+<!--                                        class="checkbox iconfont qzz_icon_checkbox-weixuan"></span>-->
+<!--                                    <span v-if="i.isChecked"-->
+<!--                                        class="checkbox iconfont qzz_icon_checkbox-checked1"></span>-->
+<!--                                </template>-->
+<!--                                <span class="name" :title="i.name">{{ formatText(i.name) }}（{{ i.cnt }}人）</span>-->
+<!--                                <span class="expand-btn" @click.stop="expandNext(i)">-->
+<!--                                    <span class="text">下一级</span>-->
+<!--                                    <span class="iconfont qzz_icon_fill_right"></span>-->
+<!--                                </span>-->
+<!--                            </li>-->
+<!--                            <li class="user-type" v-for="(o, index) in userList.users" :key="o"-->
+<!--                                @click="selectOne(o, 'user')">-->
+<!--                                <span v-if="!o.isChecked" class="checkbox iconfont qzz_icon_checkbox-weixuan"></span>-->
+<!--                                <span v-if="o.isChecked" class="checkbox iconfont qzz_icon_checkbox-checked1"></span>-->
+<!--                                <img v-if="o.avatar" class="user-img" :src="returnImgUrl(o.avatar, '_60x60.jpg')" />-->
+<!--                                <span v-else="" class="user-text">{{ getFirst(o.name) }}</span>-->
+<!--                                <span class="name">{{ o.name }}<span v-if="o.roster">({{ o.roster }})</span></span>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                        <el-empty v-else description="该部门暂无员工"></el-empty>-->
+<!--                    </div>-->
+<!--                </template>-->
+<!--                &lt;!&ndash; 单选只展示搜索框 &ndash;&gt;-->
+<!--                <template v-else>-->
+<!--                    <div class="input-box">-->
+<!--                        <input type="text" v-model="keyWord" class="" placeholder="搜索同事"-->
+<!--                            @compositionstart="compositionstart" @compositionend="compositionend"-->
+<!--                            @clear="cancelSearchShow" @keyup="throttle">-->
+<!--                        <span class="iconfont qzz_icon_fill_chacha" v-if="keyWord"-->
+<!--                            @click="keyWord = ''"></span>-->
+<!--                    </div>-->
+<!--                    <div class="search-result search-result-static" v-if="baseInfo.showSearchResultList">-->
+<!--                        <ul v-if="baseInfo.searchResultList.length > 0">-->
+<!--                            <li class="user-type" :class="{ 'user-type-bg': item.isChecked }"-->
+<!--                                v-for="(item, index) in searchResultList" :key="item" @click="addOneUser(item)">-->
+<!--                                <img v-if="item.avatar" class="user-img"-->
+<!--                                    :src="returnImgUrl(item.avatar, '_60x60.jpg')" />-->
+<!--                                <span v-else="" class="user-text">{{ getFirst(item.name) }}</span>-->
+<!--                                <span class="name">{{ item.name }}<span-->
+<!--                                        v-if="item.roster">({{ item.roster }})</span></span>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                        <el-empty v-else description="暂无数据"></el-empty>-->
+<!--                    </div>-->
+<!--                </template>-->
+<!--            </div>-->
+<!--            <div class="choose-user-right">-->
+<!--                <div class="choose-user-selected">-->
+<!--                    <template v-for="(k, index) in selectList" :key="k.id">-->
+<!--                        <span class="selected-box">-->
+<!--                            <span class="text">-->
+<!--                                {{ k.name }}<template v-if="k.type == 'dept'">({{ k.cnt }})</template>-->
+<!--                            </span>-->
+<!--                            <span class="iconfont qzz_icon_line_close" @click="delSelected(k)"></span>-->
+<!--                        </span>-->
+<!--                    </template>-->
+<!--                </div>-->
+<!--                <div class="choose-user-btns">-->
+<!--                    <span class="common-btn cancel-btn" @click="closeDialog">取消</span>-->
+<!--                    <span class="common-btn sure-btn" v-if="selectList.length > 0" @click="saveUsers">确定</span>-->
+<!--                    <span class="common-btn sure-btn disabled-btn" v-else>确定</span>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </a-model>-->
+<!--</template>-->
+<!--<script setup lang="ts">-->
+<!--import { AModal } from 'ant-design-vue'-->
+<!--import { ref, reactive, onMounted } from 'vue'-->
+<!--import {-->
+<!--    SEARCH_USER,-->
+<!--    SEARCH_ZONE_USER,-->
+<!--    GET_DEPT_INFO,-->
+<!--    GET_USERIDS,-->
+<!--} from '../api'-->
+<!--const $emit = defineEmits(["updateUserIds", "close"])-->
+<!--let IS_INPUT_CH = false;-->
+<!--let G_TIME = null;-->
+<!--const props = defineProps({-->
+<!--    visible: {-->
+<!--        type: Boolean,-->
+<!--        required: true-->
+<!--    },-->
+<!--    filterSelf: {-->
+<!--        type: Boolean,-->
+<!--        default: false-->
+<!--    },-->
+<!--    searchAllZone: {-->
+<!--        type: Boolean,-->
+<!--        default: false-->
+<!--    },-->
+<!--    multiSelect: {-->
+<!--        type: Boolean,-->
+<!--        default: true-->
+<!--    },-->
+<!--    showCheckbox: {-->
+<!--        type: Boolean,-->
+<!--        default: true-->
+<!--    },-->
+<!--    title: {-->
+<!--        type: String,-->
+<!--        default: "请选择人员"-->
+<!--    },-->
+<!--    selectedUsers: {-->
+<!--        type: Array,-->
+<!--        default() {-->
+<!--            return []-->
+<!--        }-->
+<!--    },-->
+<!--    corpId: {-->
+<!--        type: String,-->
+<!--        default: ""-->
+<!--    },-->
+<!--    appId: {-->
+<!--        type: String,-->
+<!--        default: ""-->
+<!--    },-->
+<!--    userId: { // 当前用户的UserID-->
+<!--        type: String,-->
+<!--        default: ""-->
+<!--    }-->
+<!--})-->
 
 <!--const keyWord = ref('') // 搜索关键字-->
 <!--const deptName = ref('') //1级部门名称-->
