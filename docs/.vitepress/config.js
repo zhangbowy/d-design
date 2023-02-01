@@ -23,7 +23,7 @@ export default defineConfig({
             },
             {
                 text: '组件',
-                link: '/components/',
+                link: '/guide',
             },
             {
                 text: '资源',
@@ -31,7 +31,7 @@ export default defineConfig({
             },
             {
                 text: 'GitHub',
-                link: 'https://github.com/lxKylin/vitepressdemo',
+                link: 'https://github.com/zhangbowy',
             },
         ],
         sidebar: sidebarComponent()
@@ -46,10 +46,14 @@ export default defineConfig({
 function sidebarComponent() {
     return [
         {
+            items: [
+                { text: 'Getting Started', link: '/guide' },
+            ]
+        },
+        {
             text: '组件列表',
             items: [
                 { text: 'avatar', link: '/components/avatar/index' },
-                { text: 'Getting Started', link: '/getting-started' },
             ]
         }
     ]
