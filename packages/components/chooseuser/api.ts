@@ -1,4 +1,4 @@
-import http from '../../../utils/http'
+import http from '@/api/http'
 /***根据输入搜索人员****/
 export const SEARCH_USER = (params: any) => {
     return http('/api/member/user/aggr/fuzzy', { method: 'get', params });
