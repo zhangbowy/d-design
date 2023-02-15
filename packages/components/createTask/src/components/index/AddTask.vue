@@ -293,7 +293,7 @@ const cycleList = ref([
 
 const taskFrom = reactive({
     content: "",
-    createUser: {},
+    createUser: curUser,
     principalUser: {},
     abortTime: "",
     remindType: [],
@@ -591,6 +591,7 @@ const handleCreateTask = async () => {
     taskFrom.accessory.ossAccessoryList.forEach((el) => {
         el.ossId = el.ossMaterialId;
     });
+    console.log(taskFrom);
     const { code, data } = await CREATE_TASK({
         content: taskFrom.content,
         createUser: taskFrom.createUser,

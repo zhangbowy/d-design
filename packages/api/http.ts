@@ -10,7 +10,7 @@ export interface ResData<T> {
 }
 
 // baseURL
-const BASE_URL = '/api';
+const BASE_URL = '';
 
 const instance = axios.create({
     baseURL: BASE_URL,
