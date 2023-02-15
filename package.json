@@ -20,7 +20,10 @@
   "license": "ISC",
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",
-    "dayjs": "^1.10.8"
+    "dayjs": "^1.10.8",
+    "mitt": "^3.0.0",
+    "ali-oss": "^6.17.1",
+    "dingtalk-jsapi": "^3.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.5",

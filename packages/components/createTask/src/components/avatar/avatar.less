@@ -1,0 +1,119 @@
+.avatar-main {
+    display: flex;
+    align-items: center;
+    .avatar-box {
+        height: 20px;
+        line-height: 20px;
+        width: 20px;
+        min-width: 20px;
+        border-radius: 50%;
+        text-align: center;
+        img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+        span {
+            font-size: 12px;
+            color: #ffffff;
+        }
+    }
+    .avatar-user-name {
+        font-size: 14px;
+        margin-left: 8px;
+        color: #1d2129;
+        font-weight: 400;
+    }
+}
+
+.avatar-group {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    line-height: 38px;
+    border-radius: 4px;
+    display: flex;
+    overflow: hidden;
+    background-color: #e4e4e4;
+    .one-avatar {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+            width: 38px;
+            height: 38px;
+        }
+        span {
+            font-size: 14px;
+            color: #ffffff;
+        }
+    }
+    .more-avatar {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        line-height: 38px;
+        display: flex;
+        flex-wrap: wrap;
+        text-align: center;
+        align-items: center;
+        .avatar-block {
+            width: 18px;
+            height: 18px;
+            line-height: 18px;
+            min-width: 18px;
+            min-height: 18px;
+            &:nth-child(odd) {
+                margin: 0 2px 2px 0;
+            }
+            &:nth-child(3n) {
+                margin: 0 2px 0 0;
+            }
+            &:nth-child(2) {
+                margin: 0 0 2px 0;
+            }
+            img {
+                width: 18px;
+                height: 18px;
+            }
+            span {
+                font-size: 12px;
+                color: #ffffff;
+            }
+        }
+        .avatar-nine-block {
+            width: 12px;
+            height: 12px;
+            line-height: 12px;
+            min-width: 12px;
+            margin: 0 1px 1px 0;
+            &:nth-child(3n) {
+                margin: 0 0 1px 0;
+            }
+            &:nth-child(7) {
+                margin: 0 1px 0 0;
+            }
+            &:nth-child(8) {
+                margin: 0 1px 0 0;
+            }
+            &:nth-child(9) {
+                margin: 0 1px 0 0;
+            }
+            img {
+                width: 12px;
+                height: 12px;
+            }
+            span {
+                font-size: 12px;
+                zoom: 0.7;
+                color: #ffffff;
+            }
+        }
+    }
+}
+
+.avatar-bgc {
+    background-color: #0089ff;
+}

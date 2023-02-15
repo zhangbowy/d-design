@@ -36,9 +36,9 @@ export default defineComponent({
     </div>
 </template>
 <style lang="less">
-@primary-color: #2B85FF;
+#3073ff: #2B85FF;
 .kpi-avatar {
-    background-color: @primary-color!important;
+    background-color: #3073ff!important;
     //color: #f5f5f5 !important;
     .ant-avatar-string {
         color: #f5f5f5 !important;

@@ -1,0 +1,624 @@
+.add-task-drawer {
+    .ant-drawer-content-wrapper {
+        .ant-drawer-content {
+            .ant-drawer-wrapper-body {
+                .ant-drawer-header {
+                    .ant-drawer-header-title {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        flex-direction: row-reverse;
+
+                        .ant-drawer-close {
+                            margin-left: auto;
+                            margin-right: 0;
+                        }
+
+                        .ant-drawer-title {
+                            color: #1d2129;
+                            font-size: 18px;
+                            font-weight: 500;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .public-title {
+        font-weight: 400;
+        font-size: 14px;
+        color: #86909c;
+        white-space: nowrap;
+    }
+
+    .delete-icon {
+        margin-left: 12px;
+        cursor: pointer;
+    }
+
+    .public-box {
+        height: 28px;
+        border-radius: 16px;
+        padding: 0 12px;
+        border: 1px solid #e5e6eb;
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        cursor: pointer;
+
+        &:hover {
+            border: 1px solid #037AFE;
+        }
+
+        .empty-text {
+            font-weight: 400;
+            font-size: 14px;
+            color: #c9cdd4;
+        }
+
+        .right-icon {
+            color: #4e5969;
+            margin-left: 12px;
+            margin-left: auto;
+        }
+    }
+
+    .content-box {
+        border-radius: 4px;
+        border: 1px solid #d9d9d9;
+
+        .ant-input:focus,
+        .ant-input-focused {
+            box-shadow: none;
+        }
+
+        .ant-input {
+            border: none;
+        }
+
+        .upload-box {
+            padding: 0 11px;
+            display: flex;
+            align-items: flex-end;
+
+            .file-box {
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+
+                .file-list {
+                    height: 32px;
+                    max-width: 188px;
+                    padding: 0 4px;
+                    border-radius: 4px;
+                    margin: 0 8px 8px 0;
+                    display: flex;
+                    align-items: center;
+                    background-color: #F2F3F5;
+                    cursor: pointer;
+
+                    .file-img,
+                    .file-img-not_img {
+                        height: 24px;
+                        width: 24px;
+                        min-width: 24px;
+                    }
+
+                    .file-name {
+                        margin: 0 8px 0 4px;
+                        color: #1D2129;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                    }
+
+                    .delete-file-icon {
+                        margin-left: auto;
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            .upload-icon {
+                margin-left: auto;
+                cursor: pointer;
+
+                .ant-upload {
+                    margin-bottom: 8px;
+                    display: flex;
+                    align-items: center;
+                }
+            }
+        }
+    }
+
+    .add-creator {
+        margin-top: 24px;
+        display: flex;
+        align-items: center;
+
+        .public-box {
+            margin-left: 62px;
+        }
+    }
+
+    .add-principal {
+        .add-creator;
+        margin-top: 12px;
+    }
+
+    .add-deadline {
+        .add-creator;
+        margin: 12px 0 12px 0;
+
+        .deadline-box {
+            margin-left: 20px;
+            border: none;
+            padding: 0;
+
+            .ant-picker {
+                height: 28px;
+                padding: 0 12px;
+                border-radius: 16px;
+                border: 1px solid #e5e6eb;
+
+                &:hover {
+                    border: 1px solid #3073ff;
+                }
+
+                .ant-picker-input {
+                    input::placeholder {
+                        font-weight: 400;
+                        font-size: 14px;
+                        color: #c9cdd4;
+                    }
+
+                    input:focus {
+                        outline: none;
+                        border: none;
+                        box-shadow: none;
+                    }
+                }
+
+                .right-icon {
+                    margin: 0;
+                    color: #4e5969;
+                }
+            }
+
+            .ant-picker-focused {
+                box-shadow: none;
+            }
+        }
+    }
+
+    .add-remind-btn {
+        width: 28px;
+        height: 28px;
+        min-width: 28px;
+        margin-right: 8px;
+        border-radius: 4px;
+        border: 1px solid #e5e6eb;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+
+        &:hover {
+            border: 1px solid #3073ff;
+        }
+
+        .add-icon {
+            font-size: 10px;
+            color: #4e5969;
+        }
+    }
+
+    .add-remind {
+        padding: 12px;
+        margin: 12px 0 20px 104px;
+        border-radius: 4px;
+        background-color: #f7f8fa;
+        box-sizing: border-box;
+
+        .remind-icon {
+            font-size: 12px;
+            margin-right: 8px;
+            color: #4e5969;
+        }
+
+        .remind-box {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+
+            .remind-icon {
+                margin-top: 8px;
+            }
+
+            .remind-text {
+                font-size: 12px;
+                font-weight: 400;
+                margin: 4px 24px 0 0;
+                color: #1d2129;
+                white-space: nowrap;
+            }
+
+            .custom-list {
+                display: flex;
+                flex-wrap: wrap;
+
+                .custom-box {
+                    height: 28px;
+                    border-radius: 4px;
+                    padding: 0 6px;
+                    margin: 0 8px 6px 0;
+                    display: flex;
+                    align-items: center;
+                    box-sizing: border-box;
+                    border: 1px solid #e5e6eb;
+
+                    span {
+                        font-size: 12px;
+                        font-weight: 400;
+                        margin-right: 8px;
+                        color: #1d2129;
+                        user-select: none;
+                    }
+
+                    .close-icon {
+                        font-size: 10px;
+                        cursor: pointer;
+                    }
+                }
+
+                .add-remind-btn {
+                    background-color: #f2f3f5;
+                }
+            }
+
+            .ant-select {
+                opacity: 0;
+                width: 28px;
+                height: 28px;
+                min-width: 28px;
+                box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.1);
+                position: absolute;
+                opacity: 0;
+
+                .ant-select-selector {
+                    width: 28px;
+                    height: 28px;
+                    min-width: 28px;
+                    padding: 0;
+                    border-radius: 4px;
+                    background-color: #f2f3f5;
+                    border: 1px solid #e5e6eb;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+
+                    &:hover {
+                        border: 1px solid #3073ff;
+                    }
+
+                    .ant-select-selection-overflow-item {
+                        opacity: 0;
+                        position: absolute;
+                        cursor: pointer;
+
+                        .ant-select-selection-item {
+                            cursor: pointer;
+                        }
+                    }
+
+                    .ant-select-selection-placeholder {
+                        font-size: 14px;
+                        color: #4e5969;
+                        width: 28px;
+                        height: 28px;
+                        top: 1px;
+                        left: -1px;
+                        right: 0;
+                        text-align: center;
+                        vertical-align: middle;
+                        position: absolute;
+                        transform: none;
+                    }
+
+                    .ant-select-selection-item-remove {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        .schedule-box {
+            display: flex;
+            align-items: center;
+
+            span {
+                font-weight: 400;
+                font-size: 12px;
+                margin-right: 24px;
+                color: #1d2129;
+            }
+        }
+
+        .cycle-box {
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            position: relative;
+
+            .cycle-title {
+                font-weight: 400;
+                font-size: 12px;
+                margin-right: 24px;
+                color: #1d2129;
+            }
+
+            .ant-select {
+                box-sizing: border-box;
+
+                &:hover {
+                    .ant-select-selector {
+                        border: 1px solid #037AFE;
+                    }
+                }
+
+                .ant-select-selector {
+                    height: 28px;
+                    border-radius: 16px;
+                    align-items: center;
+                    background-color: #f7f8fa;
+
+                    .ant-select-selection-item {
+                        color: #4e5969;
+                    }
+                }
+            }
+
+            .cycle-custom-box {
+                width: 237px;
+                height: 64px;
+                padding: 0 16px;
+                bottom: -70px;
+                left: 92px;
+                border-radius: 4px;
+                z-index: 9999;
+                box-shadow: 0px 12px 32px 0px rgba(38, 38, 38, 0.16);
+                box-sizing: border-box;
+                background-color: #fff;
+                position: absolute;
+                display: flex;
+                align-items: center;
+
+                .ant-btn {
+                    margin-left: 12px;
+                }
+            }
+        }
+    }
+
+    .add-exc {
+        display: flex;
+
+        .exc-list {
+            margin-left: 62px;
+
+            .exc-box {
+                margin-bottom: 8px;
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+
+                .exc-main {
+                    width: 302px;
+                    padding: 11px 12px;
+                    border-radius: 4px;
+                    border: 1px solid #e5e6eb;
+                    box-sizing: border-box;
+                    display: flex;
+
+                    .avatar {
+                        width: 38px;
+                        height: 38px;
+                        min-width: 38px;
+                        background-color: pink;
+                    }
+
+                    .main-right {
+                        width: 100%;
+                        margin-left: 8px;
+
+                        .user-name {
+                            width: 100%;
+                            font-size: 14px;
+                            font-weight: 400;
+                            color: #4e5969;
+                            display: flex;
+                            align-items: center;
+
+                            .arrow-icon {
+                                margin-left: auto;
+                            }
+
+                            .name-list {
+                                overflow: hidden;
+                                white-space: normal;
+                                word-break: break-all;
+                                text-overflow: ellipsis;
+                                display: -webkit-box;
+                                -webkit-line-clamp: 1;
+                                -webkit-box-orient: vertical;
+                            }
+
+                            .name-length {
+                                white-space: nowrap;
+                            }
+                        }
+
+                        .task-data {
+                            font-size: 12px;
+                            font-weight: 400;
+                            color: #86909c;
+                            overflow: hidden;
+                            white-space: normal;
+                            word-break: break-all;
+                            text-overflow: ellipsis;
+                            display: -webkit-box;
+                            -webkit-line-clamp: 1;
+                            -webkit-box-orient: vertical;
+
+                            .deadline-time {
+                                margin-right: 8px;
+                            }
+                        }
+                    }
+                }
+
+                .exc-delete {
+                    margin-left: 10px;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    .add-correlation {
+        margin-top: 12px;
+        display: flex;
+        align-items: center;
+
+        .add-cor-btn {
+            font-size: 12px;
+            margin-left: 62px;
+            height: 32px;
+            width: 101px;
+            border-radius: 4px;
+            color: #262626;
+            box-sizing: border-box;
+            border: 1px dashed #e5e6eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+
+            &:hover {
+                color: #037AFE;
+                border-color: #037AFE;
+            }
+
+            iconpark-icon {
+                margin-right: 3px;
+            }
+        }
+    }
+
+    .add-footer {
+        display: flex;
+        justify-content: space-between;
+
+        .cancel-btn {
+            width: 110px;
+            height: 36px;
+            margin-right: 12px;
+            border-radius: 4px;
+            background-color: #f2f3f5;
+        }
+
+        .sure-btn {
+            width: 100%;
+            height: 36px;
+            border-radius: 4px;
+        }
+    }
+}
+
+.remind-option {
+    width: 250px;
+}
+
+.cycle-option {
+    width: 200px;
+}
+
+.cycle-custom-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #037AFE;
+    cursor: pointer;
+}
+
+.theme-default .remind-option.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+    background-color: transparent;
+}
+
+.custom-option {
+    padding: 0;
+    position: relative;
+    user-select: none;
+
+    .ant-select-item-option-content {
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+
+        .custom-time {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            border-top: 1px solid #E9E9E9;
+
+            .custom-btn {
+                color: #037AFE;
+                user-select: none;
+            }
+        }
+    }
+
+    .ant-select-item-option-state {
+        display: none;
+    }
+
+    .ant-picker {
+        opacity: 0;
+        top: 0;
+        left: 0;
+        width: 250px;
+        height: 100%;
+        position: absolute;
+
+        .ant-picker-input {
+            cursor: pointer;
+
+            input {
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+.custom-option.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+    font-weight: 500;
+    color: #037AFE;
+}
+
+.theme-default .custom-option.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+    background-color: transparent;
+}
+
+.custom-option.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+    background-color: transparent;
+}
+
+.remind-option.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+    background-color: #f5f5f5;
+}
