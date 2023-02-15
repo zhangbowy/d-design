@@ -1,6 +1,6 @@
-import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
-import {message} from "ant-design-vue";
-import {getToken} from "./auth";
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { message } from "ant-design-vue";
+import { getToken } from "@/utils/utils";
 
 // 接口返回 形状
 export interface ResData<T> {
@@ -94,7 +94,7 @@ const request = <T = any>(
  * @param options
  */
 export function get<T = any>(config: AxiosRequestConfig, options?: AxiosRequestConfig): Promise<T> {
-    return request({...config, method: 'GET'}, options);
+    return request({ ...config, method: 'GET' }, options);
 }
 
 /**
@@ -106,8 +106,8 @@ export function post<T = any>(
     config: AxiosRequestConfig,
     options?: AxiosRequestConfig,
 ): Promise<T> {
-    return request({...config, method: 'POST'}, options);
+    return request({ ...config, method: 'POST' }, options);
 }
 
 export default request;
-export type {AxiosInstance, AxiosResponse};
+export type { AxiosInstance, AxiosResponse };

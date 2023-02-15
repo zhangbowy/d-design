@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<a-table :columns="columns" :data-source="data" :scroll="{y: 240}">
+		<a-table :columns="columns" :data-source="tableData" :scroll="{y: 240}">
 			<template #bodyCell="{column, record}">
 				<template v-if="column.key === 'status'">
 					<span>{{ PROJECT_STATUS[record.status] }}</span>
@@ -11,9 +11,11 @@
 </template>
 
 <script setup lang='ts'>
-import {debounce} from '@/utils';
+import {debounce} from '@/utils/utils';
 import {onMounted, ref, watch} from 'vue';
 import {PROJECT_STATUS} from '../../enum';
+import {GET_PROJECT} from '@/api/api';
+
 const columns = [
 	{
 		title: '项目名称',
@@ -52,7 +54,7 @@ const getProjectList = async () => {
 		ownerId: '',
 		projectName: projectName.value,
 	};
-	// const res = await GET_PROJECT(params);
+	const res = await GET_PROJECT(params);
 	// if (res.code == 1) {
 	// 	tableData.value = res.data;
 	// 	loading.value = false;
