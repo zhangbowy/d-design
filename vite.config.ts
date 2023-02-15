@@ -9,8 +9,9 @@ export default defineConfig({
     build: {
         lib: {
             entry: resolve(__dirname, './packages/index.ts'),
-            name: 'puUI',
-            fileName: 'pu-ui'
+            name: 'pu-ui',
+            fileName: (format) => `pu-ui.${format}.js`,
+            formats: ['es', 'umd'],
         },
         rollupOptions: {
             external: ['vue'],

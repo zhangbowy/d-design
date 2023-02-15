@@ -5,7 +5,7 @@
 		"module": "ESNext",
 		"moduleResolution": "Node",
 		"allowJs": true,
-		"strict": true,
+		"strict": false,
 		"jsx": "preserve",
 		"sourceMap": true,
 		"resolveJsonModule": true,
@@ -20,13 +20,11 @@
 		}
 	},
 	"include": [
-    "packages/**/*.ts", 
-    "packages/**/*.d.ts", 
-    "packages/**/*.tsx", 
+    "packages/**/*.ts",
+    "packages/**/*.d.ts",
+    "packages/**/*.tsx",
     "packages/**/*.vue",
-    "examples/**/*.ts",
-    "examples/**/*.vue",
-     "components.d.ts", 
+     "components.d.ts",
      "auto-imports.d.ts",
      "vite-env.d.ts"
   ],

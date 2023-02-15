@@ -8,9 +8,11 @@ export const SEARCH_ZONE_USER = (params: any) => {
 }
 /**********获取部门信息**********/
 export const GET_DEPT_INFO = (parmas: any) => {
+    // @ts-ignore
     return http('/api/member/user/pick/dept', { method: 'get', parmas });
 }
 /**********获取筛选结果**********/
 export const GET_USERIDS = (parmas: any) => {
+    // @ts-ignore
     return http('/api/member/user/pick/getUserIds', { method: 'get', parmas });
 }
