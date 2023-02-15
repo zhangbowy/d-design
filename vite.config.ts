@@ -6,6 +6,23 @@ import DefineOptions from 'unplugin-vue-define-options/vite';
 
 
 export default defineConfig({
+    server: {
+        host: "localhost",
+        hmr: true,
+        open: true,
+        cors: true,
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*",
+            "Access-Control-Allow-Headers": "*",
+        },
+        proxy: {
+            "/api": {
+                target: "http://daily-assign.sunmeta.top",
+                changeOrigin: true,
+            },
+        },
+    },
     build: {
         lib: {
             entry: resolve(__dirname, './packages/index.ts'),

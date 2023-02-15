@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 // import "./style.css";
 import '../packages/style/reset.less'
-import '../dist/style.css'
+// import '../dist/style.css'
 import 'ant-design-vue/dist/antd.css';
 import Antd from 'ant-design-vue';
 import App from "./App.vue";

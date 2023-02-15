@@ -206,13 +206,13 @@
 <!--*-->
 <!--* */-->
 <script>
-import Avatar from '@/components/Avatar/index.vue';
+import Avatar from '@/components/createTask/src/components/avatar/avatar.vue';
 import {
 	SEARCH_USER,
 	SEARCH_ZONE_USER,
 	GET_DEPT_INFO,
 	GET_USERIDS,
-} from '@/api/api';
+} from '../api';
 import {getQueryVariable} from '@/utils/utils';
 let G_CORPID = getQueryVariable('corpId');
 let G_APPID = getQueryVariable('appId');

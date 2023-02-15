@@ -124,12 +124,13 @@ const uploadFile = async (pathData) => {
           type: type,
           cname: fileInfo.cname,
           fileName: file.name,
-          id: fileInfo.id,
+          ossMaterialId: fileInfo.id,
           path: fileInfo.path,
           size: file.size,
           originalUrl: url,
         });
         emit("endUpload", updatedFileData.value);
+        updatedFileData.value= [];
       }
     });
     fileList.value = [];

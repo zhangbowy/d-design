@@ -1,0 +1,179 @@
+.add-exc-box {
+    .ant-modal {
+        width: 780px;
+        height: 550px;
+        border-radius: 4px;
+        overflow: hidden;
+
+        .ant-modal-content {
+            height: 100%;
+
+            .ant-modal-header {
+                border-bottom: none;
+                padding: 24px 32px;
+            }
+
+            .ant-modal-footer {
+                border-top: none;
+                padding: 24px 32px;
+
+                .ant-btn {
+                    width: 65px;
+                }
+
+                .ant-btn-primary {
+                    border-color: #3073ff;
+                    background-color: #3073ff;
+                }
+            }
+
+            .ant-modal-body {
+                height: calc(100% - 150px);
+                padding: 0 32px;
+                overflow-y: auto;
+
+                .public-title {
+                    width: 85px;
+                    min-width: 85px;
+                    margin-right: 24px;
+                    display: flex;
+
+                    .public-icon {
+                        margin-left: auto;
+                        color: #f53f3f;
+                    }
+
+                    .public-text {
+                        font-size: 14px;
+                        font-weight: 400;
+                        margin-left: 5px;
+                        color: #4e5969;
+                        white-space: nowrap;
+                    }
+                }
+
+                .exc-task {
+                    margin-bottom: 30px;
+                    display: flex;
+
+                    .ant-input-textarea {
+                        width: 100%;
+                    }
+
+                    .ant-input-textarea-show-count {
+                        position: relative;
+
+                        &::after {
+                            position: absolute;
+                            bottom: -20px;
+                            right: 0;
+                        }
+                    }
+                }
+
+                .exc-box {
+                    margin-bottom: 20px;
+                    display: flex;
+
+                    .exc-list {
+                        width: 100%;
+                        min-height: 32px;
+                        border-radius: 4px;
+                        padding: 0 10px 5px 10px;
+                        border: 1px solid #c9cdd4;
+                        display: flex;
+                        flex-wrap: wrap;
+                        box-sizing: border-box;
+
+                        &:hover {
+                            border: 1px solid #3073ff;
+                            cursor: pointer;
+                        }
+
+                        .empty-text {
+                            margin-top: 5px;
+                            font-weight: 400;
+                            color: #c9cdd4;
+                            display: inline-block;
+                        }
+
+                        .exc-block {
+                            height: 22px;
+                            padding: 0 8px;
+                            margin: 5px 8px 0 0;
+                            border-radius: 2px;
+                            border: 1px solid #d9d9d9;
+                            display: flex;
+                            align-items: center;
+                            background-color: #f3f3f3;
+
+                            .avatar-main {
+                                .avatar-box {
+                                    width: 16px;
+                                    height: 16px;
+                                    min-width: 16px;
+                                    line-height: 16px;
+                                    font-size: 12px;
+                                }
+                            }
+
+                            .close-icon {
+                                margin-left: 8px;
+                                font-size: 10px;
+                                cursor: pointer;
+                            }
+                        }
+
+                        .more-icon {
+                            margin-top: 6px;
+                            margin-left: auto;
+                        }
+                    }
+                }
+
+                .exc-abort-time {
+                    display: flex;
+
+                    .public-title {
+                        .public-text {
+                            margin: 0;
+                        }
+                    }
+
+                    .ant-picker {
+                        border-radius: 4px;
+                        height: 28px;
+                        padding: 0 12px;
+                        border: 1px solid #c9cdd4;
+
+                        &:hover {
+                            border: 1px solid #3073ff;
+                        }
+
+                        .ant-picker-input {
+                            input:focus {
+                                outline: none;
+                                border: none;
+                                box-shadow: none;
+                            }
+                        }
+                    }
+
+                    .ant-picker-focused {
+                        box-shadow: none;
+                    }
+
+                    .delete-icon {
+                        margin-left: 8px;
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            .dis-bgc {
+                background-color: #F7F8FA;
+                cursor: not-allowed;
+            }
+        }
+    }
+}
