@@ -20,7 +20,7 @@ export default defineComponent({
 });
 </script>
 <template>
-	<div v-if="avatar">
+	<!-- <div v-if="avatar">
 		<a-avatar
 			:class="[avatarClassName, 'kpi-avatar']"
 			:size="avatarSize"
@@ -35,7 +35,7 @@ export default defineComponent({
 		<a-avatar :class="[avatarClassName, 'kpi-avatar']" :size="avatarSize">
 			{{ avatarName.slice(0, 1) }}
 		</a-avatar>
-	</div>
+	</div> -->
 </template>
 <style lang="less">
 .kpi-avatar {

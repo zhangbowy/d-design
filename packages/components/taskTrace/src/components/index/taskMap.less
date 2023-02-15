@@ -1,0 +1,798 @@
+.map-box {
+    .custom-header {
+        height: 62px;
+        display: flex;
+        align-content: center;
+        align-items: center;
+        justify-content: space-between;
+
+        .title {
+            flex: 1;
+            font-size: 20px;
+            color: rgba(0, 0, 0, 0.85);
+            font-weight: 500;
+        }
+
+        .expand-icon {
+            width: 100px;
+            display: flex;
+            cursor: pointer;
+            justify-content: end;
+            align-content: center;
+
+            .num {
+                font-size: 14px;
+                font-weight: 400;
+                color: #657180;
+            }
+        }
+
+        .close-x {
+            width: 30px;
+            font-size: 16px;
+            color: rgba(0, 0, 0, 0.65);
+            cursor: pointer;
+        }
+    }
+
+    .ant-modal {
+        width: 920px;
+        height: 600px;
+        border-radius: 4px;
+        overflow: hidden;
+        background-color: #F7F9FB;
+
+        .ant-modal-content {
+            height: 100%;
+
+            .ant-modal-header {
+                padding: 32px 40px 8px 40px;
+                background-color: #F7F9FB;
+                border-bottom: none;
+                box-sizing: border-box;
+
+                .ant-modal-title {
+                    font-size: 20px;
+                }
+            }
+
+            .ant-modal-body {
+                //height: calc(100% - 62px);
+                height: 100%;
+                padding: 0 40px;
+                background-color: #F7F9FB;
+                box-sizing: border-box;
+
+                .ant-spin-nested-loading {
+                    height: 100%;
+
+                    .ant-spin-container {
+                        height: 100%;
+                    }
+                }
+
+                .map-key {
+                    color: #3073ff;
+                    display: inline-flex;
+                    align-items: center;
+
+                    &:hover {
+                        cursor: pointer;
+                    }
+
+                    .key-task {
+                        font-size: 12px;
+                        margin-left: 4px;
+                    }
+                }
+
+                .map-main {
+                    //height: calc(100% - 19px);
+                    height: calc(100% - 30px);
+                    padding-top: 11px;
+                    overflow-y: auto;
+                    box-sizing: border-box;
+                    display: flex;
+                    justify-content: center;
+
+                    .map-box {
+                        width: 500px;
+                        height: 500px;
+                        padding: 20px 0;
+                        overflow-y: auto;
+                        overflow-x: hidden;
+
+                        .creator-box {
+                            padding: 13px 0 37px 0;
+                            border-left: 1px solid #D4E6FF;
+                            position: relative;
+                            box-sizing: border-box;
+
+                            .creator-title {
+                                top: -11px;
+                                display: flex;
+                                align-items: center;
+                                position: absolute;
+
+                                .line {
+                                    width: 16px;
+                                    border-bottom: 1px solid #D4E6FF;
+                                }
+
+                                .cycle-icon {
+                                    width: 10px;
+                                    height: 10px;
+                                    border-radius: 50%;
+                                    background-color: #fff;
+                                    border: 2px solid #3073ff;
+                                }
+
+                                .top-title {
+                                    margin-left: 8px;
+                                    font-weight: 500;
+                                    color: #262626;
+                                }
+                            }
+
+                            .creator-task {
+                                width: 480px;
+                                padding: 16px 24px;
+                                margin-left: 16px;
+                                border-radius: 10px;
+                                background-color: #fff;
+
+                                .task-top {
+                                    display: flex;
+                                    align-items: center;
+
+                                    .avatar-main {
+                                        .avatar-box {
+                                            width: 28px;
+                                            height: 28px;
+                                            min-width: 28px;
+                                            line-height: 28px;
+                                        }
+
+                                        .avatar-user-name {
+                                            font-size: 16px;
+                                            font-weight: 500;
+                                            color: #262626;
+                                        }
+                                    }
+
+                                    .task-tag {
+                                        margin-left: 8px;
+                                        font-size: 12px;
+                                        zoom: 0.84;
+                                        padding: 0 6px;
+                                    }
+                                }
+
+                                .task-content {
+                                    font-size: 14px;
+                                    font-weight: 400;
+                                    margin: 12px 0 4px 0;
+                                    color: #1d2129;
+                                    word-break: break-all;
+
+                                    span {
+                                        line-height: 17px;
+                                    }
+
+                                    .task-files {
+                                        margin-left: 8px;
+                                        font-size: 12px;
+                                        color: #3073ff;
+                                        display: inline-flex;
+                                        align-items: center;
+                                        cursor: pointer;
+
+                                        iconpark-icon {
+                                            margin-right: 4px;
+                                        }
+                                    }
+                                }
+
+                                .task-deadline {
+                                    font-size: 12px;
+                                    font-weight: 400;
+                                    color: #86909c;
+                                }
+
+                                .task-description {
+                                    .description-text {
+                                        font-size: 12px;
+                                        font-weight: 400;
+                                        color: #86909c;
+                                        vertical-align: bottom;
+                                        word-break: break-all;
+                                    }
+
+                                    .task-files {
+                                        margin-left: 8px;
+                                        font-size: 12px;
+                                        color: #3073ff;
+                                        vertical-align: bottom;
+                                        display: inline-flex;
+                                        align-items: center;
+                                        cursor: pointer;
+
+                                        iconpark-icon {
+                                            margin-right: 4px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        .principal-box {
+                            padding: 13px 0 37px 0;
+                            border-left: 1px solid #D4E6FF;
+                            position: relative;
+                            box-sizing: border-box;
+
+                            .principal-title {
+                                top: -11px;
+                                display: flex;
+                                align-items: center;
+                                position: absolute;
+
+                                .line {
+                                    width: 16px;
+                                    border-bottom: 1px solid #D4E6FF;
+                                }
+
+                                .cycle-icon {
+                                    width: 10px;
+                                    height: 10px;
+                                    border-radius: 50%;
+                                    background-color: #fff;
+                                    border: 2px solid #3073ff;
+                                }
+
+                                .top-title {
+                                    margin-left: 8px;
+                                    font-weight: 500;
+                                    color: #262626;
+                                }
+                            }
+
+                            .principal-task {
+                                width: 480px;
+                                padding: 16px 24px;
+                                margin-left: 16px;
+                                border-radius: 10px;
+                                background-color: #fff;
+
+                                .task-top {
+                                    margin-bottom: 12px;
+                                    display: flex;
+                                    align-items: center;
+
+                                    .avatar-main {
+                                        .avatar-box {
+                                            width: 28px;
+                                            height: 28px;
+                                            min-width: 28px;
+                                            line-height: 28px;
+                                        }
+
+                                        .avatar-user-name {
+                                            font-size: 16px;
+                                            font-weight: 500;
+                                            color: #262626;
+                                        }
+                                    }
+
+                                    .task-tag {
+                                        margin-left: 8px;
+                                        font-size: 12px;
+                                        zoom: 0.84;
+                                        padding: 0 6px;
+                                    }
+                                }
+
+                                .task-deadline {
+                                    font-size: 12px;
+                                    font-weight: 400;
+                                    color: #86909c;
+                                }
+
+                                .task-description {
+                                    .description-text {
+                                        font-size: 12px;
+                                        font-weight: 400;
+                                        color: #86909c;
+                                        vertical-align: bottom;
+                                        word-break: break-all;
+                                    }
+
+                                    .task-files {
+                                        margin-left: 8px;
+                                        font-size: 12px;
+                                        color: #3073ff;
+                                        display: inline-flex;
+                                        align-items: center;
+                                        cursor: pointer;
+
+                                        iconpark-icon {
+                                            margin-right: 4px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        .executor-box {
+                            padding: 13px 0 10px 0;
+                            position: relative;
+                            box-sizing: border-box;
+
+                            .executor-title {
+                                top: -11px;
+                                display: flex;
+                                align-items: center;
+                                position: absolute;
+
+                                .line {
+                                    width: 16px;
+                                    border-bottom: 1px solid #D4E6FF;
+                                }
+
+                                .cycle-icon {
+                                    width: 10px;
+                                    height: 10px;
+                                    border-radius: 50%;
+                                    background-color: #fff;
+                                    border: 2px solid #3073ff;
+                                }
+
+                                .top-title {
+                                    margin-left: 8px;
+                                    font-weight: 500;
+                                    color: #262626;
+                                }
+                            }
+
+                            .executor-task {
+                                width: 480px;
+                                padding: 16px 24px;
+                                margin: 0 0 8px 16px;
+                                border-radius: 10px;
+                                background-color: #fff;
+
+                                .task-top {
+                                    display: flex;
+                                    align-items: center;
+
+                                    .avatar-main {
+                                        .avatar-box {
+                                            width: 28px;
+                                            height: 28px;
+                                            min-width: 28px;
+                                            line-height: 28px;
+                                        }
+
+                                        .avatar-user-name {
+                                            font-size: 16px;
+                                            font-weight: 500;
+                                            color: #262626;
+                                        }
+                                    }
+
+                                    .task-tag {
+                                        margin-left: 8px;
+                                        font-size: 12px;
+                                        zoom: 0.84;
+                                        padding: 0 6px;
+                                    }
+
+                                    .right-icon {
+                                        margin-left: auto;
+                                    }
+                                }
+
+                                .task-content {
+                                    font-size: 14px;
+                                    font-weight: 400;
+                                    margin: 12px 0 4px 0;
+                                    color: #1d2129;
+                                    word-break: break-all;
+                                }
+
+                                .task-deadline {
+                                    font-size: 12px;
+                                    font-weight: 400;
+                                    color: #86909c;
+                                }
+
+                                .task-description {
+                                    .description-text {
+                                        font-size: 12px;
+                                        font-weight: 400;
+                                        color: #86909c;
+                                        vertical-align: bottom;
+                                        word-break: break-all;
+                                    }
+
+                                    .task-files {
+                                        margin-left: 8px;
+                                        font-size: 12px;
+                                        color: #3073ff;
+                                        display: inline-flex;
+                                        vertical-align: bottom;
+                                        cursor: pointer;
+
+                                        iconpark-icon {
+                                            margin-right: 4px;
+                                        }
+                                    }
+                                }
+                            }
+
+                            .cur-point {
+                                cursor: pointer;
+                            }
+                        }
+
+                        .border-none {
+                            border-left: none;
+                        }
+
+                        .border-white {
+                            border-bottom: 1px solid transparent;
+                        }
+
+                        .task-remind-btn {
+                            border-radius: 4px;
+                            padding: 3px 10px;
+                            margin-left: auto;
+                            display: flex;
+                            align-items: center;
+                            background: #F8F8F8;
+                            cursor: pointer;
+
+                            iconpark-icon {
+                                margin-right: 3px;
+                                color: #3073ff;
+                            }
+
+                            span {
+                                font-size: 12px;
+                                font-weight: 400;
+                                color: #171A1D;
+                            }
+                        }
+                    }
+                }
+
+                .map-main-left {
+                    width: 510px;
+                    justify-content: flex-start;
+                }
+
+                /*comment-wrapper*/
+                .comment-wrapper {
+                    position: relative;
+
+                    .hd {
+                        padding: 0 20px;
+                        margin-bottom: 15px;
+                        height: 60px;
+                        display: flex;
+                        align-items: center;
+                        border-bottom: 1px solid #EEEFEE;
+
+                        .title {
+                            flex: 1;
+                            font-size: 14px;
+                            font-weight: 500;
+                            color: #262626;
+                        }
+
+                        .expand {
+                            width: 30px;
+                            cursor: pointer;
+                        }
+
+                        .close-x {
+                            width: 30px;
+                            font-size: 16px;
+                            color: rgba(0, 0, 0, 0.65);
+                            cursor: pointer;
+                        }
+                    }
+
+                    .bd {
+                        height: 350px;
+                        overflow-y: auto;
+
+                        .comment-item {
+                            padding: 0 20px;
+                            margin-bottom: 15px;
+
+                            .comment-item-hd {
+                                margin-bottom: 5px;
+                                display: flex;
+                                align-content: center;
+                                align-items: center;
+                                white-space: nowrap;
+
+                                .avatar {
+                                    width: 24px;
+                                    height: 24px;
+                                    border-radius: 50%;
+                                }
+
+                                .avatar-box {
+                                    width: 24px;
+                                    height: 24px;
+                                    min-width: 24px;
+                                    line-height: 24px;
+                                    border-radius: 50%;
+                                    color: #FFF;
+                                    background-color: #0089ff;
+                                    text-align: center;
+                                }
+
+                                .name {
+                                    font-size: 14px;
+                                    font-weight: 400;
+                                    margin-left: 10px;
+                                    margin-right: 5px;
+                                    color: #262626;
+                                    overflow: hidden;
+                                    white-space: normal;
+                                    word-break: break-all;
+                                    text-overflow: ellipsis;
+                                    display: -webkit-box;
+                                    -webkit-line-clamp: 1;
+                                    -webkit-box-orient: vertical;
+                                }
+
+                                .role {
+                                    width: 56px;
+                                    min-width: 56px;
+                                    text-align: center;
+                                    height: 22px;
+                                    line-height: 22px;
+                                    background: rgba(0, 0, 0, 0.04);
+                                    border-radius: 2px;
+                                    font-size: 12px;
+                                    font-weight: 400;
+                                    color: rgba(0, 0, 0, 0.65);
+                                }
+
+                                .time {
+                                    flex: 1;
+                                    font-size: 14px;
+                                    font-weight: 400;
+                                    color: #8F969E;
+                                    margin-left: 10px;
+                                }
+
+                                .reply-btn {
+                                    width: 30px;
+                                    font-size: 14px;
+                                    font-weight: 400;
+                                    margin-left: 16px;
+                                    color: #165DFF;
+                                    cursor: pointer;
+                                }
+                            }
+
+                            .comment-item-cont {
+                                padding-left: 30px;
+                                word-break: break-all;
+                            }
+
+                            .comment-item-reply {
+                                padding-left: 30px;
+
+                                .reply-box {
+                                    .reply-name {
+                                        font-size: 14px;
+                                        font-weight: 400;
+                                        color: #165DFF;
+                                        margin-right: 5px;
+                                    }
+
+                                    .reply-cont {
+                                        font-size: 14px;
+                                        font-weight: 400;
+                                        color: #1D2129;
+                                    }
+                                }
+
+                                .reference-cont {
+                                    font-size: 14px;
+                                    font-weight: 400;
+                                    color: #9EA7B4;
+                                    p:nth-child(1) {
+                                        display: inline;
+                                    }
+                                }
+
+                                .reference-cont:before {
+                                    margin-right: 10px;
+                                    content: "|";
+                                    font-weight: bolder;
+                                    color: #9EA7B4;
+                                }
+                            }
+
+                            .accessory-box {
+                                padding-left: 30px;
+                                display: flex;
+                                align-items: center;
+                                font-size: 14px;
+                                font-weight: 400;
+                                color: #165DFF;
+                                cursor: pointer;
+
+                                .icon {
+                                    margin-right: 5px;
+                                }
+                            }
+                        }
+                    }
+
+                    .comments-operation {
+                        width: 100%;
+                        position: relative;
+
+                        .ft {
+                            margin-bottom: 15px;
+                            padding: 0 20px;
+                            //height: 100px;
+                            margin-bottom: 15px;
+                            display: flex;
+
+                            .comment-input {
+                                width: 100%;
+                                position: relative;
+                                border: 1px solid #D7DDE4;
+
+                                .comment-name {
+                                    position: absolute;
+                                    top: 4px;
+                                    left: 4px;
+                                    z-index: 100;
+                                    padding: 0 4px;
+                                    height: 22px;
+                                    text-align: center;
+                                    background: #e6f7ff;
+                                    border-radius: 2px;
+                                    color: #165DFF;
+                                }
+
+                                textarea {
+                                    color: #464C5B;
+                                    margin-bottom: 10px;
+                                }
+
+                                
+                            }
+
+                        }
+
+                        .file-wrapper {
+                            height: 30px;
+                            top: 70px;
+                            padding: 0 20px;
+                            width: 100%;
+                            display: flex;
+                            align-items: center;
+                            position: absolute;
+
+                            .file-box {
+                                flex: 1;
+                                height: 30px;
+                                overflow-y: auto;
+                                padding-left: 5px;
+                                display: flex;
+                                flex-flow: wrap;
+
+                                .file-item {
+                                    display: inline-flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    width: 132px;
+                                    height: 25px;
+                                    background: #F2F3F5;
+                                    border-radius: 4px;
+                                    margin-right: 5px;
+                                    margin-bottom: 5px;
+
+                                    .file-img-not_img {
+                                        width: 20px;
+                                        height: 20px;
+                                        margin-right: 4px;
+                                    }
+
+                                    .ant-image {
+                                        width: 20px;
+                                        height: 20px;
+                                        margin-left: 5px;
+                                        margin-right: 10px;
+                                        display: flex;
+
+                                        .file-img {
+                                            height: 100%;
+                                        }
+                                    }
+
+                                    .file-name {
+                                        flex: 1;
+                                    }
+
+                                    .delete-icon {
+                                        width: 20px;
+                                        margin-right: 5px;
+                                        cursor: pointer;
+                                    }
+                                }
+                            }
+
+                            .file-icon {
+                                width: 20px;
+                                color: #9EA7B4;
+                                cursor: pointer;
+                                font-size: 20px;
+                                margin-left: auto;
+                            }
+                        }
+
+                        .btns {
+                            padding: 0 20px;
+                            margin-top: 8px;
+                            display: flex;
+                            justify-content: flex-end;
+
+                            .ant-btn:first-child {
+                                margin-right: 10px;
+                            }
+                        }
+                    }
+                }
+
+                .comment-wrapper-absolute {
+                    position: absolute;
+                    top: 0;
+                    right: -40px;
+                    width: 357px;
+                    height: 600px;
+                    background-color: #FFF;
+                }
+            }
+        }
+
+        .border-white {
+            border-bottom: 1px solid transparent !important;
+        }
+    }
+
+    .unread {
+        border-radius: 4px;
+        color: #FF9900;
+        border: 1px solid #FFCB85;
+    }
+
+    .rp {
+        border-radius: 4px;
+        color: #0089ff;
+        border: 1px solid #dbebfa;
+    }
+
+    .rd {
+        border-radius: 4px;
+        color: #00b042;
+        border: 1px solid #dbf0e3;
+    }
+
+    .rt {
+        border-radius: 4px;
+        color: #171a1d;
+        border: 1px solid #e5e6e8;
+    }
+}

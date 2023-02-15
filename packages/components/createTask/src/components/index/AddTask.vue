@@ -23,7 +23,7 @@
                             "></iconpark-icon>
                         </div>
                     </div>
-                    <OssUploadVue class="upload-icon" :taskId="returnSnow()" @startUpload="startUpload" @endUpload="endUpload">
+                    <OssUploadVue class="upload-icon" :bizId="returnSnow()" @startUpload="startUpload" @endUpload="endUpload">
                         <iconpark-icon class="icon" name="fujian"></iconpark-icon>
                     </OssUploadVue>
                 </div>
@@ -256,7 +256,7 @@ import * as dd from "dingtalk-jsapi";
 
 // import Comment from "./Comment.vue";
 dayjs.locale("zh-cn");
-const curUser = JSON.parse(localStorage.getItem("QZP_DATA")).user;
+const curUser = JSON.parse(localStorage.getItem("QZZ_DATA") || localStorage.getItem("QZP_DATA")).user;
 const props = defineProps({
     visible: Boolean,
     title: String,

@@ -1,0 +1,115 @@
+.event-box {
+    .ant-modal {
+        width: 780px;
+        height: 550px;
+        border-radius: 4px;
+        overflow: hidden;
+        .ant-modal-content {
+            height: 100%;
+            .ant-modal-header {
+                padding: 24px 32px;
+                border-bottom: none;
+                box-sizing: border-box;
+                .ant-modal-title {
+                    font-size: 20px;
+                }
+            }
+            .ant-modal-body {
+                height: calc(100% - 70px);
+                padding: 0 32px;
+                box-sizing: border-box; 
+                .ant-spin-nested-loading {
+                    height: 100%;
+                    .ant-spin-container {
+                        height: 100%;
+                    }
+                }
+            }
+            .key-body {
+                padding: 20px 0 5px 0;
+                height: 100%;
+                overflow-y: auto;
+                box-sizing: border-box;
+                .key-box {
+                    padding: 0 20px;
+                    box-sizing: border-box;
+                    &:last-child {
+                        .des-main {
+                            border-left: none;
+                        }
+                    }
+                    .key-top {
+                        display: flex;
+                        justify-content: space-between;
+                        .key-user {
+                            font-size: 14px;
+                            display: flex;
+                            align-items: center;
+                            .avatar-box {
+                                width: 24px;
+                                height: 24px;
+                                line-height: 24px;
+                                min-width: 24px;
+                            }
+                            .key-name {
+                                margin-left: 8px;
+                                color: rgba(0, 0, 0, .65);
+                                font-weight: 400;
+                            }
+                            .key-tag {
+                                font-size: 12px;
+                                height: 22px;
+                                min-width: 56px;
+                                color: rgba(0, 0, 0, .65);
+                                background-color: rgba(0,0,0,0.04);
+                                font-weight: 400;
+                                border-radius: 2px;
+                                margin-left: 9px;
+                                display: inline-flex;
+                                align-items: center;
+                                justify-content: center;
+                            }
+                        }
+                        .key-time {
+                            height: 24px;
+                            font-size: 12px;
+                            color: rgba(0,0,0,0.45);
+                            font-weight: 400;
+                            display: inline-flex;
+                            align-items: center;
+                        }
+                    }
+                    .des-main {
+                        margin-left: 12px;
+                        padding: 12px 0 36px 19px;
+                        box-sizing: border-box;
+                        border-left: 2px solid #EAEBED;
+                        .key-content {
+                            font-weight: 400;
+                            color: #303133;
+                            word-break: break-all;
+                            display: inline;
+                        }
+                        .appendix-span {
+                            margin-left: 8px;
+                            font-size: 14px;
+                            color: #3073ff;
+                            display: inline-block;
+                            cursor: pointer;
+                            .appendix-icon {
+                                font-size: 12px;
+                            }
+                        }
+                    }
+                }
+            }
+            .keyword-blue {
+                color: #3073FF;
+            }
+            
+            .keyword-red {
+                color: #F53F3F;
+            }
+        }
+    }
+}

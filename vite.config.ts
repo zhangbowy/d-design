@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import Components from "unplugin-vue-components/vite"
 import { resolve } from 'path'
+import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
 import dts from 'vite-plugin-dts'
 import DefineOptions from 'unplugin-vue-define-options/vite';
 
@@ -64,6 +66,9 @@ export default defineConfig({
             },
         }),
         DefineOptions(),
+        Components({
+            resolvers: [AntDesignVueResolver()],
+        }),
         dts({ include: './packages' }),
     ]
 })
