@@ -200,7 +200,7 @@
                     @change="status == 'NOT_BEGIN' && handleSchedule()" />
             </div>
             <!-- add cycle -->
-            <div v-if="cycleValue && role != 'EXECUTE'" class="cycle-box">
+            <div v-if="cycleValue && role != 'EXECUTE' && trait === 'default'" class="cycle-box">
                 <iconpark-icon name="loop" class="remind-icon"></iconpark-icon>
                 <span class="cycle-title">任务循环</span>
                 <a-select v-model:value="cycleValue" :dropdownMatchSelectWidth="false" @change="cycleChange"
