@@ -1,14 +1,27 @@
 <template>
-    <a-drawer :visible="visible" class="add-task-drawer" placement="right" :title="title" :width="480" :keyboard="false"
-        :maskClosable="false" :destroyOnClose="true" @close="handleDrawerClose">
+    <a-drawer :visible="visible" class="task-detail-drawer" placement="right" :width="480" :keyboard="false"
+        :zIndex="zIndex" :maskClosable="false" :destroyOnClose="true" :mask="mask" @close="handleDrawerClose">
+        <template #title>
+            <div class="task-detail-title">
+                <span>{{ title }}</span>
+                <a-popover :getPopupContainer="(triggerNode) => triggerNode.parentNode" trigger="click">
+                    <template #content>
+                        <span class="termination-task" @click="handleReloadTask(true)">终止任务</span>
+                    </template>
+                    <iconpark-icon v-if="taskDetail.status === 'NOT_BEGIN'" name="gengduo"
+                        class="operation-icon"></iconpark-icon>
+                </a-popover>
+            </div>
+        </template>
         <!-- input box -->
         <div class="content-box">
-            <a-textarea v-model:value="content" placeholder="请填写任务内容" :auto-size="{ minRows: 5 }" :maxlength="150"
-                :autoFocus="true" />
-            <a-spin :spinning="spinning">
+            <a-textarea v-model:value="content" class="detail-textarea" placeholder="请填写任务内容"
+                :auto-size="{ minRows: 1 }" :maxlength="150" :autoFocus="true"
+                :disabled="role == 'EXECUTE' || status != 'NOT_BEGIN'" />
+            <a-spin v-if="taskDetail.type === 'MAIN_TASK'" :spinning="spinning">
                 <div class="upload-box">
                     <div class="file-box">
-                        <div class="file-list" v-for="item in accessory.ossAccessoryList" :key="item.ossMaterialId"
+                        <div class="file-list" v-for="item in accessory.ossAccessory" :key="item.ossMaterialId"
                             @click="handleDownloadFile(item)">
                             <a-image v-if="returnType(item.cname)" class="file-img" :src="item.originalUrl" @click.stop>
                                 <template #previewMask>
@@ -18,110 +31,149 @@
                             <img v-else class="file-img-not_img"
                                 src="https://daily-static-file.oss-cn-shanghai.aliyuncs.com/file-icon.svg" alt="" />
                             <span class="file-name">{{ item.fileName }}</span>
-                            <iconpark-icon name="delete" class="delete-file-icon" @click.stop="
-                                deleteFile(accessory.ossAccessoryList, item.ossMaterialId, 'oss')
-                            "></iconpark-icon>
+                            <iconpark-icon v-if="status == 'NOT_BEGIN'" name="delete" class="delete-file-icon"
+                                @click.stop="
+                                    deleteFile(accessory.ossAccessory, item.ossMaterialId, 'oss')
+                                "></iconpark-icon>
                         </div>
                     </div>
-                    <OssUploadVue class="upload-icon" :taskId="returnSnow()" @startUpload="startUpload" @endUpload="endUpload">
+                    <OssUploadVue v-if="status == 'NOT_BEGIN'" class="upload-icon" :taskId="returnSnow()"
+                        @startUpload="startUpload" @endUpload="endUpload">
                         <iconpark-icon class="icon" name="fujian"></iconpark-icon>
                     </OssUploadVue>
                 </div>
             </a-spin>
         </div>
-        <!-- <Comment /> -->
+        <!-- main task text -->
+        <div class="main-task-text" v-if="taskDetail.mainTaskContent">
+            <span class="main-task-content" @click="handleTaskTrace">{{ taskDetail.mainTaskContent }}</span>
+            <div v-if="accessory.ossAccessory.length > 0" class="file-btn" @click="handleCheckFiles">
+                <iconpark-icon name="uploadIcon"></iconpark-icon>
+                <span>附件{{ accessory.ossAccessory.length }}个</span>
+            </div>
+        </div>
+        <!-- task info box -->
+        <div class="task-info">
+            <span class="info-time">创建时间：{{ sliceSS(created) }}</span>
+            <span class="info-tag" :class="{
+                rp: status === 'NOT_BEGIN',
+                rd: status === 'DONE',
+                rt: status === 'TERMINATION',
+            }">{{ returnTaskMark(status) }}</span>
+        </div>
         <!-- add creator box -->
         <div class="add-creator">
             <span class="public-title">创建人</span>
-            <div class="public-box" @click="handleChooseUser('creator')">
+            <div class="create-box">
                 <div v-if="checkNullObj(createUser)" class="empty-text">
                     选择创建人
                 </div>
                 <div v-else class="user-box">
                     <AvatarVue :userData="createUser" />
                 </div>
-                <iconpark-icon name="right" class="right-icon"></iconpark-icon>
             </div>
         </div>
         <!-- add principal box -->
         <div class="add-principal">
             <span class="public-title">负责人</span>
-            <div class="public-box" @click="handleChooseUser('principal')">
+            <div class="public-box" :class="{
+                // 'dis-bgc': role == 'EXECUTE' || status != 'NOT_BEGIN',
+                'prin-null': role == 'EXECUTE' || status != 'NOT_BEGIN',
+            }" @click="
+    role != 'EXECUTE' &&
+    status == 'NOT_BEGIN' &&
+    handleChooseUser('principal')
+">
                 <div v-if="checkNullObj(principalUser)" class="empty-text">
-                    选择负责人
+                    {{
+    role == "EXECUTE" || status != "NOT_BEGIN"
+    ? "无"
+    : "选择负责人"
+                    }}
                 </div>
                 <div v-else class="user-box">
                     <AvatarVue :userData="principalUser" />
                 </div>
-                <iconpark-icon name="right" class="right-icon"></iconpark-icon>
+                <iconpark-icon name="right" class="right-icon"
+                    v-if="role != 'EXECUTE' && status == 'NOT_BEGIN'"></iconpark-icon>
             </div>
-            <iconpark-icon v-if="!checkNullObj(principalUser)" name="delete" class="delete-icon"
-                @click="handleDeletePri()"></iconpark-icon>
+            <iconpark-icon name="delete" class="delete-icon" v-if="
+                role != 'EXECUTE' &&
+                status == 'NOT_BEGIN' &&
+                !checkNullObj(principalUser)
+            " @click="handleDeletePri()"></iconpark-icon>
         </div>
-        <!-- <iconpark-icon name="right" class="right-icon"></iconpark-icon>
-      </div>
-      <iconpark-icon
-        v-if="!checkNullObj(principalUser)"
-        name="delete"
-        class="delete-icon"
-        @click="handleDeletePri()"
-      ></iconpark-icon>
-    </div> -->
         <!-- add start time box -->
         <div class="add-deadline">
             <span class="public-title">任务开始时间</span>
-            <div class="deadline-box">
-                <a-date-picker v-model:value="startTime" format="YYYY-MM-DD HH:mm" placeholder="选择时间" :show-time="{
-                    hideDisabledOptions: false,
-                    defaultValue: dayjs('00:00:00', 'HH:mm:ss'),
-                }" :allowClear="false" :autofocus="false" :showNow="false" :locale="locale"
-                    :disabledDate="disabledStartDate" @ok="confirmStartTime">
-                    <template v-slot:suffixIcon>
-                        <iconpark-icon name="right" class="right-icon"></iconpark-icon>
-                    </template>
-                </a-date-picker>
+            <div class="deadline-box"
+                :class="{ 'dis-bgc': status != 'NOT_BEGIN', 'dis-text': (role == 'EXECUTE' && !checkCanUpdateTime(role)) }">
+                <template v-if="status != 'NOT_BEGIN'">
+                    {{ sliceSS(taskDetail?.startTime) }}
+                </template>
+                <template v-else>
+                    <a-date-picker v-model:value="startTime" format="YYYY-MM-DD HH:mm" placeholder="选择时间" :show-time="{
+                        hideDisabledOptions: true,
+                        defaultValue: dayjs('00:00:00', 'HH:mm:ss'),
+                    }" :allowClear="false" :autofocus="false" :showNow="false" :locale="locale"
+                        :disabled="status != 'NOT_BEGIN'" :disabledDate="disabledStartDate" @ok="confirmStartTime">
+                        <template v-slot:suffixIcon v-if="status == 'NOT_BEGIN'">
+                            <iconpark-icon name="right" class="right-icon"></iconpark-icon>
+                        </template>
+                    </a-date-picker>
+                </template>
             </div>
         </div>
+        <!-- add deadline box -->
         <div class="add-deadline">
             <span class="public-title">任务截止时间</span>
-            <div class="deadline-box">
-                <a-date-picker ref="datePicker" v-model:value="dayFormat" format="YYYY-MM-DD HH:mm" placeholder="选择时间"
-                    :show-time="{
-                        hideDisabledOptions: false,
-                        defaultValue: dayjs('00:00:00', 'HH:mm:ss')
-                    }" :allowClear="false" :autofocus="false" :showNow="false" :locale="locale"
-                    :disabledDate="disabledDeadDate" @ok="confirmDeadline">
-                    <template v-slot:suffixIcon>
-                        <iconpark-icon name="right" class="right-icon"></iconpark-icon>
-                    </template>
-                </a-date-picker>
+            <div v-if="dayFormat || status == 'NOT_BEGIN'" class="deadline-box"
+                :class="{ 'dis-bgc': role == 'EXECUTE' || status != 'NOT_BEGIN', 'dis-text': (role == 'EXECUTE' && !checkCanUpdateTime(role)) }">
+                <template v-if="role == 'EXECUTE' && !checkCanUpdateTime(role)">
+                    {{ sliceSS(taskDetail?.abortTime) }}
+                </template>
+                <template v-else>
+                    <a-date-picker v-model:value="dayFormat" format="YYYY-MM-DD HH:mm" placeholder="选择时间"
+                        :show-time="{ defaultValue: dayjs('00:00:00', 'HH:mm:00') }" :allowClear="false"
+                        :autofocus="false" :showNow="false" :locale="locale" :disabledDate="disabledDeadDate"
+                        :disabled="status != 'NOT_BEGIN'" @ok="confirmDeadline">
+                        <template v-slot:suffixIcon v-if="role != 'EXECUTE' && status == 'NOT_BEGIN'">
+                            <iconpark-icon name="right" class="right-icon"></iconpark-icon>
+                        </template>
+                    </a-date-picker>
+                </template>
             </div>
-            <iconpark-icon v-if="abortTime" name="delete" class="delete-icon"
-                @click="handleDelAbortTime"></iconpark-icon>
+            <div v-else class="deadline-null">无</div>
+            <template v-if="role == 'EXECUTE' && !checkCanUpdateTime(role)">
+
+            </template>
+            <template v-else="">
+                <iconpark-icon name="delete" class="delete-icon" v-if="status == 'NOT_BEGIN' && dayFormat"
+                    @click="handleDelAbortTime"></iconpark-icon>
+            </template>
+
         </div>
         <!-- add time remind -->
-        <div class="add-remind" v-if="dayFormat != null">
+        <div class="add-remind" v-if="dayFormat != null && status == 'NOT_BEGIN'">
             <!-- deadline remind box -->
             <div class="remind-box">
                 <iconpark-icon name="tixing" class="remind-icon"></iconpark-icon>
-                <span class="remind-text" v-if="returnListNum() == 0">暂无提醒</span>
+                <span class="remind-text">提醒时间</span>
                 <div class="custom-list">
-                    <div class="add-remind-btn" @click="handleSelect">
+                    <div class="add-remind-btn" v-if="status == 'NOT_BEGIN'" @click="handleSelect">
                         <iconpark-icon name="add" class="add-icon"></iconpark-icon>
                         <a-select v-model:value="selectArr" mode="multiple" dropdownClassName="selector"
                             :open="selectOpen" :dropdownMatchSelectWidth="false" @change="handleSelectChange"
                             @blur="handleSelectBlur">
                             <a-select-option class="remind-option" v-for="item in remindOptions.slice(0, 4)"
-                                :key="item.type" :value="item.type">{{ item.customTime }}
-                            </a-select-option>
+                                :key="item.type" :value="item.type">{{ item.customTime }}</a-select-option>
                             <a-select-option class="custom-option">
                                 <div class="custom-time">
                                     <div class="custom-btn">+ 自定义</div>
                                     <a-date-picker format="YYYY-MM-DD HH:mm" dropdownClassName="picker" :show-time="{
-                                        hideDisabledOptions: true,
                                         defaultValue: dayjs(
                                             '00:00:00',
-                                            'HH:mm'
+                                            'HH:mm:00'
                                         ),
                                     }" :allowClear="false" :autofocus="false" :showNow="false" :locale="locale"
                                         @openChange="handlePickerChange" @ok="confirmRemindDeadline">
@@ -134,25 +186,21 @@
                         <div class="custom-box" v-if="item.choose">
                             <span>{{ item.customTime }}</span>
                             <iconpark-icon name="guanbi" class="close-icon"
+                                v-if="role != 'EXECUTE' && status == 'NOT_BEGIN'"
                                 @click="handleDeleteRemind(item)"></iconpark-icon>
                         </div>
                     </template>
                 </div>
             </div>
             <!-- add-schedule -->
-            <div class="schedule-box">
+            <div class="schedule-box" v-if="role != 'EXECUTE'">
                 <iconpark-icon name="richeng" class="remind-icon"></iconpark-icon>
                 <span>插入钉钉日程</span>
-                <a-switch :checked="openSchedule" @change="handleSchedule" />
+                <a-switch :checked="openSchedule" :disabled="status != 'NOT_BEGIN'"
+                    @change="status == 'NOT_BEGIN' && handleSchedule()" />
             </div>
-            <!-- add-schedule -->
-            <!-- <div class="schedule-box">
-        <iconpark-icon name="richeng" class="remind-icon"></iconpark-icon>
-        <span>插入钉钉日程</span>
-        <a-switch :checked="openSchedule" @change="handleSchedule" />
-      </div> -->
             <!-- add cycle -->
-            <div class="cycle-box">
+            <div v-if="cycleValue && role != 'EXECUTE'" class="cycle-box">
                 <iconpark-icon name="loop" class="remind-icon"></iconpark-icon>
                 <span class="cycle-title">任务循环</span>
                 <a-select v-model:value="cycleValue" :dropdownMatchSelectWidth="false" @change="cycleChange"
@@ -176,36 +224,36 @@
             </div>
         </div>
         <!-- add exc box -->
-        <div class="add-exc">
+        <div class="add-exc" v-if="role != 'EXECUTE'">
             <span class="public-title">参与人</span>
+            <span class="empty-exc" v-if="status != 'NOT_BEGIN' && subTasks.length === 0">无</span>
             <div class="exc-list">
-                <div class="exc-box" v-for="item in subTasks" :key="item.index">
+                <div class="exc-box" v-for="item in subTasks" :key="item.id">
                     <div class="exc-main" @click="handleCheckExc(item)">
                         <AvatarVue :userData="item.executeUser" />
                         <div class="main-right">
                             <div class="user-name">
                                 <span class="name-list">{{
-                                    returnName(item?.executeUser)
+                                    returnName(item.executeUser)
                                 }}</span>
-                                <span v-if="item?.executeUser?.length > 2" class="name-length">等{{
-                                    item?.executeUser?.length
-                                }}人</span>
-                                <iconpark-icon name="right" class="arrow-icon"></iconpark-icon>
+                                <span v-if="item.executeUser.length > 2">等{{ item.executeUser.length }}人</span>
+                                <iconpark-icon name="right" class="arrow-icon"
+                                    v-if="status == 'NOT_BEGIN'"></iconpark-icon>
                             </div>
                             <div class="task-data">
-                                <span v-if="item?.abortTime" class="deadline-time">截止{{
-                                    returnTIme(item?.abortTime)
+                                <span v-if="item.leaderAbortTime" class="deadline-time">截止{{
+                                    returnTIme(item.leaderAbortTime)
                                 }}</span>
                                 <span class="side-task-content">{{
-                                    item?.content
+                                    item.content
                                 }}</span>
                             </div>
                         </div>
                     </div>
-                    <iconpark-icon name="delete" class="exc-delete"
+                    <iconpark-icon name="delete" class="exc-delete" v-if="status == 'NOT_BEGIN'"
                         @click="handleDeleteSub(item.index)"></iconpark-icon>
                 </div>
-                <div class="add-remind-btn" @click="handleAddExc">
+                <div class="add-remind-btn" v-if="role != 'EXECUTE' && status == 'NOT_BEGIN'" @click="handleAddExc">
                     <iconpark-icon name="add" class="add-icon"></iconpark-icon>
                 </div>
             </div>
@@ -220,12 +268,20 @@
         </div>
         <!-- create task footer box -->
         <template #footer>
-            <div class="add-footer">
-                <a-button class="cancel-btn" @click="handleDrawerClose">取消</a-button>
-                <a-button type="primary" class="sure-btn" :disabled="judgeStrNull(content) || spinning"
-                    :loading="loading" @click="handleCreateTask">新建任务
-                </a-button>
-            </div>
+            <Transition>
+                <div class="add-footer" v-if="!isEdit">
+                    <a-button v-if="showDetail" class="cancel-btn" @click="handleTaskTrace">任务追踪</a-button>
+                    <a-button type="primary" class="sure-btn" :class="{ 'restart-btn': status != 'NOT_BEGIN' }"
+                        @click="handleReloadTask(false)">{{
+    status == "NOT_BEGIN" ? "完成任务" : "重启任务"
+                        }}</a-button>
+                </div>
+                <div class="save-footer" v-else>
+                    <a-button class="cancel-btn" @click="handleDrawerClose">取消</a-button>
+                    <a-button type="primary" class="sure-btn" :disabled="judgeStrNull(content)" :loading="loading"
+                        @click="handleCreateTask">保存修改</a-button>
+                </div>
+            </Transition>
         </template>
     </a-drawer>
     <!-- choose user component -->
@@ -233,35 +289,77 @@
         :title="choose.title" :selectedUsers="choose.selectedUsers" @updateUserIds="updateUserIds"
         @close="handleChooseClose" />
     <!-- add executor component -->
-    <AddExcVue :visible="addExcVisible" :subTask="curSubTask" @closeAddExc="closeAddExc" @addExc="addExc" />
+    <AddExcVue :visible="addExcVisible" :subTask="curSubTask" :isDisable="execDisable" @closeAddExc="closeAddExc"
+        @addExc="addExc" />
     <!-- dialog component -->
     <DialogVue :dialogVisible="dialog.visible" :title="dialog.title" :content="dialog.content"
         @cancelEvent="cancelEvent" @okEvent="okEvent" />
+    <!-- renew task status component -->
+    <RenewTaskVue :renewVisible="renewVisible" :toStatus="toStatus" :dragEl="taskDetail" :zIndex="1200"
+        @closeRenew="closeRenew" />
+    <!-- task trace component -->
+    <TaskTrace :visible="map.visible" :taskData="taskDetail" :curUser="curUser" :trait="trait" @closeMap="closeMap" />
+    <!-- upload file list -->
+    <FileListVue :appendixShow="files.show" :accessory="files.accessory" @hideFiles="hideCommentFiles" />
 </template>
 
 <script setup>
 import { ref, reactive, toRefs, watch } from "vue";
-import { CREATE_TASK } from "../../api";
-import { checkNullObj, formatDate, judgeStrNull } from "../../utils/utils";
+import { UP_DATA_TASK, GET_RELEVANCE_CNT } from "../../api";
+import { checkNullObj, formatDate, judgeStrNull, sliceSS } from "../../utils/utils";
+// import { useStore } from "vuex";
 import { message } from "ant-design-vue";
 import mitt from "@/utils/eventBus";
 import dayjs from "dayjs";
+import "dayjs/locale/zh-cn";
 import locale from "ant-design-vue/es/date-picker/locale/zh_CN";
 import AvatarVue from "../avatar/avatar.vue";
-import ChooseUserVue from "../../../../chooseuser/components/index1.vue";
+import ChooseUserVue from "@/components/chooseuser/components/index1.vue";
 import AddExcVue from "../addExc/AddExc.vue";
 import DialogVue from "../dialog/Dialog.vue";
-import OssUploadVue from "../../../../upload/src/index";
+import RenewTaskVue from "../renewTask/RenewTask.vue";
+import OssUploadVue from "@/components/upload/src/index";
+import FileListVue from "../fileList/FileList.vue";
+import TaskTrace from '@/components/taskTrace/src/index';
 import * as dd from "dingtalk-jsapi";
 
-// import Comment from "./Comment.vue";
 dayjs.locale("zh-cn");
-const curUser = JSON.parse(localStorage.getItem("QZP_DATA")).user;
+// const curUser = JSON.parse(localStorage.getItem("QZP_DATA")).user;
+// const store = useStore();
+
 const props = defineProps({
     visible: Boolean,
     title: String,
+    taskDetail: Object,
+    isCut: {
+        type: Boolean,
+        defaultValue: false,
+    },
+    mask: {
+        type: Boolean,
+        defaultValue: true,
+    },
+    showDetail: {
+        type: Boolean,
+        default: true,
+        required: false
+    },
+    zIndex: {
+        type: Number,
+        default: 1000,
+        required: false
+    },
+    curUser: {
+        type: Object,
+        required: true
+    },
+    trait: {
+        type: String,
+        required: true
+    }
 });
-const emit = defineEmits(["closeDrawer"]);
+
+const emit = defineEmits(["closeDrawer", "saveCurTaskId"]);
 
 const cycleList = ref([
     {
@@ -290,29 +388,38 @@ const cycleList = ref([
         value: 30,
     },
 ]);
-
 const taskFrom = reactive({
     content: "",
-    createUser: curUser,
+    createUser: {},
     principalUser: {},
     abortTime: "",
+    leaderAbortTime: "",
     remindType: [],
     subTasks: [],
     openSchedule: false,
     forCreateUser: null,
     dayFormat: null,
     selectArr: [],
+    role: "",
+    status: "",
+    created: "",
+    id: null,
     cycleValue: ["NOT_REPEAT"],
     loopType: {
         value: 0,
         type: "NOT_REPEAT",
     },
     accessory: {
-        ossAccessoryList: [],
-        dingDishAccessoryList: []
+        ossAccessory: [],
+        dingDishAccessory: []
     },
-    startTime: dayjs()
+    startTime: ""
 }); //save task form
+const files = reactive({
+    show: false,
+    accessory: {}
+})
+
 const choose = reactive({
     visible: false,
     searchAllZone: true,
@@ -321,12 +428,19 @@ const choose = reactive({
     title: "",
     selectedUsers: [],
 }); //control chose user component
+
 const dialog = reactive({
     visible: false,
     title: "",
     content: "",
     type: "",
 }); //save dialog data
+
+const map = reactive({
+    visible: false,
+    taskId: null,
+});
+
 const remindOptions = ref([
     {
         type: "10",
@@ -353,40 +467,94 @@ const addExcVisible = ref(false); //control add executer component visible
 const curSubTask = ref({}); //save current subtask
 const loading = ref(false); //create task  loading
 const selectOpen = ref(false); //select open
-const tag = ref(false); //control select and date picker open
+const tag = ref(false); //compatibility select and picker
+const copyFrom = ref({}); //copy task from, contrast data
+const isEdit = ref(false); //judge did edit
+const renewVisible = ref(false); //control renew task component visible
+const toStatus = ref(""); //change status
+const execDisable = ref(false); //control executor disable
 const customCycleShow = ref(false); //control custom cycle box visible
 const customCycleValue = ref(""); //save custom cycle value
-const spinning = ref(false);
-// const hours = ref(Array.from(Array(24), (v, k) => k));
-const hours = ref([]);
-const mins = ref([]);
-const datePicker = ref(null)
-const trait = ref(sessionStorage.getItem("G_TRAIT") || 'default');
-const cache = reactive({
-    openData: null,
-    closeData: null,
-});
+const spinning = ref(false); //upload files loading control
 
 watch(
     () => props.visible,
     (val, oldVal) => {
         if (val) {
-            taskFrom.abortTime = "";
-            taskFrom.content = "";
-            taskFrom.createUser = curUser;
-            taskFrom.dayFormat = null;
-            taskFrom.forCreateUser = null;
-            taskFrom.openSchedule = false;
-            taskFrom.principalUser = {};
+            getRelevanceCnt()
+            props.taskDetail.subTasks.forEach((el) => {
+                el.index = el.id;
+            });
+            emit("saveCurTaskId", props.taskDetail.id)
+            // store.commit("UPDATE_TASK_ID", props.taskDetail.id);
+            let arr = []; //save remind template type
+            //loop taskFrom keys assignment
+            Object.keys(taskFrom).map((el) => {
+                switch (el) {
+                    case "dayFormat":
+                        taskFrom[el] = props.taskDetail.abortTime
+                            ? dayjs(props.taskDetail.abortTime)
+                            : null;
+                        break;
+                    case "cycleValue":
+                        if (props.taskDetail.loopType?.type === 'CUSTOM_CYCLE') {
+                            taskFrom[el] = ["每" + props.taskDetail.loopType?.value + "天"]
+                        } else {
+                            taskFrom[el] = [props.taskDetail.loopType?.type];
+                        }
+                        break;
+                    case 'startTime':
+                        taskFrom[el] = dayjs(props.taskDetail[el]);
+                        break;
+                    default:
+                        taskFrom[el] = props.taskDetail[el];
+                        break;
+                }
+            });
             taskFrom.remindType = [];
-            taskFrom.subTasks = [];
-            taskFrom.selectArr = [];
-            taskFrom.cycleValue = ["NOT_REPEAT"];
-            taskFrom.loopType.type = "NOT_REPEAT";
-            taskFrom.loopType.value = 0;
-            taskFrom.accessory.ossAccessoryList = [];
-            taskFrom.startTime = dayjs();
-            cache.openData = JSON.stringify(taskFrom);
+            remindOptions.value.forEach((el) => {
+                el.choose = false;
+            });
+            props.taskDetail.remindList.forEach((el, val) => {
+                if (el.type != "00") {
+                    arr.push(el.type);
+                    let index = remindOptions.value.findIndex(
+                        (i) => i.type == el.type
+                    );
+                    remindOptions.value[index].choose = true;
+                } else {
+                    let item = {};
+                    item.customTime = el.customTime;
+                    item.type = "00";
+                    item.choose = true;
+                    remindOptions.value.push(item);
+                }
+            });
+            taskFrom.selectArr = arr;
+            copyFrom.value = JSON.stringify(taskFrom);
+        }
+    }
+);
+
+watch(
+    () => taskFrom,
+    (val, oldVal) => {
+        if (copyFrom.value == JSON.stringify(val)) {
+            isEdit.value = false;
+        } else {
+            isEdit.value = true;
+        }
+    },
+    {
+        deep: true,
+    }
+);
+
+watch(
+    () => props.isCut,
+    (val, oldVal) => {
+        if (val) {
+            handleDrawerClose();
         }
     }
 );
@@ -408,16 +576,20 @@ watch(
  * handle drawer close event
  */
 const handleDrawerClose = () => {
-    cache.closeData = JSON.stringify(taskFrom);
-    if (cache.openData === cache.closeData) {
-        emit("closeDrawer");
-    } else {
+    if (isEdit.value) {
         dialog.visible = true;
         dialog.title = "关闭";
-        dialog.content = "关闭后填写内容将不会保存，确定关闭吗？";
+        dialog.content = taskFrom.content
+            ? "确定保存修改内容吗？"
+            : "任务内容不可为空，离开后任务内容将重置";
         dialog.type = "close";
+    } else {
+        emit("closeDrawer");
+        emit("saveCurTaskId", null)
+        // store.commit("UPDATE_TASK_ID", null);
     }
 };
+
 /**
  * choose user component callback
  * @param {Array} arr
@@ -430,6 +602,7 @@ const updateUserIds = (arr) => {
     }
     choose.visible = false;
 };
+
 /**
  * handle choose user public event
  * @param {String} type
@@ -449,18 +622,21 @@ const handleChooseUser = (type) => {
             : [taskFrom.principalUser];
     }
 };
+
 /**
  * close choose user callback
  */
 const handleChooseClose = () => {
     choose.visible = false;
 };
+
 /**
  * handle delete principal event
  */
 const handleDeletePri = () => {
     taskFrom.principalUser = {};
 };
+
 /**
  * confirm deadline callback
  * @param {String} time
@@ -471,19 +647,16 @@ const confirmDeadline = (time) => {
 };
 
 /**
- * confirm start time callback
- * @param {String} time 
- */
-const confirmStartTime = (time) => {
-    taskFrom.startTime = time;
-};
-/**
  * handle delete abort time event
  */
 const handleDelAbortTime = () => {
     taskFrom.abortTime = "";
     taskFrom.dayFormat = null;
+    remindOptions.value.forEach((el) => {
+        el.choose = false;
+    });
 };
+
 /**
  * handle select option change event
  * @param {Array} val
@@ -495,6 +668,7 @@ const handleSelectChange = (val) => {
         el.choose = taskFrom.selectArr.some((i) => el.type === i);
     });
 };
+
 /**
  * handle custom time select event
  * @param {Date} date
@@ -508,6 +682,7 @@ const confirmRemindDeadline = (date) => {
     remindOptions.value.push(item);
     selectOpen.value = false;
 };
+
 /**
  * handle add executor event
  */
@@ -515,28 +690,28 @@ const handleAddExc = () => {
     addExcVisible.value = true;
     curSubTask.value = {};
 };
+
 /**
  * close add executer component callback
  */
 const closeAddExc = () => {
     addExcVisible.value = false;
 };
+
 /**
  * handle add executer callback event
  * @param {Object} from
  */
 const addExc = (from) => {
-    let num = -1;
-    if (taskFrom.subTasks.length > 0) {
-        num = taskFrom.subTasks.findIndex((el) => el.index == from.index);
-    }
-    if (num === -1) {
+    let num = taskFrom.subTasks.findIndex((el) => el.index == from.index);
+    if (num == -1) {
         taskFrom.subTasks.push(from);
     } else {
         taskFrom.subTasks[num] = from;
     }
     addExcVisible.value = false;
 };
+
 /**
  * return current subtask name list
  * @param {Array} nameArr
@@ -544,7 +719,7 @@ const addExc = (from) => {
 const returnName = (nameArr) => {
     let arr = [];
     let nameStr = "";
-    nameArr?.forEach((el) => {
+    nameArr.forEach((el) => {
         arr.push(el.name);
     });
     if (arr.length <= 2) {
@@ -554,6 +729,7 @@ const returnName = (nameArr) => {
     }
     return nameStr;
 };
+
 /**
  * handle custom abort time
  * @param {String} time
@@ -563,6 +739,7 @@ const returnTIme = (time) => {
     let index = timeStr.indexOf("-");
     return timeStr.slice(index);
 };
+
 /**
  * handle delete current subtask event
  * @param {Number} index
@@ -571,28 +748,33 @@ const handleDeleteSub = (index) => {
     let num = taskFrom.subTasks.findIndex((el) => el.index === index);
     taskFrom.subTasks.splice(num, 1);
 };
+
 /**
  * handle create task event
  */
 const handleCreateTask = async () => {
     loading.value = true;
     remindOptions.value.forEach((el) => {
-        if (el.choose && el.type != "00") {
+        if (el.choose && el.type !== "00") {
             let item = {};
             item.type = el.type;
             taskFrom.remindType.push(item);
-        } else if (el.choose && el.type == "00") {
+        } else if (el.choose && el.type === "00") {
             taskFrom.remindType.push(el);
         }
     });
-    if (taskFrom.createUser.userId != curUser.userId) {
-        taskFrom.forCreateUser = curUser;
+    if (taskFrom.createUser.userId != props.curUser.userId) {
+        taskFrom.forCreateUser = props.curUser;
     }
-    taskFrom.accessory.ossAccessoryList.forEach((el) => {
-        el.ossId = el.ossMaterialId;
+    let fileItem = {};
+    fileItem.dingDishAccessoryList = [];
+    fileItem.ossAccessoryList = [];
+    taskFrom.accessory.ossAccessory.map((el) => {
+        let item = {};
+        item.ossId = el.ossMaterialId;
+        fileItem.ossAccessoryList.push(item)
     });
-    console.log(taskFrom);
-    const { code, data } = await CREATE_TASK({
+    const { code } = await UP_DATA_TASK({
         content: taskFrom.content,
         createUser: taskFrom.createUser,
         principalUser: taskFrom.principalUser,
@@ -600,28 +782,41 @@ const handleCreateTask = async () => {
         remindType: taskFrom.remindType,
         subTasks: taskFrom.subTasks,
         openSchedule: taskFrom.openSchedule,
-        forCreateUser: taskFrom.forCreateUser,
+        id: taskFrom.id,
         loopType: taskFrom.loopType,
-        accessory: taskFrom.accessory,
+        accessory: fileItem,
         startTime: dayjs(taskFrom.startTime).format('YYYY-MM-DD HH:mm:00')
     });
     if (code === 1) {
         emit("closeDrawer");
-        message.success("任务创建成功");
+        message.success("任务修改成功");
         loading.value = false;
         mitt.emit("reloadTask");
+        emit("saveCurTaskId", null);
+        // store.commit("UPDATE_TASK_ID", null);
     } else {
-        message.error("任务创建失败");
+        message.error("任务修改失败");
         loading.value = false;
         taskFrom.remindType = [];
     }
 };
+
 /**
  * handle dialog cancel event
  */
 const cancelEvent = () => {
     dialog.visible = false;
+    switch (dialog.type) {
+        case "close":
+            if (taskFrom.content) emit("closeDrawer");
+            emit("saveCurTaskId", null)
+            // store.commit("UPDATE_TASK_ID", null);
+            break;
+        default:
+            break;
+    }
 };
+
 /**
  * handle dialog ok event
  */
@@ -629,21 +824,32 @@ const okEvent = () => {
     dialog.visible = false;
     switch (dialog.type) {
         case "close":
-            emit("closeDrawer");
+            if (taskFrom.content) {
+                handleCreateTask();
+            } else {
+                emit("closeDrawer");
+                emit("saveCurTaskId", null)
+                // store.commit("UPDATE_TASK_ID", null);
+            }
             break;
         case "schedule":
             taskFrom.openSchedule = true;
+            break;
+        case "loop":
+            renewVisible.value = true;
             break;
         default:
             break;
     }
 };
+
 /**
  * handle choose select remind time
  */
 const handleSelect = () => {
     selectOpen.value = true;
 };
+
 /**
  * handle select blur event
  */
@@ -651,6 +857,7 @@ const handleSelectBlur = () => {
     if (tag.value) return;
     selectOpen.value = false;
 };
+
 /**
  * handle time picker visible event
  * @param {Boolean} status
@@ -659,6 +866,7 @@ const handlePickerChange = (status) => {
     tag.value = true;
     if (!status) tag.value = false;
 };
+
 /**
  * handle delete remind time event
  * @param {Object} item
@@ -680,6 +888,25 @@ const handleDeleteRemind = (item) => {
         });
     }
 };
+
+/**
+ * return task mark
+ * @param {String} type
+ * @return {String}
+ */
+const returnTaskMark = (type) => {
+    switch (type) {
+        case "NOT_BEGIN":
+            return "未完成";
+        case "DONE":
+            return "已完成";
+        case "TERMINATION":
+            return "已终止";
+        default:
+            return;
+    }
+};
+
 /**
  * return remind list number
  * @return {Number}
@@ -693,6 +920,7 @@ const returnListNum = () => {
     });
     return num;
 };
+
 /**
  * handle check executer event
  * @param {Object} item
@@ -700,7 +928,65 @@ const returnListNum = () => {
 const handleCheckExc = (item) => {
     addExcVisible.value = true;
     curSubTask.value = item;
+    if (taskFrom.status == "NOT_BEGIN") {
+        execDisable.value = false;
+    } else {
+        execDisable.value = true;
+    }
 };
+
+/**
+ * handle finish or reload task
+ */
+const handleReloadTask = (isTermination = false) => {
+    if (taskFrom.loopType?.type !== "NOT_REPEAT" && isTermination) {
+        dialog.content = "终止后将不再生成循环任务，确定终止任务？";
+        dialog.title = "终止任务";
+        dialog.type = "loop";
+        dialog.visible = true;
+    } else {
+        renewVisible.value = true;
+    }
+    if (isTermination) {
+        toStatus.value = "TERMINATION";
+        return;
+    }
+    if (taskFrom.status == "NOT_BEGIN") {
+        toStatus.value = "DONE";
+    } else {
+        toStatus.value = "NOT_BEGIN";
+    }
+};
+
+/**
+ * close renew callback
+ * @param {String} type
+ */
+const closeRenew = (type) => {
+    renewVisible.value = false;
+    if (type == "renew") {
+        emit("closeDrawer");
+        emit("saveCurTaskId", null)
+        // store.commit("UPDATE_TASK_ID", null);
+        mitt.emit("reloadTask");
+    }
+};
+
+/**
+ * handle open task trace event
+ */
+const handleTaskTrace = () => {
+    map.visible = true;
+    map.taskId = taskFrom.id;
+};
+
+/**
+ * handle close task trace callback event
+ */
+const closeMap = () => {
+    map.visible = false;
+};
+
 /**
  * handle schedule event
  */
@@ -753,61 +1039,15 @@ const closeCustomBox = (event) => {
     }
 };
 /*
- * cuttom time
- * */
-const range = (start, end) => {
-    const result = [];
-    for (let i = start; i < end; i++) {
-        result.push(i);
-    }
-    return result;
-};
-/*
- * handle deadline disabled time event
- * */
-const disabledDeadlineHours = (type) => {
-    let h = Array.from(Array(24), (v, k) => k);
-    switch (type) {
-        case 'deadline':
-            return hours.value;
-        case 'start':
-            return hours.value;
-    }
-};
-const disabledDeadlineMin = (type) => {
-    let h = Array.from(Array(60), (v, k) => k);
-    if (dayjs(taskFrom.abortTime).format('YYYY-MM-DD HH') == dayjs(taskFrom.startTime).format('YYYY-MM-DD HH')) {
-        mins.value = m.slice(0, dayjs(taskFrom.startTime).$m)
-    }
-    switch (type) {
-        case 'deadline':
-            return mins.value;
-        case 'start':
-            return mins.value;
-    }
-};
-
-/**
- * handle deadline disabled time event
- * @param {string} dateType h/m
- * @param {string} timeType start/deadline
- */
-const disabledRangeTime = () => {
-    return {
-        disabledHours: () => disabledDeadlineHours('deadline'),
-        disabledMinutes: () => disabledDeadlineMin('deadline'),
-    }
-};
-
-/**
- * oss upload callback event
- */
-const startUpload = () => {
-    spinning.value = true;
-};
-const endUpload = (ossArr) => {
-    taskFrom.accessory.ossAccessoryList.push(...ossArr);
-    spinning.value = false;
+* 如果是全局配置中配置了"允许参与人修改截止时间"，并且是任务参与人
+* 则可以修改时间
+* */
+const checkCanUpdateTime = (role) => {
+    console.log('当前任务角色：' + role);
+    const ls = localStorage.getItem("QCP_GLOBAL_CFG");
+    const lsObj = JSON.parse(ls);
+    const open = lsObj?.abortTimePowerCommand?.open;
+    return open;
 };
 
 /**
@@ -839,6 +1079,25 @@ const deleteFile = (arr, id, type) => {
 };
 
 /**
+ * oss upload callback event
+ */
+const startUpload = () => {
+    spinning.value = true;
+};
+const endUpload = (ossArr) => {
+    taskFrom.accessory.ossAccessory.push(...ossArr);
+    spinning.value = false;
+};
+
+/**
+ * confirm start time callback
+ * @param {String} time 
+ */
+const confirmStartTime = (time) => {
+    taskFrom.startTime = time;
+};
+
+/**
  * judge disabled deadline date
  * @param {Date} data 
  */
@@ -852,6 +1111,21 @@ const disabledDeadDate = (data) => {
  */
 const disabledStartDate = (data) => {
     return dayjs(taskFrom.abortTime) <= data;
+};
+
+/**
+ * handle check files list event
+ */
+const handleCheckFiles = () => {
+    files.show = true;
+    files.accessory = taskFrom.accessory;
+};
+
+/**
+ * close commentFileModal event
+ */
+const hideCommentFiles = () => {
+    files.show = false;
 };
 
 /**
@@ -882,9 +1156,28 @@ const handleDownloadFile = (file) => {
  */
 const returnSnow = () => {
     // const bizId = new Snowflake(1n, 1n, 0n).nextId().toString();
-    const bizId = Date.now().toString() + curUser.userId;
+    const bizId = Date.now().toString() + props.curUser.userId;
     return bizId
-}
+};
+
+/**
+ * get relevance count event
+ */
+const getRelevanceCnt = async () => {
+    let type = "";
+    if(props.taskDetail.type === 'MAIN_TASK') {
+        type = 'TASK_MAIN'
+    } else {
+        type = 'TASK_SUB'
+    }
+    const { code, data } = await GET_RELEVANCE_CNT({
+        taskId: props.taskDetail.id,
+        relevanceType: type
+    });
+    if(code === 1) {
+        console.log(data);
+    }
+};
 const {
     content,
     createUser,
@@ -896,6 +1189,9 @@ const {
     forCreateUser,
     dayFormat,
     selectArr,
+    role,
+    status,
+    created,
     cycleValue,
     startTime,
     accessory
@@ -911,6 +1207,7 @@ export default {
     },
 };
 </script>
+
 <style lang="less">
-@import "./addTask.less";
+@import "./taskDetail.less";
 </style>

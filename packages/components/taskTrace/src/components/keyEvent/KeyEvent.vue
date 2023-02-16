@@ -56,11 +56,13 @@ import { sliceSS } from "../../utils/utils";
 import avatarVue from "../avatar/avatar.vue";
 import FileListVue from "../fileList/FileList.vue";
 
-const curUser = JSON.parse(localStorage.getItem("QZZ_DATA")) || JSON.parse(localStorage.getItem("QZP_DATA")).user;
-
 const props = defineProps({
   visible: Boolean,
   taskId: Number,
+  curUser: {
+    type: Object,
+    required: true
+  }
 });
 
 const emit = defineEmits(["closeEvent"]);
@@ -125,7 +127,7 @@ const returnAva = (item, type) => {
       break;
     case "createTask":
       if (item.label.role === "FOR_CREATE") {
-        if (curUser.userId === item.label.createUser.userId) {
+        if (props.curUser.userId === item.label.createUser.userId) {
           avatar = item.label.forCreateUser;
           name = item.label.forCreateUser.name;
         } else {
@@ -175,7 +177,7 @@ const nameTemplate = (item, type) => {
   let avatar = {};
   let name = "";
   if (item.label.role === "FOR_CREATE") {
-    if (curUser.userId === item.label.createUser.userId) {
+    if (props.curUser.userId === item.label.createUser.userId) {
       avatar = item.label.forCreateUser;
       name = item.label.forCreateUser.name;
     } else {
@@ -208,7 +210,7 @@ const returnContent = (item) => {
     case "allocationTask":
       if (
         item.role === "FOR_CREATE" &&
-        item.label.createUser.userId === curUser.userId
+        item.label.createUser.userId === props.curUser.userId
       ) {
         role = "代创建人";
         creator = item.label.forCreateUser.name;
@@ -235,7 +237,7 @@ const returnContent = (item) => {
     case "createTask":
       if (
         item.label.forCreateUser != null &&
-        item.label.createUser.userId === curUser.userId
+        item.label.createUser.userId === props.curUser.userId
       ) {
         role = "代创建人";
         creator = item.label.forCreateUser.name;
@@ -248,7 +250,7 @@ const returnContent = (item) => {
     case "deleteTask":
       if (
         item.label.role === "FOR_CREATE" &&
-        item.label.createUser.userId === curUser.userId
+        item.label.createUser.userId === props.curUser.userId
       ) {
         role = "代创建人";
         creator = item.label.forCreateUser.name;
@@ -264,7 +266,7 @@ const returnContent = (item) => {
     case "updateTaskAbortTime":
       if (
         item.label.role === "FOR_CREATE" &&
-        item.label.createUser.userId === curUser.userId
+        item.label.createUser.userId === props.curUser.userId
       ) {
         role = "代创建人";
         creator = item.label.forCreateUser.name;
@@ -290,7 +292,7 @@ const returnContent = (item) => {
     case "updateTaskContent":
       if (
         item.label.role === "FOR_CREATE" &&
-        item.label.createUser.userId === curUser.userId
+        item.label.createUser.userId === props.curUser.userId
       ) {
         role = "代创建人";
         creator = item.label.forCreateUser.name;
@@ -311,7 +313,7 @@ const returnContent = (item) => {
     case "updateTaskUser":
       if (
         item.label.role === "FOR_CREATE" &&
-        item.label.createUser.userId === curUser.userId
+        item.label.createUser.userId === props.curUser.userId
       ) {
         role = "代创建人";
         creator = item.label.forCreateUser.name;
@@ -337,7 +339,7 @@ const returnContent = (item) => {
       )}”<span class="keyword-blue">修改为</span>“${newArr.join("、")}”`;
     case "updateTaskStatus":
       if (item.label.role === "FOR_CREATE") {
-        if (item.label.createUser.userId === curUser.userId) {
+        if (item.label.createUser.userId === props.curUser.userId) {
           role = "代创建人";
           creator = item.label.forCreateUser.name;
         } else {
@@ -367,7 +369,7 @@ const returnContent = (item) => {
       }`;
     case "urgeTask":
       if (item.label.role === "FOR_CREATE") {
-        if (item.label.createUser.userId === curUser.userId) {
+        if (item.label.createUser.userId === props.curUser.userId) {
           role = "代创建人";
           creator = item.label.forCreateUser.name;
         } else {
@@ -424,7 +426,7 @@ const returnRole = (item) => {
     case "allocationTask":
       if (
         item.role === "FOR_CREATE" &&
-        item.label.createUser.userId === curUser.userId
+        item.label.createUser.userId === props.curUser.userId
       ) {
         role = "代创建人";
       } else if (item.label.role === "PRINCIPAL") {
@@ -436,7 +438,7 @@ const returnRole = (item) => {
     case "createTask":
       if (
         item.label.forCreateUser != null &&
-        item.label.createUser.userId === curUser.userId
+        item.label.createUser.userId === props.curUser.userId
       ) {
         role = "代创建人";
       } else {
@@ -446,7 +448,7 @@ const returnRole = (item) => {
     case "deleteTask":
       if (
         item.label.role === "FOR_CREATE" &&
-        item.label.createUser.userId === curUser.userId
+        item.label.createUser.userId === props.curUser.userId
       ) {
         role = "代创建人";
       } else if (item.label.role === "PRINCIPAL") {
@@ -458,7 +460,7 @@ const returnRole = (item) => {
     case "updateTaskAbortTime":
       if (
         item.label.role === "FOR_CREATE" &&
-        item.label.createUser.userId === curUser.userId
+        item.label.createUser.userId === props.curUser.userId
       ) {
         role = "代创建人";
       } else if (item.label.role === "PRINCIPAL") {
@@ -470,7 +472,7 @@ const returnRole = (item) => {
     case "updateTaskContent":
       if (
         item.label.role === "FOR_CREATE" &&
-        item.label.createUser.userId === curUser.userId
+        item.label.createUser.userId === props.curUser.userId
       ) {
         role = "代创建人";
       } else if (item.label.role === "PRINCIPAL") {
@@ -482,7 +484,7 @@ const returnRole = (item) => {
     case "updateTaskUser":
       if (
         item.label.role === "FOR_CREATE" &&
-        item.label.createUser.userId === curUser.userId
+        item.label.createUser.userId === props.curUser.userId
       ) {
         role = "代创建人";
       } else if (item.label.role === "PRINCIPAL") {
@@ -493,7 +495,7 @@ const returnRole = (item) => {
       return role;
     case "updateTaskStatus":
       if (item.label.role === "FOR_CREATE") {
-        if (item.label.createUser.userId === curUser.userId) {
+        if (item.label.createUser.userId === props.curUser.userId) {
           role = "代创建人";
         } else {
           role = "创建人";
@@ -508,7 +510,7 @@ const returnRole = (item) => {
       return role;
     case "urgeTask":
       if (item.label.role === "FOR_CREATE") {
-        if (item.label.createUser.userId === curUser.userId) {
+        if (item.label.createUser.userId === props.curUser.userId) {
           role = "代创建人";
         } else {
           role = "创建人";

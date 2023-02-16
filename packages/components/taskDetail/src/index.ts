@@ -1,13 +1,13 @@
 import { App } from 'vue'
-import CreateTask from "./components/index/AddTask.vue"
+import TaskDetail from "./components/index/TaskDetail.vue"
 
-(CreateTask as any).install = function (app: App) {
+(TaskDetail as any).install = function (app: App) {
     // 组件注册，按需引入
-    app.component((CreateTask as any).name, CreateTask as any)
+    app.component((TaskDetail as any).name, TaskDetail as any)
     return app
 }
 
 
-export { CreateTask };
+export { TaskDetail };
 
-export default CreateTask
+export default TaskDetail

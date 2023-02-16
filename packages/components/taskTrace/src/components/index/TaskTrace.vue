@@ -384,7 +384,7 @@
             </div>
             <div class="file-icon">
               <OssUploadVue
-                :taskId="props.taskData.id"
+                :taskId="taskData.id"
                 @startUpload="startUpload"
                 @endUpload="endUpload"
               >
@@ -414,6 +414,7 @@
   <KeyEventVue
     :visible="event.visible"
     :taskId="event.taskId"
+    :curUser="curUser"
     @closeEvent="closeEvent"
   />
   <!-- files list component -->
