@@ -313,13 +313,13 @@ import mitt from "@/utils/eventBus";
 import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
 import locale from "ant-design-vue/es/date-picker/locale/zh_CN";
-import AvatarVue from "../avatar/avatar.vue";
+import AvatarVue from "@/components/createTask/src/components/avatar/avatar.vue";
 import ChooseUserVue from "@/components/chooseuser/components/index1.vue";
-import AddExcVue from "../addExc/AddExc.vue";
-import DialogVue from "../dialog/Dialog.vue";
+import AddExcVue from "@/components/createTask/src/components/addExc/AddExc.vue";
+import DialogVue from "@/components/createTask/src/components/dialog/Dialog.vue";
 import RenewTaskVue from "../renewTask/RenewTask.vue";
 import OssUploadVue from "@/components/upload/src/index";
-import FileListVue from "../fileList/FileList.vue";
+import FileListVue from "@/components/taskTrace/src/components/fileList/FileList.vue";
 import TaskTrace from '@/components/taskTrace/src/index';
 import * as dd from "dingtalk-jsapi";
 

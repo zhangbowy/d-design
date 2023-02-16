@@ -53,7 +53,7 @@
 import { ref, reactive, watch } from "vue";
 import { QUERY_KEY_EVENTS } from "../../api";
 import { sliceSS } from "../../utils/utils";
-import avatarVue from "../avatar/avatar.vue";
+import avatarVue from "@/components/createTask/src/components/avatar/avatar.vue";
 import FileListVue from "../fileList/FileList.vue";
 
 const props = defineProps({

@@ -95,7 +95,7 @@ import { ref, watch, reactive } from "vue";
 import { QUERY_MAP_EXEC } from "../../api";
 import { getTaskMainId } from "../../utils/utils";
 import { handleRemindDD } from "../../utils/ddRemind"
-import avatarVue from "../avatar/avatar.vue";
+import avatarVue from "@/components/createTask/src/components/avatar/avatar.vue";
 import FileListVue from "../fileList/FileList.vue";
 
 const props = defineProps({
