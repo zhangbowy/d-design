@@ -44,6 +44,6 @@ const props = defineProps({
 });
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 @import "./avatar.less";
 </style>

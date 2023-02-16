@@ -291,7 +291,7 @@
               <span class="time">{{ formatTime(item.created) }}</span>
               <span
                 class="reply-btn"
-                v-if="item.fromUser.userId !== userOBj?.user?.userId"
+                v-if="item.fromUser.userId !== curUser.userId"
                 @click="addReply(item)"
                 >回复</span
               >
@@ -384,7 +384,7 @@
             </div>
             <div class="file-icon">
               <OssUploadVue
-                :taskId="props.taskId"
+                :taskId="props.taskData.id"
                 @startUpload="startUpload"
                 @endUpload="endUpload"
               >
@@ -445,13 +445,21 @@ import FileListVue from "../fileList/FileList.vue";
 import OssUploadVue from "@/components/upload/src/index";
 import Edit from "@/components/edit/src/index";
 
-const userOBj = JSON.parse(localStorage.getItem("QZZ_DATA")) || JSON.parse(localStorage.getItem("QZP_DATA")) || {};
-
 const props = defineProps({
   visible: Boolean,
-  taskId: Number,
-  taskData: {},
-  trait: String
+  taskData: {
+    type: [Object, null],
+    required: true
+  },
+  curUser: {
+    type: Object,
+    required: true
+  },
+  trait: {
+    type: String,
+    default: 'default',
+    required: true
+  }
 });
 const showComment = ref(true);
 const commentValue = ref("");
@@ -514,7 +522,7 @@ const handleMapCancel = () => {
  * query map data
  */
 const queryMap = async () => {
-  let id = props.taskId;
+  let id = props.taskData.id;
   spinning.value = true;
   const { data, code } = await QUERY_TASK_MAP({
     id,
@@ -545,6 +553,7 @@ const returnTaskMark = (type, read = true) => {
       return;
   }
 };
+
 /**
  * return files num
  * @param {Object} files
@@ -578,7 +587,7 @@ const closeExcList = () => {
  */
 const handleKeyEvent = () => {
   event.visible = true;
-  event.taskId = props.taskId;
+  event.taskId = props.taskData.id;
 };
 /**
  * handle key event component close callback event

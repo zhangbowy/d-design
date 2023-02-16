@@ -211,7 +211,7 @@
             </div>
         </div>
         <!-- add correlation -->
-        <div v-if="trait === 'OKR'" class="add-correlation">
+        <div v-if="isCorrelation" class="add-correlation">
             <span class="public-title">关联项</span>
             <div class="add-cor-btn">
                 <iconpark-icon name="guanlian"></iconpark-icon>
@@ -256,12 +256,25 @@ import * as dd from "dingtalk-jsapi";
 
 // import Comment from "./Comment.vue";
 dayjs.locale("zh-cn");
-const curUser = JSON.parse(localStorage.getItem("QZZ_DATA") || localStorage.getItem("QZP_DATA")).user;
+// const curUser = JSON.parse(localStorage.getItem("QZZ_DATA") || localStorage.getItem("QZP_DATA")).user;
 const props = defineProps({
     visible: Boolean,
-    title: String,
+    curUser: {
+        type: Object,
+        required: true
+    },
+    title: {
+        type: String,
+        default: '创建任务',
+        required: false
+    },
+    isCorrelation: {
+        type: Boolean,
+        default: false,
+        required: false
+    }
 });
-const emit = defineEmits(["closeDrawer"]);
+const emit = defineEmits(["closeDrawer", "successCreate"]);
 
 const cycleList = ref([
     {
@@ -293,7 +306,7 @@ const cycleList = ref([
 
 const taskFrom = reactive({
     content: "",
-    createUser: curUser,
+    createUser: props.curUser,
     principalUser: {},
     abortTime: "",
     remindType: [],
@@ -373,7 +386,7 @@ watch(
         if (val) {
             taskFrom.abortTime = "";
             taskFrom.content = "";
-            taskFrom.createUser = curUser;
+            taskFrom.createUser = props.curUser;
             taskFrom.dayFormat = null;
             taskFrom.forCreateUser = null;
             taskFrom.openSchedule = false;
@@ -585,8 +598,8 @@ const handleCreateTask = async () => {
             taskFrom.remindType.push(el);
         }
     });
-    if (taskFrom.createUser.userId != curUser.userId) {
-        taskFrom.forCreateUser = curUser;
+    if (taskFrom.createUser.userId != props.curUser.userId) {
+        taskFrom.forCreateUser = props.curUser;
     }
     taskFrom.accessory.ossAccessoryList.forEach((el) => {
         el.ossId = el.ossMaterialId;
@@ -606,10 +619,15 @@ const handleCreateTask = async () => {
         startTime: dayjs(taskFrom.startTime).format('YYYY-MM-DD HH:mm:00')
     });
     if (code === 1) {
-        emit("closeDrawer");
-        message.success("任务创建成功");
-        loading.value = false;
-        mitt.emit("reloadTask");
+        if(props.isCorrelation) {
+            //关联todo
+        } else {
+            emit("successCreate", data);
+            emit("closeDrawer")
+            message.success("任务创建成功");
+            loading.value = false;
+            mitt.emit("reloadTask");
+        }
     } else {
         message.error("任务创建失败");
         loading.value = false;
@@ -882,7 +900,7 @@ const handleDownloadFile = (file) => {
  */
 const returnSnow = () => {
     // const bizId = new Snowflake(1n, 1n, 0n).nextId().toString();
-    const bizId = Date.now().toString() + curUser.userId;
+    const bizId = Date.now().toString() + props.curUser.userId;
     return bizId
 }
 const {
