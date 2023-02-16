@@ -10,7 +10,7 @@ export interface ResData<T> {
 }
 
 // baseURL
-const BASE_URL = '/api';
+const BASE_URL = '';
 
 const instance = axios.create({
     baseURL: BASE_URL,
@@ -22,7 +22,6 @@ instance.interceptors.request.use(
     (config) => {
         // 请求头 token配置
         const token = getToken();
-
         if (token) {
             config.headers = {
                 ...config.headers,
@@ -70,6 +69,7 @@ instance.interceptors.response.use(
 const request = <T = any>(
     config: AxiosRequestConfig | string,
     options?: AxiosRequestConfig,
+
 ): Promise<T> => {
     if (typeof config === 'string') {
         if (!options) {

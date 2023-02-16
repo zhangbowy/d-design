@@ -3,34 +3,64 @@
 		:visible="visible"
 		title="添加关联"
 		@ok="handleOk"
-		:width="780"
+		:width="980"
 		cancelText="取消"
 		okText="确定"
 		class="relation-wrapper"
+		@cancel="handelCancel"
+		:confirmLoading="confirmLoading"
 		centered>
 		<header>
 			<a-radio-group v-model:value="curTab">
-				<a-radio-button v-for="item in tabs" :key="item" :value="item">{{
-					TABS_ENUM[item]
-				}}</a-radio-button>
+				<a-radio-button
+					class="radio-btn"
+					v-for="item in tabs"
+					:key="item"
+					:value="item">
+					{{ TABS_ENUM[item] }}
+				</a-radio-button>
 			</a-radio-group>
 		</header>
-		<main></main>
+		<main>
+			<Okr
+				@handelCheckedCallback="handelCheckedCallback"
+				v-if="tabs.includes('OKR')"
+				:relevanceType="info.relevanceType"
+				:biz-id="info.id"
+				v-show="curTab == 'OKR'" />
+			<Project
+				v-if="tabs.includes('PROJECT')"
+				:okr-info="info"
+				v-show="curTab == 'PROJECT'"
+				@handelCheckedCallback="handelCheckedCallback" />
+			<Task
+				v-if="tabs.includes('TASK')"
+				:okr-info="info"
+				v-show="curTab == 'TASK'"
+				@handelCheckedCallback="handelCheckedCallback" />
+		</main>
 	</a-modal>
 </template>
 
 <script setup lang='ts'>
-import {ref} from 'vue';
+import {onMounted, reactive, ref} from 'vue';
 import {TABS_ENUM} from './enum';
-
+import {ADD_RELATION,ADD_OKR_RELATION} from '@/api/api'
+import Project from './components/Project/index.vue'
+import Task from './components/Task/index.vue'
+import Okr from './components/Okr/index.vue'
+import { relevanceType,reverseTabEnum } from './enum';
+import {message} from 'ant-design-vue';
 defineOptions({
 	name: 'Relation',
 });
+const emit = defineEmits(["update:visible", "refreshList"]);
 const props = defineProps({
 	visible: {
 		type: Boolean,
-		default: true,
+		default: false,
 	},
+    // 显示那些tab
 	tabs: {
 		type: Array<'PROJECT' | 'TASK' | 'OKR'>,
 		require: true,
@@ -43,10 +73,50 @@ const props = defineProps({
 			);
 		},
 	},
+    // 关联的源信息
+    info: {
+        type: Object,
+        require: true,
+        default: {},
+    }
 });
 const curTab = ref(props.tabs[0]);
+const confirmLoading = ref(false)
+const newCheckArr = ref([])
+// check的回调
+const handelCheckedCallback = (val) => {
+  newCheckArr.value = val;
+};
 // 成功回调
-const handleOk = () => {};
+const handleOk = async () => {
+    confirmLoading.value = true
+    const params = {
+    sourceInfo: {
+      id: props.info.id,
+      relevanceType: props.info.relevanceType,
+      relevanceCategory: props.info.relevanceCategory,
+    },
+    targetInfo: newCheckArr.value
+      .map((list) =>({
+        id: list.id || list.projectId,
+        relevanceType: relevanceType[list.type] || "PROJECT",
+        relevanceCategory: reverseTabEnum[curTab.value],
+      })
+     ),
+    relevanceSource: "ADD",
+  };
+  const res = curTab.value=='OKR'? await ADD_OKR_RELATION(params) : await ADD_RELATION(params);
+  if (res.code == 1) {
+    message.success('关联成功!');
+    emit("refreshList");
+  }
+  confirmLoading.value = false
+  emit("update:visible", false);
+};
+// 关闭弹窗
+const handelCancel =() =>{
+    emit("update:visible", false);
+}
 </script>
 
 <style scoped lang='less'>

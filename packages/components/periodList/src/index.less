@@ -1,0 +1,112 @@
+// 周期气泡样式
+.period-popoer {
+
+    // 修改padding
+    &.el-popover.el-popper {
+        padding: 0;
+    }
+}
+
+// 周期列表样式
+.period-list-wrapper {
+    .period-year-select {
+        padding: 0 120px;
+        height: 60px;
+        line-height: 60px;
+        text-align: center;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        display: flex;
+        justify-content: space-between;
+
+        .prev,
+        .next {
+            cursor: pointer;
+        }
+
+        .prev.disabled,
+        .next.disabled {
+            cursor: default;
+            color: #ddd;
+        }
+    }
+
+    .period-list {
+        padding: 16px 20px;
+
+        li {
+            height: 30px;
+            line-height: 30px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            user-select: none;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            span {
+                text-align: center;
+                flex: 1;
+                height: 100%;
+                background: #fafafa;
+                border-radius: 2px;
+                cursor: pointer;
+                font-size: 14px;
+                font-family: PingFangSC-Regular, PingFang SC;
+                font-weight: 400;
+                color: #595959;
+
+                &:not(.disabled):hover {
+                    background: #d8f8f2;
+                    color: #0ea388;
+                }
+
+                &.active,
+                &.active:hover {
+                    color: #ffffff;
+                    background: #0ea388;
+                }
+
+                &.disabled {
+                    opacity: 0.3;
+                    color: #595959;
+                    cursor: auto;
+                }
+
+                margin-right: 8px;
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+}
+
+.period-cont {
+    min-width: 160px;
+    box-sizing: border-box;
+    padding: 0 17px 0 20px;
+    justify-content: space-between;
+    box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.06);
+    height: 40px;
+    line-height: 40px;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #303133;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    user-select: none;
+    cursor: pointer;
+    transition: all 0.5s ease-in;
+
+    span {
+        vertical-align: middle;
+    }
+
+    // &:hover {
+    //     color: #00a48a;
+    // }
+}

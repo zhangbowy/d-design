@@ -1,0 +1,59 @@
+.okr-relation-wrapper {
+
+    header {
+        #myokr-period {
+            width: 200px;
+            background: @white;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+
+            :v-deep(.period-cont) {
+                box-shadow: none;
+            }
+        }
+    }
+
+    main {
+        margin-top: 10px;
+        overflow: auto;
+        height: 300px;
+        padding-bottom: 30px;
+
+        .O {
+            width: 35px;
+            height: 20px;
+            background: #00A48A;
+            border-radius: 21px;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 500;
+            color: @white;
+            line-height: 20px;
+            text-align: center;
+            margin-right: 12px;
+        }
+
+        .cur-checkbox {
+            margin-top: 20px;
+            margin-left: 0;
+
+            .KR {
+                .O;
+                color: #00A488;
+                background: #D8F8F2;
+                font-size: 12px;
+            }
+        }
+
+
+
+
+
+        .kr-checkbox {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-left: 18px;
+        }
+    }
+}

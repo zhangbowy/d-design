@@ -1,0 +1,72 @@
+.task-wrapper {
+    header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+
+        .task-select {
+            width: 180px;
+            border-radius: 4px;
+        }
+
+        .sort {
+            width: 32px;
+            height: 32px;
+            background: #FFFFFF;
+            border-radius: 4px;
+            border: 1px solid #dcdfe6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 16px;
+            cursor: pointer;
+        }
+
+
+        .task-input {
+            width: 320px;
+            background: #FFFFFF;
+            border-radius: 4px;
+            margin-left: auto;
+        }
+    }
+
+
+}
+
+
+
+.task-sort-ul {
+    margin-bottom: 0;
+
+    li {
+        padding: 7px 10px;
+
+        &:hover {
+            border-radius: 4px;
+            background-color: #fafafa;
+            cursor: pointer;
+        }
+    }
+}
+
+
+.single-line {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.taskName {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.85);
+}
+
+.default-status {
+    width: 54px;
+    height: 22px;
+    border-radius: 2px;
+    line-height: 22px;
+    text-align: center;
+    display: inline-block;
+}

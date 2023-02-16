@@ -48,3 +48,10 @@ export function setToken(token: string) {
 export function removeToken() {
     sessionStorage.setItem(TokenKey, '');
 }
+
+
+// 存储localStorage
+export function getStorage(key) {
+    const value = localStorage.getItem(key) || "";
+    return value ? JSON.parse(value) : null;
+}
