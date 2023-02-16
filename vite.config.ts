@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import Components from "unplugin-vue-components/vite"
 import { resolve } from 'path'
+import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
 import dts from 'vite-plugin-dts'
 import DefineOptions from 'unplugin-vue-define-options/vite';
 
@@ -55,8 +57,18 @@ export default defineConfig({
         },
     },
     plugins: [
-        vue(),
+        vue({
+            template: {
+                compilerOptions: {
+                    // 将所有带短横线的标签名都视为自定义元素
+                    isCustomElement: (tag) => tag === "iconpark-icon",
+                },
+            },
+        }),
         DefineOptions(),
+        Components({
+            resolvers: [AntDesignVueResolver()],
+        }),
         dts({ include: './packages' }),
     ]
 })

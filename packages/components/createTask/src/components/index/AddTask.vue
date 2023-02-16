@@ -23,7 +23,8 @@
                             "></iconpark-icon>
                         </div>
                     </div>
-                    <OssUploadVue class="upload-icon" :taskId="returnSnow()" @startUpload="startUpload" @endUpload="endUpload">
+                    <OssUploadVue class="upload-icon" :bizId="returnSnow()" @startUpload="startUpload"
+                        @endUpload="endUpload">
                         <iconpark-icon class="icon" name="fujian"></iconpark-icon>
                     </OssUploadVue>
                 </div>
@@ -58,15 +59,6 @@
             <iconpark-icon v-if="!checkNullObj(principalUser)" name="delete" class="delete-icon"
                 @click="handleDeletePri()"></iconpark-icon>
         </div>
-        <!-- <iconpark-icon name="right" class="right-icon"></iconpark-icon>
-      </div>
-      <iconpark-icon
-        v-if="!checkNullObj(principalUser)"
-        name="delete"
-        class="delete-icon"
-        @click="handleDeletePri()"
-      ></iconpark-icon>
-    </div> -->
         <!-- add start time box -->
         <div class="add-deadline">
             <span class="public-title">任务开始时间</span>
@@ -145,14 +137,8 @@
                 <span>插入钉钉日程</span>
                 <a-switch :checked="openSchedule" @change="handleSchedule" />
             </div>
-            <!-- add-schedule -->
-            <!-- <div class="schedule-box">
-        <iconpark-icon name="richeng" class="remind-icon"></iconpark-icon>
-        <span>插入钉钉日程</span>
-        <a-switch :checked="openSchedule" @change="handleSchedule" />
-      </div> -->
             <!-- add cycle -->
-            <div class="cycle-box">
+            <div v-if="trait === 'default'" class="cycle-box">
                 <iconpark-icon name="loop" class="remind-icon"></iconpark-icon>
                 <span class="cycle-title">任务循环</span>
                 <a-select v-model:value="cycleValue" :dropdownMatchSelectWidth="false" @change="cycleChange"
@@ -241,7 +227,7 @@
 
 <script setup>
 import { ref, reactive, toRefs, watch } from "vue";
-import { CREATE_TASK } from "../../api";
+import { CREATE_TASK, CREATE_PROJECT_TASK } from "../../api";
 import { checkNullObj, formatDate, judgeStrNull } from "../../utils/utils";
 import { message } from "ant-design-vue";
 import mitt from "@/utils/eventBus";
@@ -253,15 +239,39 @@ import AddExcVue from "../addExc/AddExc.vue";
 import DialogVue from "../dialog/Dialog.vue";
 import OssUploadVue from "../../../../upload/src/index";
 import * as dd from "dingtalk-jsapi";
+import { alertProps } from "ant-design-vue/lib/alert";
 
 // import Comment from "./Comment.vue";
 dayjs.locale("zh-cn");
-const curUser = JSON.parse(localStorage.getItem("QZP_DATA")).user;
+// const curUser = JSON.parse(localStorage.getItem("QZZ_DATA") || localStorage.getItem("QZP_DATA")).user;
 const props = defineProps({
     visible: Boolean,
-    title: String,
+    curUser: {
+        type: Object,
+        required: true
+    },
+    title: {
+        type: String,
+        default: '创建任务',
+        required: false
+    },
+    trait: {
+        type: Boolean,
+        default: false,
+        required: false
+    },
+    projectId: {
+        type: Number,
+        default: 0,
+        required: false
+    },
+    menuId: {
+        type: Number,
+        default: 0,
+        required: false
+    }
 });
-const emit = defineEmits(["closeDrawer"]);
+const emit = defineEmits(["closeDrawer", "successCreate"]);
 
 const cycleList = ref([
     {
@@ -293,7 +303,7 @@ const cycleList = ref([
 
 const taskFrom = reactive({
     content: "",
-    createUser: {},
+    createUser: props.curUser,
     principalUser: {},
     abortTime: "",
     remindType: [],
@@ -373,7 +383,7 @@ watch(
         if (val) {
             taskFrom.abortTime = "";
             taskFrom.content = "";
-            taskFrom.createUser = curUser;
+            taskFrom.createUser = props.curUser;
             taskFrom.dayFormat = null;
             taskFrom.forCreateUser = null;
             taskFrom.openSchedule = false;
@@ -575,6 +585,7 @@ const handleDeleteSub = (index) => {
  * handle create task event
  */
 const handleCreateTask = async () => {
+    let resCode = 0, resData = null;
     loading.value = true;
     remindOptions.value.forEach((el) => {
         if (el.choose && el.type != "00") {
@@ -585,30 +596,55 @@ const handleCreateTask = async () => {
             taskFrom.remindType.push(el);
         }
     });
-    if (taskFrom.createUser.userId != curUser.userId) {
-        taskFrom.forCreateUser = curUser;
+    if (taskFrom.createUser.userId != props.curUser.userId) {
+        taskFrom.forCreateUser = props.curUser;
     }
     taskFrom.accessory.ossAccessoryList.forEach((el) => {
         el.ossId = el.ossMaterialId;
     });
-    const { code, data } = await CREATE_TASK({
-        content: taskFrom.content,
-        createUser: taskFrom.createUser,
-        principalUser: taskFrom.principalUser,
-        abortTime: taskFrom.abortTime,
-        remindType: taskFrom.remindType,
-        subTasks: taskFrom.subTasks,
-        openSchedule: taskFrom.openSchedule,
-        forCreateUser: taskFrom.forCreateUser,
-        loopType: taskFrom.loopType,
-        accessory: taskFrom.accessory,
-        startTime: dayjs(taskFrom.startTime).format('YYYY-MM-DD HH:mm:00')
-    });
+    if (props.trait == 'project') {
+        const { code, data } = await CREATE_PROJECT_TASK({
+            content: taskFrom.content,
+            createUser: taskFrom.createUser,
+            principalUser: taskFrom.principalUser,
+            abortTime: taskFrom.abortTime,
+            remindType: taskFrom.remindType,
+            subTasks: taskFrom.subTasks,
+            openSchedule: taskFrom.openSchedule,
+            forCreateUser: taskFrom.forCreateUser,
+            loopType: taskFrom.loopType,
+            projectId: props.projectId,
+            menuId: props.menuId,
+            accessory: taskFrom.accessory,
+            startTime: dayjs(taskFrom.startTime).format('YYYY-MM-DD HH:mm:00')
+        });
+    } else {
+        const { code, data } = await CREATE_TASK({
+            content: taskFrom.content,
+            createUser: taskFrom.createUser,
+            principalUser: taskFrom.principalUser,
+            abortTime: taskFrom.abortTime,
+            remindType: taskFrom.remindType,
+            subTasks: taskFrom.subTasks,
+            openSchedule: taskFrom.openSchedule,
+            forCreateUser: taskFrom.forCreateUser,
+            loopType: taskFrom.loopType,
+            accessory: taskFrom.accessory,
+            startTime: dayjs(taskFrom.startTime).format('YYYY-MM-DD HH:mm:00')
+        });
+        resCode = code;
+        resData = data
+    }
     if (code === 1) {
-        emit("closeDrawer");
-        message.success("任务创建成功");
-        loading.value = false;
-        mitt.emit("reloadTask");
+        if (props.trait === 'OKR') {
+            //关联todo
+        } else {
+            emit("successCreate", data);
+            emit("closeDrawer")
+            message.success("任务创建成功");
+            loading.value = false;
+            mitt.emit("reloadTask");
+        }
     } else {
         message.error("任务创建失败");
         loading.value = false;
@@ -881,7 +917,7 @@ const handleDownloadFile = (file) => {
  */
 const returnSnow = () => {
     // const bizId = new Snowflake(1n, 1n, 0n).nextId().toString();
-    const bizId = Date.now().toString() + curUser.userId;
+    const bizId = Date.now().toString() + props.curUser.userId;
     return bizId
 }
 const {

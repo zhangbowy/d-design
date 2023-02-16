@@ -916,7 +916,7 @@ export default {
 					color: @font2;
 				}
 				.common-btn.sure-btn {
-					color: @white;
+					color: #fff;
 					background-color: @primary;
 					margin-right: 0;
 				}
@@ -1130,7 +1130,7 @@ export default {
 			top: 64px;
 			left: 20px;
 			z-index: 10;
-			background: @white;
+			background: #fff;
 			box-shadow: 0px 5px 40px 4px rgba(@black, 0.09),
 				0px 3px 18px 0px rgba(@black, 0.12), 0px 1px 2px -2px rgba(@black, 0.16);
 

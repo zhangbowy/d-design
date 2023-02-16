@@ -24,7 +24,7 @@ npm link
 ```
 #### 3、其他任意项目 把pu-ui link到本项目node_modules
 ```js
-npm link pu-ui
+npm link d-design
 ```
 #### 4、引入测试
 ```js

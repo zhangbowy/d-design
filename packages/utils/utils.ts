@@ -1,5 +1,5 @@
 
-import { TokenKey } from '../enum'
+// import { TokenKey } from '../enum'
 
 /*
  * 返回页面中的查询参数
@@ -38,15 +38,15 @@ export const debounce = (fn: (value: any) => void, time = 500) => {
 
 
 export function getToken() {
-    return sessionStorage.getItem(TokenKey) || '';
+    return localStorage.getItem('QZZ_ACCESS_TOKEN') || localStorage.getItem('QZP_ACCESS_TOKEN') || localStorage.getItem('G_TOKEN');
 }
 
 export function setToken(token: string) {
-    sessionStorage.setItem(TokenKey, token);
+    localStorage.setItem('QZZ_ACCESS_TOKEN', token);
 }
 
 export function removeToken() {
-    sessionStorage.setItem(TokenKey, '');
+    localStorage.setItem('QZZ_ACCESS_TOKEN', '');
 }
 
 

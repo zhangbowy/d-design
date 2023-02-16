@@ -114,7 +114,7 @@ const props = defineProps({
   isDisable: {
     type: Boolean,
     required: false,
-    defaultValue: false
+    default: false
   }
 });
 

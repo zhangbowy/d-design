@@ -7,13 +7,30 @@
 <script setup>
 import { ref } from "vue";
 import { GET_STS, GET_FILES_PATH } from "../api";
+import { getQueryVariable } from "@/utils/utils";
 import ossClient from "@/utils/oss";
 
 const props = defineProps({
-  bizId: Number,
-  corpId: String,
-  appId: String,
-  bizType: String
+  bizId: [Number, String],
+  corpId: {
+    type: String,
+    default: () => {
+      return getQueryVariable("corpId")
+    },
+    required: false
+  },
+  appId: {
+    type: String,
+    default: () => {
+      return getQueryVariable("appId")
+    },
+    required: false
+  },
+  bizType: {
+    type: String,
+    default: 'okr_score',
+    required: false
+  }
 });
 
 const emit = defineEmits(["startUpload", "endUpload"]);
