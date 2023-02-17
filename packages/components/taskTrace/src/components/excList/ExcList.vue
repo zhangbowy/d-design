@@ -69,11 +69,11 @@
           "
           class="exc-remind-box"
         >
-          <div v-if="!isAllRead" class="remind-btn" @click="handleUnread">
+          <div v-if="!isAllRead && trait != 'PROJECT'" class="remind-btn" @click="handleUnread">
             <iconpark-icon name="remind"></iconpark-icon>
             <span>提醒未读人员</span>
           </div>
-          <div class="press-btn" @click="handlePress">
+          <div v-if="trait != 'PROJECT'" class="press-btn" @click="handlePress">
             <iconpark-icon name="Urge"></iconpark-icon>
             <span>催办全部人员</span>
           </div>

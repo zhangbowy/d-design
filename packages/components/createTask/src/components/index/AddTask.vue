@@ -340,7 +340,6 @@ import AddExcVue from '../addExc/AddExc.vue';
 import DialogVue from '../dialog/Dialog.vue';
 import OssUploadVue from '../../../../upload/src/index';
 import * as dd from 'dingtalk-jsapi';
-import {alertProps} from 'ant-design-vue/lib/alert';
 
 // import Comment from "./Comment.vue";
 dayjs.locale('zh-cn');
@@ -727,6 +726,8 @@ const handleCreateTask = async () => {
 			accessory: taskFrom.accessory,
 			startTime: dayjs(taskFrom.startTime).format('YYYY-MM-DD HH:mm:00'),
 		});
+		resCode = code;
+		resData = data;
 	} else {
 		const {code, data} = await CREATE_TASK({
 			content: taskFrom.content,
