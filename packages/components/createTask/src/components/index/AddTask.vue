@@ -340,7 +340,6 @@ import AddExcVue from '../addExc/AddExc.vue';
 import DialogVue from '../dialog/Dialog.vue';
 import OssUploadVue from '../../../../upload/src/index';
 import * as dd from 'dingtalk-jsapi';
-import {alertProps} from 'ant-design-vue/lib/alert';
 
 // import Comment from "./Comment.vue";
 dayjs.locale('zh-cn');
@@ -370,37 +369,10 @@ const props = defineProps({
         type: Number,
         default: 0,
         required: false
-    }
-	visible: Boolean,
-	curUser: {
-		type: Object,
-		default: {
-			userId: 0,
-		},
-	},
+    },
 	width: {
 		type: Number,
 		default: 480,
-	},
-	title: {
-		type: String,
-		default: '创建任务',
-		required: false,
-	},
-	trait: {
-		type: Boolean,
-		default: false,
-		required: false,
-	},
-	projectId: {
-		type: Number,
-		default: 0,
-		required: false,
-	},
-	menuId: {
-		type: Number,
-		default: 0,
-		required: false,
 	},
 });
 const emit = defineEmits(['closeDrawer', 'successCreate']);
@@ -751,6 +723,8 @@ const handleCreateTask = async () => {
 			accessory: taskFrom.accessory,
 			startTime: dayjs(taskFrom.startTime).format('YYYY-MM-DD HH:mm:00'),
 		});
+        resCode = code;
+		resData = data;
 	} else {
 		const {code, data} = await CREATE_TASK({
 			content: taskFrom.content,
