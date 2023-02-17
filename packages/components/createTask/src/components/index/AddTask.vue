@@ -370,37 +370,10 @@ const props = defineProps({
         type: Number,
         default: 0,
         required: false
-    }
-	visible: Boolean,
-	curUser: {
-		type: Object,
-		default: {
-			userId: 0,
-		},
-	},
+    },
 	width: {
 		type: Number,
 		default: 480,
-	},
-	title: {
-		type: String,
-		default: '创建任务',
-		required: false,
-	},
-	trait: {
-		type: Boolean,
-		default: false,
-		required: false,
-	},
-	projectId: {
-		type: Number,
-		default: 0,
-		required: false,
-	},
-	menuId: {
-		type: Number,
-		default: 0,
-		required: false,
 	},
 });
 const emit = defineEmits(['closeDrawer', 'successCreate']);
