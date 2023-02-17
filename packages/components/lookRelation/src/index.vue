@@ -51,7 +51,10 @@
 								>查看详情</a-button
 							>
 							<a-divider style="margin: 0" type="vertical" />
-							<a-button type="link" @click="handleDelCor(item.relevanceId)"
+							<a-button
+								v-if="isOperable"
+								type="link"
+								@click="handleDelCor(item.relevanceId)"
 								>移除关联</a-button
 							>
 						</div>
@@ -62,7 +65,9 @@
 		<template #footer>
 			<div class="drawer-footer">
 				<a-button>关闭</a-button>
-				<a-button type="primary" @click="handelAddRelation">添加关联</a-button>
+				<a-button v-if="isOperable" type="primary" @click="handelAddRelation"
+					>添加关联</a-button
+				>
 			</div>
 		</template>
 	</a-drawer>
@@ -81,11 +86,11 @@
 </template>
 
 <script setup lang='ts'>
-import {reactive, ref} from 'vue';
+import {computed, reactive, ref} from 'vue';
 import {GET_CORRELATION_INFO, DELETE_CORRELATION} from '@/api/api';
 import {onMounted} from 'vue';
 import {IAllRelationData, InfoList} from './type';
-import {RELATION_TYPE, RELATION_TYPE_TEXT} from './enum';
+import {RELATION_TYPE, RELATION_TYPE_TEXT, OKR_PURSUE} from './enum';
 import {PlusOutlined} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
 import CreateTask from '@/components/createTask/src/components/index/AddTask.vue';
@@ -110,6 +115,7 @@ const props = defineProps({
 			content: 'mock',
 			id: 103224,
 			sourceType: 'OKR',
+			status: 'OKR_PURSUE',
 		},
 	},
 });
@@ -138,6 +144,10 @@ const initRequest = async () => {
 		console.log('查看关联初始化数据失败：', err);
 	}
 };
+//是否可以操作
+const isOperable = computed(() => {
+	return props.info.status === OKR_PURSUE;
+});
 // 添加任务
 const handelAddTask = () => {
 	createTaskVisible.value = true;
@@ -162,8 +172,9 @@ const handleDelCor = async (id: Number) => {
 };
 
 //任务创建成功回调
-const handelCreateTaskSuccess = (data) => {
-	console.log('data', data);
+const handelCreateTaskSuccess = () => {
+	createTaskVisible.value = false;
+	initRequest();
 };
 
 // 关闭弹窗

@@ -7,7 +7,24 @@ import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
 import { themePreprocessorPlugin } from "@zougt/vite-plugin-theme-preprocessor";
 import dts from 'vite-plugin-dts'
 import DefineOptions from 'unplugin-vue-define-options/vite';
-
+const includeStyles = {
+    ".ant-btn-link:hover, .ant-btn-link:focus": {
+        'border-color': "transparent",
+    },
+    ".ant-btn-primary:hover": {
+        color: '#ffffff'
+    },
+    ".ant-checkbox-disabled .ant-checkbox-inner": {
+        "background-color": '#f5f5f5'
+    },
+    ".ant-checkbox-checked": {
+        color: '@primary-color'
+    },
+    ".add-exc-box .ant-modal .ant-modal-content .ant-modal-footer .ant-btn-primary": {
+        'border-color': "#d9d9d9",
+        "background-color": '#f5f5f5'
+    }
+};
 
 export default defineConfig({
     server: {
@@ -87,19 +104,27 @@ export default defineConfig({
                     {
                         scopeName: "task-theme-default",
                         path: path.resolve("./packages/assets/style/variables.less"),
+                        includeStyles
                     },
                     {
                         scopeName: "task-theme-integration",
                         path: path.resolve(
                             "./packages/assets/style/variablesInte.less"
                         ),
+                        includeStyles
                     },
                     {
                         scopeName: "task-theme-okr",
                         path: path.resolve(
                             "./packages/assets/style/OKRvariables.less"
                         ),
+                        includeStyles
                     },
+                ],
+                includeStyleWithColors: [
+                    {
+                        color: "#ffffff",
+                    }
                 ],
                 defaultScopeName: "task-theme-default",
                 extract: false,
