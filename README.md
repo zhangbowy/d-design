@@ -28,5 +28,5 @@ npm link d-design
 ```
 #### 4、引入测试
 ```js
-import { ChooseUser } from 'pu-ui';
+import { ChooseUser } from 'd-design';
 ```
