@@ -256,7 +256,7 @@ const props = defineProps({
         required: false
     },
     trait: {
-        type: String,
+        type: String, //OKR/PROJECT/INTE/default
         default: false,
         required: false
     },
@@ -371,7 +371,6 @@ const spinning = ref(false);
 const hours = ref([]);
 const mins = ref([]);
 const datePicker = ref(null)
-const trait = ref(sessionStorage.getItem("G_TRAIT") || 'default');
 const cache = reactive({
     openData: null,
     closeData: null,
@@ -602,7 +601,7 @@ const handleCreateTask = async () => {
     taskFrom.accessory.ossAccessoryList.forEach((el) => {
         el.ossId = el.ossMaterialId;
     });
-    if (props.trait == 'project') {
+    if (props.trait == 'PROJECT') {
         const { code, data } = await CREATE_PROJECT_TASK({
             content: taskFrom.content,
             createUser: taskFrom.createUser,
@@ -618,6 +617,8 @@ const handleCreateTask = async () => {
             accessory: taskFrom.accessory,
             startTime: dayjs(taskFrom.startTime).format('YYYY-MM-DD HH:mm:00')
         });
+        resCode = code;
+        resData = data
     } else {
         const { code, data } = await CREATE_TASK({
             content: taskFrom.content,
@@ -635,7 +636,7 @@ const handleCreateTask = async () => {
         resCode = code;
         resData = data
     }
-    if (code === 1) {
+    if (resCode === 1) {
         if (props.trait === 'OKR') {
             //关联todo
         } else {
