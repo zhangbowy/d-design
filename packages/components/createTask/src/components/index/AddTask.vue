@@ -746,7 +746,7 @@ const handleCreateTask = async () => {
 		if (props.trait === 'OKR') {
 			//关联todo
 		} else {
-			emit('successCreate', data);
+			emit('successCreate', resData);
 			emit('closeDrawer');
 			message.success('任务创建成功');
 			loading.value = false;

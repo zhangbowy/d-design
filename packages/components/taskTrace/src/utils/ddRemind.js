@@ -20,28 +20,8 @@ export const handleRemindDD = (
     let clientId = getQueryVariable("clientId");
     let ddAppId = appId.substring(2);
     let appUrl = `dingtalk://dingtalkclient/action/openapp?corpid=${corpId}&container_type=work_platform&app_id=${ddAppId}&redirect_type=emit_params&params=&redirect_url=${encodeURIComponent(
-        `https://qzz-static.forwe.store/public-assets/coolapp.html?corpId=${corpId}&appId=${appId}&clientId=${clientId}&taskId=${taskId}&app=${trait}`
+        `https://qzz-static.forwe.store/public-assets/coolapp.html?corpId=${corpId}&appId=${appId}&clientId=${clientId}&taskId=${taskId}&app=${trait}&mode=${import.meta.env.MODE}`
     )}`;
-    let integrationUrl = "";
-    switch (import.meta.env.MODE) {
-        case "daily":
-            integrationUrl = `dingtalk://dingtalkclient/action/openapp?corpid=${corpId}&container_type=work_platform&app_id=${ddAppId}&redirect_type=emit_params&params=&redirect_url=${encodeURIComponent(
-                `http://daily-sunstrike.sunmeta.top/task?corpId=${corpId}&appId=${appId}&clientId=${clientId}&taskId=${taskId}&app=${trait}`
-            )}`;
-            break;
-        case "gray":
-            integrationUrl = `dingtalk://dingtalkclient/action/openapp?corpid=${corpId}&container_type=work_platform&app_id=${ddAppId}&redirect_type=emit_params&params=&redirect_url=${encodeURIComponent(
-                `http://gray-sunstrike.sunmeta.top/task?corpId=${corpId}&appId=${appId}&clientId=${clientId}&taskId=${taskId}&app=${trait}`
-            )}`;
-            break;
-        case "prod":
-            integrationUrl = `dingtalk://dingtalkclient/action/openapp?corpid=${corpId}&container_type=work_platform&app_id=${ddAppId}&redirect_type=emit_params&params=&redirect_url=${encodeURIComponent(
-                `https://sunstrike.forwe.store/task?corpId=${corpId}&appId=${appId}&clientId=${clientId}&taskId=${taskId}&app=${trait}`
-            )}`;
-            break;
-    }
-
-    let url = appUrl;
 
     if (user instanceof Array) {
         user.map((el) => {
@@ -63,7 +43,7 @@ export const handleRemindDD = (
             },
             attachment: {
                 title: content,
-                url: url,
+                url: appUrl,
                 image: "https://daily-static-file.oss-cn-shanghai.aliyuncs.com/qzp-img-logo.svg",
                 text: "任务",
             },
