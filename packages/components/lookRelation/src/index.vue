@@ -71,6 +71,13 @@
 		:tabs="['PROJECT', 'TASK']"
 		:info="relationInfo"
 		@refreshList="initRequest" />
+	<CreateTask
+		v-if="createTaskVisible"
+		:visible="createTaskVisible"
+		:title="'创建任务'"
+		:width="780"
+		@closeDrawer="createTaskVisible = false"
+		@successCreate="handelCreateTaskSuccess" />
 </template>
 
 <script setup lang='ts'>
@@ -81,6 +88,7 @@ import {IAllRelationData, InfoList} from './type';
 import {RELATION_TYPE, RELATION_TYPE_TEXT} from './enum';
 import {PlusOutlined} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
+import CreateTask from '@/components/createTask/src/components/index/AddTask.vue';
 
 defineOptions({
 	name: 'LookRelation',
@@ -96,7 +104,7 @@ const props = defineProps({
 		default: {
 			avatar:
 				'https://static-legacy.dingtalk.com/media/lADPDhmOyroRtzrNArzNArw_700_700.jpg',
-			name: '刘恒',
+			name: '暂无',
 			type: 'KR',
 			indexId: 1,
 			content: 'mock',
@@ -107,6 +115,7 @@ const props = defineProps({
 });
 
 const show = ref(false);
+const createTaskVisible = ref(false);
 const allRelationData = ref<IAllRelationData[]>([]); // 所有关联数据
 const relationInfo = reactive({
 	id: props.info.id,
@@ -115,18 +124,24 @@ const relationInfo = reactive({
 });
 // 初始化数据请求
 const initRequest = async () => {
-	const params = {
-		bizId: props.info.id,
-		relevanceCategory: props.info.sourceType,
-		relevanceType: props.info.type,
-	};
-	const res = await GET_CORRELATION_INFO(params);
-	if (res.code == 1) {
-		allRelationData.value = res.data;
+	try {
+		const params = {
+			bizId: props.info.id,
+			relevanceCategory: props.info.sourceType,
+			relevanceType: props.info.type,
+		};
+		const res = await GET_CORRELATION_INFO(params);
+		if (res.code == 1) {
+			allRelationData.value = res.data;
+		}
+	} catch (err) {
+		console.log('查看关联初始化数据失败：', err);
 	}
 };
 // 添加任务
-const handelAddTask = () => {};
+const handelAddTask = () => {
+	createTaskVisible.value = true;
+};
 // 查看详情
 const handleDetail = (item: InfoList, type: String) => {
 	emit('lookDetailCallback', item, type);
@@ -142,8 +157,13 @@ const handleDelCor = async (id: Number) => {
 			message.success('移除关联成功!');
 		}
 	} catch (err) {
-		console.log('err', err);
+		console.log('移除关联失败：', err);
 	}
+};
+
+//任务创建成功回调
+const handelCreateTaskSuccess = (data) => {
+	console.log('data', data);
 };
 
 // 关闭弹窗
@@ -161,4 +181,24 @@ onMounted(() => {
 
 <style scoped lang='less'>
 @import './index.less';
+</style>
+
+<style lang="less">
+.custom-class {
+	.ant-drawer-body {
+		background-color: #f6f6f6;
+		padding: 0;
+		position: relative;
+	}
+
+	.ant-drawer-header-title {
+		width: 100%;
+		justify-content: inherit;
+		flex-direction: row-reverse;
+
+		.ant-drawer-title {
+			flex: initial;
+		}
+	}
+}
 </style>

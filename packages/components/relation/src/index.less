@@ -1,10 +1,6 @@
 .relation-wrapper {
     width: 100%;
 
-    :global(.ant-modal-body) {
-        padding: 0;
-    }
-
 
     header {
         width: inherit;
@@ -25,5 +21,10 @@
 
     main {
         padding: 24px 24px 0;
+
+        :global(.ant-table-cell) {
+            padding: 16px 16px !important;
+        }
+
     }
 }

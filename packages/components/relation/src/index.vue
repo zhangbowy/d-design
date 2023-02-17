@@ -21,24 +21,26 @@
 				</a-radio-button>
 			</a-radio-group>
 		</header>
-		<main>
-			<Okr
-				@handelCheckedCallback="handelCheckedCallback"
-				v-if="tabs.includes('OKR')"
-				:relevanceType="info.relevanceType"
-				:biz-id="info.id"
-				v-show="curTab == 'OKR'" />
-			<Project
-				v-if="tabs.includes('PROJECT')"
-				:okr-info="info"
-				v-show="curTab == 'PROJECT'"
-				@handelCheckedCallback="handelCheckedCallback" />
-			<Task
-				v-if="tabs.includes('TASK')"
-				:okr-info="info"
-				v-show="curTab == 'TASK'"
-				@handelCheckedCallback="handelCheckedCallback" />
-		</main>
+		<a-config-provider :locale="zhCN">
+			<main>
+				<Okr
+					@handelCheckedCallback="handelCheckedCallback"
+					v-if="tabs.includes('OKR')"
+					:relevanceType="info.relevanceType"
+					:biz-id="info.id"
+					v-show="curTab == 'OKR'" />
+				<Project
+					v-if="tabs.includes('PROJECT')"
+					:okr-info="info"
+					v-show="curTab == 'PROJECT'"
+					@handelCheckedCallback="handelCheckedCallback" />
+				<Task
+					v-if="tabs.includes('TASK')"
+					:okr-info="info"
+					v-show="curTab == 'TASK'"
+					@handelCheckedCallback="handelCheckedCallback" />
+			</main>
+		</a-config-provider>
 	</a-modal>
 </template>
 
@@ -51,6 +53,7 @@ import Task from './components/Task/index.vue'
 import Okr from './components/Okr/index.vue'
 import { relevanceType,reverseTabEnum } from './enum';
 import {message} from 'ant-design-vue';
+import zhCN from 'ant-design-vue/es/locale/zh_CN';
 defineOptions({
 	name: 'Relation',
 });
@@ -121,4 +124,13 @@ const handelCancel =() =>{
 
 <style scoped lang='less'>
 @import './index.less';
+</style>
+<style lang="less">
+.relation-wrapper {
+	width: 100%;
+
+	.ant-modal-body {
+		padding: 0;
+	}
+}
 </style>

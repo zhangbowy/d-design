@@ -13,11 +13,7 @@
 					>{{ item.label }}</a-select-option
 				>
 			</a-select>
-			<a-popover
-				placement="bottom"
-				:visible="visible"
-				trigger="click"
-				popper-class="task-popover">
+			<a-popover trigger="focus" popper-class="task-popover">
 				<template #content>
 					<ul class="task-sort-ul">
 						<li
@@ -28,10 +24,7 @@
 						</li>
 					</ul>
 				</template>
-
-				<span class="sort" @click="visible = true">
-					<profile-outlined />
-				</span>
+				<profile-outlined class="sort" />
 			</a-popover>
 			<a-input
 				v-model:value="taskName"
@@ -177,7 +170,6 @@ const filterContent = reactive({
 const state = reactive({
 	loading: true,
 	selectedRowKeys: [],
-	visible: false,
 });
 const pagination = reactive({
 	totalNum: 0,
@@ -227,7 +219,6 @@ const getTaskList = async () => {
 //popover点击
 const selectPopover = (val) => {
 	filterContent.curSort = val;
-	state.visible = false;
 };
 const searchName = debounce(getTaskList, 500);
 // onMounted(() => {
@@ -249,7 +240,7 @@ watch(
 	}
 );
 watch(() => filterContent.taskName, searchName);
-const {loading, visible} = toRefs(state);
+const {loading} = toRefs(state);
 const {curAngle, taskName} = toRefs(filterContent);
 </script>
 

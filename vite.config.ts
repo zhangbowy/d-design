@@ -50,6 +50,10 @@ export default defineConfig({
     css: {
         preprocessorOptions: {
             less: {
+                // modifyVars: {
+                //     "primary-color": "#00A48A",
+                // },
+                javascriptEnabled: true,
                 charset: false,
                 // 注入样式变量（根据自己需求注入其他）
                 additionalData: '@import "@/style/global.less";',
@@ -67,7 +71,12 @@ export default defineConfig({
         }),
         DefineOptions(),
         Components({
-            resolvers: [AntDesignVueResolver()],
+            resolvers: [
+                // AntDesignVueResolver({
+                //     importStyle: "less",
+                // }),
+                AntDesignVueResolver()
+            ],
         }),
         dts({ include: './packages' }),
     ]
