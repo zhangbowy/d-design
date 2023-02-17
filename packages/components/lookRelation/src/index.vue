@@ -81,9 +81,9 @@
 </template>
 
 <script setup lang='ts'>
-import {reactive, ref} from '@vue/reactivity';
+import {reactive, ref} from 'vue';
 import {GET_CORRELATION_INFO, DELETE_CORRELATION} from '@/api/api';
-import {onMounted} from '@vue/runtime-core';
+import {onMounted} from 'vue';
 import {IAllRelationData, InfoList} from './type';
 import {RELATION_TYPE, RELATION_TYPE_TEXT} from './enum';
 import {PlusOutlined} from '@ant-design/icons-vue';
