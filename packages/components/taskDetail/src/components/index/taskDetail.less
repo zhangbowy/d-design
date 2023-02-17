@@ -15,7 +15,7 @@
                         }
 
                         .ant-drawer-title {
-                            color: #1d2129;
+                            color: @text-main;
                             font-size: 18px;
                             font-weight: 500;
 
@@ -27,7 +27,7 @@
                                 iconpark-icon {
                                     font-size: 16px;
                                     margin-right: 16px;
-                                    color: #86909c;
+                                    color: @text-minor;
                                     cursor: pointer;
                                 }
 
@@ -41,7 +41,7 @@
 
                                         .termination-task {
                                             &:hover {
-                                                color: #3073ff;
+                                                color: @primary-color;
                                                 cursor: pointer;
                                             }
                                         }
@@ -58,7 +58,7 @@
     .public-title {
         font-weight: 400;
         font-size: 14px;
-        color: #86909c;
+        color: @text-minor;
         white-space: nowrap;
     }
 
@@ -71,24 +71,24 @@
         height: 28px;
         border-radius: 16px;
         padding: 0 12px;
-        border: 1px solid #e5e6eb;
+        border: 1px solid @border-general;
         display: flex;
         align-items: center;
         box-sizing: border-box;
         cursor: pointer;
 
         &:hover {
-            border: 1px solid #3073ff;
+            border: 1px solid @primary-color;
         }
 
         .empty-text {
             font-weight: 400;
             font-size: 14px;
-            color: #c9cdd4;
+            color: @text-disable;
         }
 
         .right-icon {
-            color: #4e5969;
+            color: @text-sub-main;
             margin-left: 12px;
             margin-left: auto;
         }
@@ -99,7 +99,7 @@
         font-weight: 500;
         min-height: 40px !important;
         padding-left: 0;
-        color: #1d2129;
+        color: @text-main;
         border: none;
     }
 
@@ -183,11 +183,11 @@
     .main-task-text {
         font-size: 12px;
         padding-left: 10px;
-        color: #c9cdd4;
-        border-left: 2px solid #c9cdd4;
+        color: @text-disable;
+        border-left: 2px solid @text-disable;
 
         .main-task-content:hover {
-            color: #3073ff;
+            color: @primary-color;
             cursor: pointer;
         }
 
@@ -195,7 +195,7 @@
             margin-left: 4px;
             display: inline-flex;
             align-items: center;
-            color: #3073ff;
+            color: @primary-color;
             cursor: pointer;
             user-select: none;
             vertical-align: bottom;
@@ -214,7 +214,7 @@
         .info-time {
             font-size: 12px;
             font-weight: 400;
-            color: #86909c;
+            color: @text-minor;
         }
 
         .info-tag {
@@ -259,17 +259,17 @@
                 height: 28px;
                 padding: 0 12px;
                 border-radius: 16px;
-                border: 1px solid #e5e6eb;
+                border: 1px solid @border-general;
 
                 &:hover {
-                    border: 1px solid #3073ff;
+                    border: 1px solid @primary-color;
                 }
 
                 .ant-picker-input {
                     input::placeholder {
                         font-weight: 400;
                         font-size: 14px;
-                        color: #c9cdd4;
+                        color: @text-disable;
                     }
 
                     input:focus {
@@ -281,7 +281,7 @@
 
                 .right-icon {
                     margin: 0;
-                    color: #4e5969;
+                    color: @text-sub-main;
                 }
             }
 
@@ -291,12 +291,12 @@
 
             .ant-picker-disabled {
                 background-color: transparent;
-                border: 1px solid #e5e6eb;
+                border: 1px solid @border-general;
                 cursor: not-allowed;
 
                 .ant-picker-input {
                     input[disabled] {
-                        color: #1d2129;
+                        color: @text-main;
                         cursor: not-allowed;
                     }
                 }
@@ -309,8 +309,8 @@
         height: 28px;
         min-width: 28px;
         margin-right: 8px;
-        border-radius: 4px;
-        border: 1px solid #e5e6eb;
+        border-radius: @border-radius-4;
+        border: 1px solid @border-general;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -318,26 +318,26 @@
         position: relative;
 
         &:hover {
-            border: 1px solid #3073ff;
+            border: 1px solid @primary-color;
         }
 
         .add-icon {
             font-size: 10px;
-            color: #4e5969;
+            color: @text-sub-main;
         }
     }
 
     .add-remind {
         padding: 12px;
         margin: 12px 0 20px 104px;
-        border-radius: 4px;
+        border-radius: @border-radius-4;
         background-color: #f7f8fa;
         box-sizing: border-box;
 
         .remind-icon {
             font-size: 12px;
             margin-right: 8px;
-            color: #4e5969;
+            color: @text-sub-main;
         }
 
         .remind-box {
@@ -352,7 +352,7 @@
                 font-size: 12px;
                 font-weight: 400;
                 margin: 4px 24px 0 0;
-                color: #1d2129;
+                color: @text-main;
                 white-space: nowrap;
             }
 
@@ -368,13 +368,13 @@
                     display: flex;
                     align-items: center;
                     box-sizing: border-box;
-                    border: 1px solid #e5e6eb;
+                    border: 1px solid @border-general;
 
                     span {
                         font-size: 12px;
                         font-weight: 400;
                         margin-right: 8px;
-                        color: #1d2129;
+                        color: @text-main;
                         user-select: none;
                     }
 
@@ -385,7 +385,7 @@
                 }
 
                 .add-remind-btn {
-                    background-color: #f2f3f5;
+                    background-color: @border-shallow;
                 }
             }
 
@@ -403,16 +403,16 @@
                     height: 28px;
                     min-width: 28px;
                     padding: 0;
-                    border-radius: 4px;
-                    background-color: #f2f3f5;
-                    border: 1px solid #e5e6eb;
+                    border-radius: @border-radius-4;
+                    background-color: @border-shallow;
+                    border: 1px solid @border-general;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     cursor: pointer;
 
                     &:hover {
-                        border: 1px solid #3073ff;
+                        border: 1px solid @primary-color;
                     }
 
                     .ant-select-selection-overflow-item {
@@ -427,7 +427,7 @@
 
                     .ant-select-selection-placeholder {
                         font-size: 14px;
-                        color: #4e5969;
+                        color: @text-sub-main;
                         width: 28px;
                         height: 28px;
                         top: 1px;
@@ -455,7 +455,7 @@
                 font-weight: 400;
                 font-size: 12px;
                 margin-right: 24px;
-                color: #1d2129;
+                color: @text-main;
             }
 
             .unselect-icon {
@@ -465,7 +465,7 @@
             }
 
             .select-icon {
-                color: #3073ff;
+                color: @primary-color;
             }
         }
 
@@ -479,7 +479,7 @@
                 font-weight: 400;
                 font-size: 12px;
                 margin-right: 24px;
-                color: #1d2129;
+                color: @text-main;
             }
 
             .ant-select {
@@ -487,7 +487,7 @@
 
                 &:hover {
                     .ant-select-selector {
-                        border: 1px solid #3073ff;
+                        border: 1px solid @primary-color;
                     }
                 }
 
@@ -498,7 +498,7 @@
                     background-color: #f7f8fa;
 
                     .ant-select-selection-item {
-                        color: #4e5969;
+                        color: @text-sub-main;
                     }
                 }
             }
@@ -532,7 +532,7 @@
             font-weight: 400;
             font-size: 14px;
             margin-left: 62px;
-            color: #c9cdd4;
+            color: @text-disable;
         }
 
         .exc-list {
@@ -547,8 +547,8 @@
                 .exc-main {
                     width: 302px;
                     padding: 11px 12px;
-                    border-radius: 4px;
-                    border: 1px solid #e5e6eb;
+                    border-radius: @border-radius-4;
+                    border: 1px solid @border-general;
                     box-sizing: border-box;
                     display: flex;
 
@@ -567,7 +567,7 @@
                             width: 100%;
                             font-size: 14px;
                             font-weight: 400;
-                            color: #4e5969;
+                            color: @text-sub-main;
                             display: flex;
                             align-items: center;
 
@@ -593,7 +593,7 @@
                         .task-data {
                             font-size: 12px;
                             font-weight: 400;
-                            color: #86909c;
+                            color: @text-minor;
                             overflow: hidden;
                             white-space: normal;
                             word-break: break-all;
@@ -630,15 +630,15 @@
             border-radius: 4px;
             color: #262626;
             box-sizing: border-box;
-            border: 1px dashed #e5e6eb;
+            border: 1px dashed @border-general;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
 
             &:hover {
-                color: #3073ff;
-                border-color: #3073ff;
+                color: @primary-color;
+                border-color: @primary-color;
             }
 
             iconpark-icon {
@@ -655,21 +655,21 @@
             width: 110px;
             height: 36px;
             margin-right: 12px;
-            border-radius: 4px;
+            border-radius: @border-radius-4;
         }
 
         .sure-btn {
             width: 100%;
             height: 36px;
-            border-radius: 4px;
+            border-radius: @border-radius-4;
         }
 
         .restart-btn {
-            color: #1d2129;
-            background-color: #f2f3f5;
+            color: @text-main;
+            background-color: @border-shallow;
             border: none;
             box-shadow: none;
-            border: 1px solid #e5e6eb;
+            border: 1px solid @border-general;
         }
     }
 
@@ -682,32 +682,32 @@
             width: 96px;
             border-radius: 4px;
             margin-right: 12px;
-            background-color: #f2f3f5;
+            background-color: @border-shallow;
             border: none;
         }
 
         .sure-btn {
             border-radius: 4px;
-            background-color: #3073ff;
+            background-color: @primary-color;
             border: none;
         }
     }
 
     .rp {
         border-radius: 4px;
-        color: #0089ff;
+        color: @qzp-task-process;
         border: 1px solid #dbebfa;
     }
 
     .rd {
         border-radius: 4px;
-        color: #00b042;
+        color: @qzp-task-done;
         border: 1px solid #dbf0e3;
     }
 
     .rt {
         border-radius: 4px;
-        color: #171a1d;
+        color: @qzp-task-termination;
         border: 1px solid #e5e6e8;
     }
 
@@ -761,7 +761,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #3073ff;
+    color: @primary-color;
     cursor: pointer;
 }
 

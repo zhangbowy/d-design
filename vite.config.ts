@@ -1,8 +1,10 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import Components from "unplugin-vue-components/vite"
+import path from "path";
 import { resolve } from 'path'
 import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
+import { themePreprocessorPlugin } from "@zougt/vite-plugin-theme-preprocessor";
 import dts from 'vite-plugin-dts'
 import DefineOptions from 'unplugin-vue-define-options/vite';
 
@@ -70,5 +72,30 @@ export default defineConfig({
             resolvers: [AntDesignVueResolver()],
         }),
         dts({ include: './packages' }),
+        themePreprocessorPlugin({
+            less: {
+                multipleScopeVars: [
+                    {
+                        scopeName: "task-theme-default",
+                        path: path.resolve("./packages/assets/style/variables.less"),
+                    },
+                    {
+                        scopeName: "task-theme-integration",
+                        path: path.resolve(
+                            "./packages/assets/style/variablesInte.less"
+                        ),
+                    },
+                    {
+                        scopeName: "task-theme-okr",
+                        path: path.resolve(
+                            "./packages/assets/style/OKRvariables.less"
+                        ),
+                    },
+                ],
+                defaultScopeName: "task-theme-default",
+                extract: false,
+                // themeLinkTagInjectTo: "body"
+            },
+        }),
     ]
 })

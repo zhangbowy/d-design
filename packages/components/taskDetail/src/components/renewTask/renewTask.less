@@ -2,7 +2,7 @@
   .ant-modal {
     width: 780px;
     height: 550px;
-    border-radius: 4px;
+    border-radius: @border-radius-4;
     overflow: hidden;
     .ant-modal-content {
       height: 100%;
@@ -17,8 +17,8 @@
           width: 65px;
         }
         .ant-btn-primary {
-          border-color: #3073ff;
-          background-color: #3073ff;
+          border-color: @primary-color;
+          background-color: @primary-color;
         }
       }
       .ant-modal-body {
@@ -27,15 +27,15 @@
         overflow-y: auto;
         .ant-input-textarea {
           .ant-input {
-            border: 1px solid #c9cdd4;
+            border: 1px solid @border-deep;
           }
           .ant-input:focus,
           .ant-input-focused {
-            border: 1px solid #3073ff;
+            border: 1px solid @primary-color;
             box-shadow: none;
           }
           .ant-input:hover {
-            border: 1px solid #3073ff;
+            border: 1px solid @primary-color;
           }
         }
         .upload-box {
@@ -50,11 +50,11 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            border: 1px solid #e5e6eb;
+            border: 1px solid @border-general;
             .btn-text {
               font-size: 14px;
               font-weight: 400;
-              color: #4e5969;
+              color: @text-sub-main;
               user-select: none;
             }
             .btn-icon {
@@ -76,7 +76,7 @@
             cursor: pointer;
             &:hover {
               .file-name {
-                color: #3073ff;
+                color: @primary-color;
               }
             }
             .file-img {
@@ -91,7 +91,7 @@
               line-height: 48px;
               margin-right: 16px;
               font-weight: 400;
-              color: #1d2129;
+              color: @text-main;
               overflow: hidden;
               white-space: normal;
               word-break: break-all;

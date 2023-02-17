@@ -256,7 +256,7 @@ const props = defineProps({
         required: false
     },
     trait: {
-        type: Boolean,
+        type: String,
         default: false,
         required: false
     },
