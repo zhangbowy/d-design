@@ -133,7 +133,7 @@
                 <div
                   v-if="
                     taskData.role == 'CREATE' &&
-                    principalUser?.status === 'NOT_BEGIN'
+                    principalUser?.status === 'NOT_BEGIN' && trait !== 'PROJECT'
                   "
                   class="task-remind-btn"
                   @click="

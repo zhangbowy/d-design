@@ -1,6 +1,6 @@
 {
   "name": "d-design",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "description": "",
   "main": "./dist/pu-ui.umd.js",
   "module": "./dist/pu-ui.es.js",
@@ -62,7 +62,8 @@
     "vitepress": "^1.0.0-alpha.31",
     "vue-devui": "^1.4.0",
     "less": "^4.1.3",
-    "vitepress-theme-demoblock": "^2.0.1"
+    "vitepress-theme-demoblock": "^2.0.1",
+    "@zougt/vite-plugin-theme-preprocessor": "^1.4.5"
   },
   "husky": {
     "hooks": {

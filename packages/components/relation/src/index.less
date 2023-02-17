@@ -1,10 +1,6 @@
 .relation-wrapper {
     width: 100%;
 
-    :global(.ant-modal-body) {
-        padding: 0;
-    }
-
 
     header {
         width: inherit;
@@ -14,5 +10,21 @@
         display: flex;
         align-items: center;
         justify-content: center;
+
+        .radio-btn {
+            width: 88px;
+            height: 36px;
+            text-align: center;
+            line-height: 36px;
+        }
+    }
+
+    main {
+        padding: 24px 24px 0;
+
+        :global(.ant-table-cell) {
+            padding: 16px 16px !important;
+        }
+
     }
 }

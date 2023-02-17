@@ -48,3 +48,10 @@ export function setToken(token: string) {
 export function removeToken() {
     localStorage.setItem('QZZ_ACCESS_TOKEN', '');
 }
+
+
+// 存储localStorage
+export function getStorage(key) {
+    const value = localStorage.getItem(key) || "";
+    return value ? JSON.parse(value) : null;
+}

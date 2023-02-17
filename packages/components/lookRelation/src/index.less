@@ -1,0 +1,180 @@
+.custom-class {
+
+
+    .content {
+
+        header {
+            position: sticky;
+            top: 0;
+            background-color: #fff;
+            z-index: 2;
+
+            .user-info {
+                height: 80px;
+                padding: 0 32px;
+                display: flex;
+                align-items: center;
+
+                .nick {
+                    width: 40px;
+                    height: 40px;
+                    background-color: #0089FF;
+                    border-radius: 50%;
+                    color: #FFF;
+                    text-align: center;
+                    line-height: 40px;
+                    font-size: 20px;
+                    margin-right: 10px;
+                }
+
+                img {
+                    width: 48px;
+                    height: 48px;
+                    margin-right: 16px;
+                    border-radius: 50%;
+                }
+
+                .info-detail {
+                    .user-name {
+                        font-size: 18px;
+                        font-weight: 600;
+                        color: #464c5b;
+                        overflow: hidden;
+                        white-space: normal;
+                        word-break: break-all;
+                        text-overflow: ellipsis;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 1;
+                        -webkit-box-orient: vertical;
+                    }
+
+                    .user-task {
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: #657180;
+                        display: block;
+                        overflow: hidden;
+                        white-space: normal;
+                        word-break: break-all;
+                        text-overflow: ellipsis;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 1;
+                        -webkit-box-orient: vertical;
+                    }
+                }
+            }
+        }
+
+        main {
+            padding: 16px 24px;
+
+            .cor-project:not(:first-child) {
+                margin-top: 16px;
+            }
+
+
+            .project-title {
+                font-size: 14px;
+                color: rgba(0, 0, 0, 0.45);
+
+                .add-text-color {
+                    // color: #00a48a;
+                    padding-left: 0;
+                }
+            }
+
+            .project-item {
+                height: 56px;
+                padding: 0 16px;
+                margin-top: 8px;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                background-color: #fff;
+
+                .project-text {
+                    font-weight: 400;
+                    margin-right: 6px;
+                    color: #262626;
+                    overflow: hidden;
+                    white-space: normal;
+                    word-break: break-all;
+                    text-overflow: ellipsis;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 1;
+                    -webkit-box-orient: vertical;
+                }
+
+                .status-icon {
+                    font-size: 12px;
+                    padding: 3px 9px;
+                    border-radius: 2px;
+                    margin-right: 16px;
+                    white-space: nowrap;
+                }
+
+                .underway {
+                    color: #ff9900;
+                    background-color: #fff5e7;
+                }
+
+                .closed {
+                    color: #fff;
+                    background-color: #86909c;
+                }
+
+                .NOT_BEGIN {
+                    background: #F6F6F6;
+                    color: #595959;
+                }
+
+                .DONE {
+                    color: #00A48A;
+                    background: #EFF9F7;
+                }
+
+                .TERMINATION {
+                    color: #fff;
+                    background: #9DA7B2;
+                }
+
+                .item-op {
+                    margin-left: auto;
+                    display: flex;
+                    align-items: center;
+
+                    span {
+                        font-weight: 400;
+                        color: #00a48a;
+                        white-space: nowrap;
+                        user-select: none;
+                        cursor: pointer;
+                    }
+
+                    .op-line {
+                        height: 14px;
+                        width: 1px;
+                        margin: 0 6px;
+                        border-left: 1px solid rgba(0, 0, 0, 0.08);
+                        box-sizing: border-box;
+                    }
+                }
+            }
+        }
+    }
+
+    .drawer-footer {
+        text-align: right;
+        padding-right: 16px;
+
+        button {
+            width: 88px;
+            height: 32px;
+            border-radius: 2px;
+        }
+
+        button:nth-child(2) {
+            margin-left: 14px;
+        }
+    }
+}
