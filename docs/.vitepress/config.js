@@ -34,7 +34,11 @@ export default defineConfig({
                 link: 'https://github.com/zhangbowy',
             },
         ],
-        sidebar: sidebarComponent()
+        sidebar: sidebarComponent(),
+        footer: {
+            message: '',
+            copyright: 'Copyright © 2023 蒲公英前端团队'
+        }
     },
     title: 'd-design',
     description: '222',
