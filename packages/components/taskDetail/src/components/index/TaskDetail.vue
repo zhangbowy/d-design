@@ -295,7 +295,7 @@
     <DialogVue :dialogVisible="dialog.visible" :title="dialog.title" :content="dialog.content"
         @cancelEvent="cancelEvent" @okEvent="okEvent" />
     <!-- renew task status component -->
-    <RenewTaskVue :renewVisible="renewVisible" :toStatus="toStatus" :dragEl="taskDetail" :zIndex="1200"
+    <RenewTask :renewVisible="renewVisible" :toStatus="toStatus" :dragEl="taskDetail" :zIndex="1200"
         @closeRenew="closeRenew" />
     <!-- task trace component -->
     <TaskTrace :visible="map.visible" :taskData="taskDetail" :curUser="curUser" :trait="trait" @closeMap="closeMap" />
@@ -317,7 +317,7 @@ import AvatarVue from "@/components/createTask/src/components/avatar/avatar.vue"
 import ChooseUserVue from "@/components/chooseuser/components/index1.vue";
 import AddExcVue from "@/components/createTask/src/components/addExc/AddExc.vue";
 import DialogVue from "@/components/createTask/src/components/dialog/Dialog.vue";
-import RenewTaskVue from "../renewTask/RenewTask.vue";
+import RenewTask from "@/components/renewTask/src/index";
 import OssUploadVue from "@/components/upload/src/index";
 import FileListVue from "@/components/taskTrace/src/components/fileList/FileList.vue";
 import TaskTrace from '@/components/taskTrace/src/index';
@@ -1200,6 +1200,7 @@ const {
 
 <script>
 export default {
+    name: 'TaskDetail',
     components: {
         VNodes: (_, { attrs }) => {
             return attrs.vnodes;

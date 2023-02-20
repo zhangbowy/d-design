@@ -446,6 +446,10 @@ import FileListVue from "../fileList/FileList.vue";
 import OssUploadVue from "@/components/upload/src/index";
 import Edit from "@/components/edit/src/index";
 
+defineOptions({
+	name: 'TaskTrace',
+});
+
 const props = defineProps({
   visible: Boolean,
   taskData: {
@@ -523,7 +527,7 @@ const handleMapCancel = () => {
  * query map data
  */
 const queryMap = async () => {
-  let id = props.taskData.id;
+  let id = getTaskMainId(props.taskData);
   spinning.value = true;
   const { data, code } = await QUERY_TASK_MAP({
     id,

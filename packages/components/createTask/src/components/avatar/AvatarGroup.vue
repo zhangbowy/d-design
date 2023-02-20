@@ -67,6 +67,6 @@ const returnName = () => {
 };
 </script>
 
-<style lang="less" >
+<style lang="less" scoped >
 @import './avatarGroup.less';
 </style>
