@@ -11,3 +11,6 @@ export const RELATION_TYPE_TEXT = {
     task: "任务",
     project: "项目",
 };
+
+
+export const OKR_PURSUE = 'OKR_PURSUE'

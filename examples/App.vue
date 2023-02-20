@@ -20,7 +20,7 @@ import {ref} from 'vue';
 // import Sources from './components/sources.vue'; // 新增
 import CreateTask from '../packages/components/createTask/src/index';
 // ChooseUser({})
-const visible = ref(false);
+const visible = ref(true);
 </script>
 
 <style scoped>

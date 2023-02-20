@@ -124,7 +124,10 @@ const handelCheckboxChange = (e: number[]) => {
 			}
 		});
 	});
-	emit('handelCheckedCallback', arr);
+	emit('handelCheckedCallback', {
+		type: 'OKR',
+		checkedArr: arr,
+	});
 };
 onMounted(() => {
 	getOkrList();

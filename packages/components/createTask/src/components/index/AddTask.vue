@@ -347,31 +347,34 @@ import * as dd from 'dingtalk-jsapi';
 dayjs.locale('zh-cn');
 // const curUser = JSON.parse(localStorage.getItem("QZZ_DATA") || localStorage.getItem("QZP_DATA")).user;
 const props = defineProps({
-    visible: Boolean,
-    curUser: {
-        type: Object,
-        required: true
-    },
-    title: {
-        type: String,
-        default: '创建任务',
-        required: false
-    },
-    trait: {
-        type: String, //OKR/PROJECT/INTE/default
-        default: false,
-        required: false
-    },
-    projectId: {
-        type: Number,
-        default: 0,
-        required: false
-    },
-    menuId: {
-        type: Number,
-        default: 0,
-        required: false
-    },
+	visible: Boolean,
+	curUser: {
+		type: Object,
+		required: true,
+		default: {
+			userId: 0,
+		},
+	},
+	title: {
+		type: String,
+		default: '创建任务',
+		required: false,
+	},
+	trait: {
+		type: String, //OKR/PROJECT/INTE/default
+		default: false,
+		required: false,
+	},
+	projectId: {
+		type: Number,
+		default: 0,
+		required: false,
+	},
+	menuId: {
+		type: Number,
+		default: 0,
+		required: false,
+	},
 	width: {
 		type: Number,
 		default: 480,
@@ -734,7 +737,7 @@ const handleCreateTask = async () => {
 			accessory: taskFrom.accessory,
 			startTime: dayjs(taskFrom.startTime).format('YYYY-MM-DD HH:mm:00'),
 		});
-        resCode = code;
+		resCode = code;
 		resData = data;
 	} else {
 		const {code, data} = await CREATE_TASK({
@@ -1067,6 +1070,6 @@ export default {
 	},
 };
 </script>
-<style lang="less" >
+<style lang="less" scoped>
 @import './addTask.less';
 </style>
