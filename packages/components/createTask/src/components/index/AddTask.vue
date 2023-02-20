@@ -232,7 +232,7 @@ import mitt from '@/utils/eventBus';
 import dayjs from 'dayjs';
 import locale from 'ant-design-vue/es/date-picker/locale/zh_CN';
 import AvatarVue from '../avatar/avatar.vue';
-import ChooseUserVue from '../../../../chooseuser/components/index1.vue';
+import ChooseUserVue from '../../../../chooseuser/components/index.vue';
 import AddExcVue from '../addExc/AddExc.vue';
 import DialogVue from '../dialog/Dialog.vue';
 import OssUploadVue from '../../../../upload/src/index';

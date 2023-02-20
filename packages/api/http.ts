@@ -19,7 +19,7 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(
-    (config) => {
+    (config:any) => {
         // 请求头 token配置
         const token = getToken();
         if (token) {
