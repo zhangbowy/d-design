@@ -220,7 +220,7 @@
 	<!-- dialog component -->
 	<DialogVue :dialogVisible="dialog.visible" :title="dialog.title" :content="dialog.content"
 		@cancelEvent="cancelEvent" @okEvent="okEvent" />
-	<Relation v-modal:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :info="relation.info" @successCallback="relationConfirm" />
+	<!-- <Relation v-modal:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :info="relation.info" @successCallback="relationConfirm" /> -->
 </template>
 
 <script setup>
@@ -236,7 +236,7 @@ import ChooseUserVue from '../../../../chooseuser/components/index1.vue';
 import AddExcVue from '../addExc/AddExc.vue';
 import DialogVue from '../dialog/Dialog.vue';
 import OssUploadVue from '../../../../upload/src/index';
-import Relation from '@/components/relation/index';
+// import Relation from '@/components/relation/index';
 import * as dd from 'dingtalk-jsapi';
 // import Comment from "./Comment.vue";
 dayjs.locale('zh-cn');
