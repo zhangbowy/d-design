@@ -41,7 +41,8 @@ export default defineConfig({
         }
     },
     title: 'd-design',
-    description: '222',
+    description: '蒲公英前端团队开发的ui组件库',
+    lastUpdated: true,
     markdown,
     lang
 })
