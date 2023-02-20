@@ -324,6 +324,7 @@
 		:content="dialog.content"
 		@cancelEvent="cancelEvent"
 		@okEvent="okEvent" />
+	<Relation v-modal:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :info="relation.info" />
 </template>
 
 <script setup>
@@ -339,6 +340,7 @@ import ChooseUserVue from '../../../../chooseuser/components/index1.vue';
 import AddExcVue from '../addExc/AddExc.vue';
 import DialogVue from '../dialog/Dialog.vue';
 import OssUploadVue from '../../../../upload/src/index';
+import Relation from '@/components/relation/index';
 import * as dd from 'dingtalk-jsapi';
 
 // import Comment from "./Comment.vue";
@@ -463,6 +465,15 @@ const remindOptions = ref([
 		choose: false,
 	},
 ]);
+const relation = reactive({
+	visible: false,
+	info: {
+		id: 0,
+		relevanceType: '',
+		relevanceCategory: ''
+	},
+})
+
 const addExcVisible = ref(false); //control add executer component visible
 const curSubTask = ref({}); //save current subtask
 const loading = ref(false); //create task  loading
