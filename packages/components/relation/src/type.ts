@@ -21,3 +21,7 @@ export interface ITaskTableColumns {
     link: boolean;
     id: number
 }
+
+export type OperationType = 'OKR' | 'TASK' | 'PROJECT'
+export type RelevanceType = "O" | "KR" | "TASK_TARGET" | "PROJECT" | "PROJECT_MENU" | "MAIN_TASK" | "SUB_TASK";
+export type ICheckedCallback = (val: { type: OperationType, checkedArr: any[] }) => void;

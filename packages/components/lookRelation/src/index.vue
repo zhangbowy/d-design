@@ -76,24 +76,24 @@
 		:tabs="['PROJECT', 'OKR']"
 		:info="relationInfo"
 		@refreshList="initRequest" />
-	<CreateTask
+	<!-- <CreateTask
 		v-if="createTaskVisible"
 		:visible="createTaskVisible"
 		:title="'创建任务'"
 		:width="780"
 		@closeDrawer="createTaskVisible = false"
-		@successCreate="handelCreateTaskSuccess" />
+		@successCreate="handelCreateTaskSuccess" /> -->
 </template>
 
 <script setup lang='ts'>
 import {computed, reactive, ref} from 'vue';
 import {GET_CORRELATION_INFO, DELETE_CORRELATION} from '@/api/api';
 import {onMounted} from 'vue';
-import {IAllRelationData, InfoList} from './type';
+import {IAllRelationData, InfoList, RelationInfo} from './type';
 import {RELATION_TYPE, RELATION_TYPE_TEXT, OKR_PURSUE} from './enum';
 import {PlusOutlined} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
-import CreateTask from '@/components/createTask/src/components/index/AddTask.vue';
+// import CreateTask from '@/components/createTask/src/components/index/AddTask.vue';
 
 defineOptions({
 	name: 'LookRelation',
@@ -123,7 +123,7 @@ const props = defineProps({
 const show = ref(false);
 const createTaskVisible = ref(false);
 const allRelationData = ref<IAllRelationData[]>([]); // 所有关联数据
-const relationInfo = reactive({
+const relationInfo = reactive<RelationInfo>({
 	id: props.info.id,
 	relevanceType: props.info.type,
 	relevanceCategory: props.info.sourceType,

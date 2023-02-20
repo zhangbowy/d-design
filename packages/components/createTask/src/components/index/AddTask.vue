@@ -340,7 +340,6 @@ import AddExcVue from '../addExc/AddExc.vue';
 import DialogVue from '../dialog/Dialog.vue';
 import OssUploadVue from '../../../../upload/src/index';
 import * as dd from 'dingtalk-jsapi';
-
 // import Comment from "./Comment.vue";
 dayjs.locale('zh-cn');
 // const curUser = JSON.parse(localStorage.getItem("QZZ_DATA") || localStorage.getItem("QZP_DATA")).user;
@@ -1052,6 +1051,7 @@ const {
 
 <script>
 export default {
+	name: 'CreateTask',
 	components: {
 		VNodes: (_, {attrs}) => {
 			return attrs.vnodes;
