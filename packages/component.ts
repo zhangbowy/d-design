@@ -8,8 +8,9 @@ import TaskTrace from './components/taskTrace/src'
 import TaskDetail from './components/taskDetail/src'
 import DDUpload from './components/ddUpload/src'
 import RenewTask from './components/renewTask/src'
+import ChooseUser from './components/chooseuser/index'
 
-export default [Cycle, Relation, Avatar, OssUpload, CreateTask, TaskTrace, TaskDetail, DDUpload, LookRelation, RenewTask]
+export default [Cycle, Relation, Avatar, OssUpload, CreateTask, TaskTrace, TaskDetail, DDUpload, LookRelation, RenewTask, ChooseUser]
 //
 export {
     Cycle,
@@ -21,5 +22,6 @@ export {
     TaskTrace,
     TaskDetail,
     DDUpload,
-    RenewTask
+    RenewTask,
+    ChooseUser
 }

@@ -326,7 +326,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
 import locale from "ant-design-vue/es/date-picker/locale/zh_CN";
 import AvatarVue from "@/components/createTask/src/components/avatar/avatar.vue";
-import ChooseUserVue from "@/components/chooseuser/components/index1.vue";
+import ChooseUserVue from "@/components/chooseuser/components/index.vue";
 import AddExcVue from "@/components/createTask/src/components/addExc/AddExc.vue";
 import DialogVue from "@/components/createTask/src/components/dialog/Dialog.vue";
 import RenewTask from "@/components/renewTask/src/index";
