@@ -6,7 +6,7 @@ hero:
   text: 蒲公英ui组件库
   tagline: 一个基于 antd的 Vue3 组件库
   image:
-    src: https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/031893abb64b40d6b4e14d0aad8e7760~tplv-k3u1fbpfcp-zoom-crop-mark:3024:3024:3024:1702.awebp
+    src: https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6c035bf2d77d426da46d4006eec70514~tplv-k3u1fbpfcp-watermark.image
     alt: pu-ui
   actions:
     - theme: brand
@@ -20,9 +20,9 @@ features:
   - title: "团结"
     details: An enterprise-class UI components based on Ant Design and Vue. 🐜
   - title: 民主
-    details: 222222222222222
+    details: An enterprise-class UI components based on Ant Design and Vue. 🐜
   - title: 富强
-    details: 3333333
+    details: An enterprise-class UI components based on Ant Design and Vue. 🐜
   - title: 和谐
-    details: 4
+    details: An enterprise-class UI components based on Ant Design and Vue. 🐜
 ---

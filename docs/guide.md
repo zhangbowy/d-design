@@ -1,6 +1,6 @@
 # 快速开始
 
-引导您如何在项目中使用`da-ui`
+引导您如何在项目中使用`d-design`
 
 ### Vue版本
 
@@ -20,7 +20,7 @@ npm create vite my-vue-app -- --template vue-ts
 
 ### 2. 安装
 
-进入你的项目文件夹，使用 NPM 安装`da-ui`和配套的图标库
+进入你的项目文件夹，使用 NPM 安装`d-design`和配套的图标库
 
 ```shell
 npm i d-design
@@ -33,7 +33,7 @@ npm i d-design
 ```ts
 import DDesign from 'd-design';
 
-createApp(App).use(DevUI).mount('#app');
+createApp(App).use(DDesign).mount('#app');
 ```
 
 ### 4. 使用

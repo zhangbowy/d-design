@@ -1,6 +1,8 @@
 ## 项目名称
-> 请介绍一下你的项目吧  
+> d-design
 
+## 官网
+http://d-design.mawenqing.net/
 ## 组件范式
 3.1 各组件目录规范
 
@@ -22,11 +24,11 @@
 ```js
 npm link
 ```
-#### 3、其他任意项目 把pu-ui link到本项目node_modules
+#### 3、其他任意项目 把d-design link到本项目node_modules
 ```js
 npm link d-design
 ```
 #### 4、引入测试
 ```js
-import { ChooseUser } from 'pu-ui';
+import { ChooseUser } from 'd-design';
 ```
