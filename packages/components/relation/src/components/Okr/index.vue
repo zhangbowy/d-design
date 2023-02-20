@@ -70,11 +70,11 @@ const props = defineProps({
 });
 const emit = defineEmits(['handelRelationCallback', 'handelCheckedCallback']);
 // 周期改变
-const queryOKRByUserId = (info) => {
+const queryOKRByUserId = (info: {curPeriodId: string}) => {
 	getOkrList(info.curPeriodId);
 };
 // 获取列表
-const getOkrList = async (periodId?) => {
+const getOkrList = async (periodId?: string) => {
 	loading.value = true;
 
 	const params = {

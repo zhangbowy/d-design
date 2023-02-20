@@ -105,7 +105,7 @@ export default defineConfig({
                 AntDesignVueResolver()
             ],
         }),
-        dts({ include: './packages' }),
+        // dts({ include: './packages' }),
         themePreprocessorPlugin({
             less: {
                 multipleScopeVars: [
