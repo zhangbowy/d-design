@@ -51,7 +51,10 @@
 								>查看详情</a-button
 							>
 							<a-divider style="margin: 0" type="vertical" />
-							<a-button type="link" @click="handleDelCor(item.relevanceId)"
+							<a-button
+								v-if="isOperable"
+								type="link"
+								@click="handleDelCor(item.relevanceId)"
 								>移除关联</a-button
 							>
 						</div>
@@ -62,33 +65,35 @@
 		<template #footer>
 			<div class="drawer-footer">
 				<a-button>关闭</a-button>
-				<a-button type="primary" @click="handelAddRelation">添加关联</a-button>
+				<a-button v-if="isOperable" type="primary" @click="handelAddRelation"
+					>添加关联</a-button
+				>
 			</div>
 		</template>
 	</a-drawer>
 	<Relation
 		v-model:visible="show"
-		:tabs="['PROJECT', 'TASK']"
+		:tabs="['PROJECT', 'OKR']"
 		:info="relationInfo"
 		@refreshList="initRequest" />
-	<CreateTask
+	<!-- <CreateTask
 		v-if="createTaskVisible"
 		:visible="createTaskVisible"
 		:title="'创建任务'"
 		:width="780"
 		@closeDrawer="createTaskVisible = false"
-		@successCreate="handelCreateTaskSuccess" />
+		@successCreate="handelCreateTaskSuccess" /> -->
 </template>
 
 <script setup lang='ts'>
-import {reactive, ref} from '@vue/reactivity';
+import {computed, reactive, ref} from 'vue';
 import {GET_CORRELATION_INFO, DELETE_CORRELATION} from '@/api/api';
-import {onMounted} from '@vue/runtime-core';
-import {IAllRelationData, InfoList} from './type';
-import {RELATION_TYPE, RELATION_TYPE_TEXT} from './enum';
+import {onMounted} from 'vue';
+import {IAllRelationData, InfoList, RelationInfo} from './type';
+import {RELATION_TYPE, RELATION_TYPE_TEXT, OKR_PURSUE} from './enum';
 import {PlusOutlined} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
-import CreateTask from '@/components/createTask/src/components/index/AddTask.vue';
+// import CreateTask from '@/components/createTask/src/components/index/AddTask.vue';
 
 defineOptions({
 	name: 'LookRelation',
@@ -109,7 +114,8 @@ const props = defineProps({
 			indexId: 1,
 			content: 'mock',
 			id: 103224,
-			sourceType: 'OKR',
+			sourceType: 'TASK',
+			status: 'OKR_PURSUE',
 		},
 	},
 });
@@ -117,7 +123,7 @@ const props = defineProps({
 const show = ref(false);
 const createTaskVisible = ref(false);
 const allRelationData = ref<IAllRelationData[]>([]); // 所有关联数据
-const relationInfo = reactive({
+const relationInfo = reactive<RelationInfo>({
 	id: props.info.id,
 	relevanceType: props.info.type,
 	relevanceCategory: props.info.sourceType,
@@ -138,6 +144,13 @@ const initRequest = async () => {
 		console.log('查看关联初始化数据失败：', err);
 	}
 };
+//是否可以操作
+const isOperable = computed(() => {
+	return (
+		props.info.sourceType !== 'OKR' ||
+		(props.info.sourceType === 'OKR' && props.info.status !== OKR_PURSUE)
+	);
+});
 // 添加任务
 const handelAddTask = () => {
 	createTaskVisible.value = true;
@@ -162,8 +175,9 @@ const handleDelCor = async (id: Number) => {
 };
 
 //任务创建成功回调
-const handelCreateTaskSuccess = (data) => {
-	console.log('data', data);
+const handelCreateTaskSuccess = () => {
+	createTaskVisible.value = false;
+	initRequest();
 };
 
 // 关闭弹窗

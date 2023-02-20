@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang='ts'>
-import {onMounted, reactive, ref} from 'vue';
+import {ref} from 'vue';
 import {TABS_ENUM} from './enum';
 import {ADD_RELATION,ADD_OKR_RELATION} from '@/api/api'
 import Project from './components/Project/index.vue'
@@ -54,10 +54,11 @@ import Okr from './components/Okr/index.vue'
 import { relevanceType,reverseTabEnum } from './enum';
 import {message} from 'ant-design-vue';
 import zhCN from 'ant-design-vue/es/locale/zh_CN';
+import { ICheckedCallback, OperationType, RelevanceType } from './type';
 defineOptions({
 	name: 'Relation',
 });
-const emit = defineEmits(["update:visible", "refreshList"]);
+const emit = defineEmits(["update:visible", "refreshList","successCallback"]);
 const props = defineProps({
 	visible: {
 		type: Boolean,
@@ -80,35 +81,54 @@ const props = defineProps({
     info: {
         type: Object,
         require: true,
-        default: {},
+        default: {
+            id:0,
+            relevanceType:'',
+            relevanceCategory:''
+        },
     }
 });
 const curTab = ref(props.tabs[0]);
 const confirmLoading = ref(false)
 const newCheckArr = ref([])
+const allRelation = ref({
+    'OKR':[],
+    'TASK':[],
+    'PROJECT':[]
+})
 // check的回调
-const handelCheckedCallback = (val) => {
-  newCheckArr.value = val;
+const handelCheckedCallback:ICheckedCallback = (val) => {
+    allRelation.value[val.type] = val.checkedArr
+    console.log('allRelation.value',allRelation.value)
+//   newCheckArr.value = val;
 };
 // 成功回调
 const handleOk = async () => {
     confirmLoading.value = true
+    const formatArr = Object.keys(allRelation.value).filter((item)=>allRelation.value[item as OperationType].length>0).map(item=>{
+        const objArr = allRelation.value[item as OperationType].map(list=>({
+            id:list.id||list.projectId,
+            relevanceType: relevanceType[list.type as RelevanceType]||'PROJECT',
+            relevanceCategory: item,
+        }))
+        return objArr
+    })
     const params = {
     sourceInfo: {
       id: props.info.id,
       relevanceType: props.info.relevanceType,
       relevanceCategory: props.info.relevanceCategory,
     },
-    targetInfo: newCheckArr.value
-      .map((list) =>({
-        id: list.id || list.projectId,
-        relevanceType: relevanceType[list.type] || "PROJECT",
-        relevanceCategory: reverseTabEnum[curTab.value],
-      })
-     ),
+    targetInfo: formatArr.flat(Infinity),
     relevanceSource: "ADD",
   };
-  const res = curTab.value=='OKR'? await ADD_OKR_RELATION(params) : await ADD_RELATION(params);
+  if(!props.tabs.includes('TASK')){
+    emit('successCallback',params)
+    confirmLoading.value = false
+    emit("update:visible", false);
+    return false
+  }
+  const res =  await ADD_RELATION(params);
   if (res.code == 1) {
     message.success('关联成功!');
     emit("refreshList");

@@ -12,3 +12,9 @@ export interface InfoList {
     }
     relevanceType: string
 }
+
+export interface RelationInfo {
+    id: number;
+    relevanceType: string;
+    relevanceCategory: string
+}

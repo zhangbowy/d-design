@@ -70,12 +70,16 @@ import {
     RENEW_TASK_STATUS,
     QUERY_CORP_SPACE,
     QUERY_DD_PERMISSION,
-} from "../../api";
-import { getQueryVariable, judgeStrNull } from "../../utils/utils";
+} from "../api";
+import { getQueryVariable, judgeStrNull } from "../utils/utils";
 import { message } from "ant-design-vue";
 import * as dd from "dingtalk-jsapi";
 import OssUploadVue from "@/components/upload/src/index";
 import DDUploadVue from "@/components/ddUpload/src/index";
+
+defineOptions({
+	name: 'RenewTask',
+});
 
 const G_corpId = getQueryVariable("corpId");
 const props = defineProps({
