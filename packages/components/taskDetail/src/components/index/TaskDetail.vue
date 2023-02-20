@@ -261,10 +261,14 @@
         <!-- add correlation -->
         <div v-if="trait === 'OKR'" class="add-correlation">
             <span class="public-title">关联项</span>
-            <div class="add-cor-btn">
-                <iconpark-icon name="guanlian"></iconpark-icon>
-                <span>添加关联</span>
-            </div>
+			<div class="add-cor-btn" @click="handleAddRelation()">
+				<iconpark-icon name="guanlian"></iconpark-icon>
+				<span>添加关联</span>
+			</div>
+			<div class="cor-text" v-if="renderCorText()" @click="handleCheckRelation()">
+				<iconpark-icon name="guanlian"></iconpark-icon>
+				<span>{{ renderCorText() }}</span>
+			</div>
         </div>
         <!-- create task footer box -->
         <template #footer>
@@ -301,6 +305,9 @@
     <TaskTrace :visible="map.visible" :taskData="taskDetail" :curUser="curUser" :trait="trait" @closeMap="closeMap" />
     <!-- upload file list -->
     <FileListVue :appendixShow="files.show" :accessory="files.accessory" @hideFiles="hideCommentFiles" />
+	<Relation v-model:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :info="relation.info"
+		@successCallback="relationConfirm" />
+	<LookRelation v-if="lookRelation.visible" v-model:visible="lookRelation.visible" :info="lookRelation.info" />
 </template>
 
 <script setup>
@@ -326,11 +333,11 @@ import RenewTask from "@/components/renewTask/src/index";
 import OssUploadVue from "@/components/upload/src/index";
 import FileListVue from "@/components/taskTrace/src/components/fileList/FileList.vue";
 import TaskTrace from '@/components/taskTrace/src/index';
+import Relation from '@/components/relation/src/index.vue';
+import LookRelation from '@/components/lookRelation/index';
 import * as dd from 'dingtalk-jsapi';
 
 dayjs.locale('zh-cn');
-// const curUser = JSON.parse(localStorage.getItem("QZP_DATA")).user;
-// const store = useStore();
 
 const props = defineProps({
 	visible: Boolean,
@@ -364,7 +371,7 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(['closeDrawer', 'saveCurTaskId']);
+const emit = defineEmits(['closeDrawer', 'saveCurTaskId', 'successChange']);
 
 const cycleList = ref([
 	{
@@ -445,6 +452,27 @@ const map = reactive({
 	visible: false,
 	taskId: null,
 });
+const relation = reactive({
+	visible: false,
+	info: {
+		id: null,
+		relevanceType: 'TASK_MAIN',
+		relevanceCategory: 'TASK'
+	},
+});
+const lookRelation = reactive({
+	visible: false,
+	info: {
+		avatar: '',
+		name: '',
+		type: 'TASK',
+		indexId: 0,
+		content: '',
+		id: null,
+		sourceType: 'TASK',
+		status: ''
+	}
+})
 
 const remindOptions = ref([
 	{
@@ -481,6 +509,7 @@ const execDisable = ref(false); //control executor disable
 const customCycleShow = ref(false); //control custom cycle box visible
 const customCycleValue = ref(''); //save custom cycle value
 const spinning = ref(false); //upload files loading control
+const relationCallback = ref({})
 
 watch(
 	() => props.visible,
@@ -791,12 +820,10 @@ const handleCreateTask = async () => {
 		startTime: dayjs(taskFrom.startTime).format('YYYY-MM-DD HH:mm:00'),
 	});
 	if (code === 1) {
-		emit('closeDrawer');
+		emit("successChange");
 		message.success('任务修改成功');
 		loading.value = false;
-		mitt.emit('reloadTask');
 		emit('saveCurTaskId', null);
-		// store.commit("UPDATE_TASK_ID", null);
 	} else {
 		message.error('任务修改失败');
 		loading.value = false;
@@ -968,10 +995,8 @@ const handleReloadTask = (isTermination = false) => {
 const closeRenew = (type) => {
 	renewVisible.value = false;
 	if (type == 'renew') {
-		emit('closeDrawer');
+		emit("successChange");
 		emit('saveCurTaskId', null);
-		// store.commit("UPDATE_TASK_ID", null);
-		mitt.emit('reloadTask');
 	}
 };
 
@@ -1181,6 +1206,54 @@ const getRelevanceCnt = async () => {
 		console.log(data);
 	}
 };
+
+/**
+ * handle add link callback
+ * @param {Object} data 
+ */
+ const relationConfirm = (data) => {
+	relationCallback.value = data;
+};
+
+/**
+ * handle click add relation event
+ */
+const handleAddRelation = () => {
+	relation.info.id = props.taskDetail.id;
+	relation.visible = true;
+};
+
+/**
+ * render relation text
+ */
+const renderCorText = () => {
+	let projects = 0;
+	let okrs = 0;
+	if (relationCallback.value.targetInfo && relationCallback.value.targetInfo.length > 0) {
+		relationCallback.value.targetInfo.map(el => {
+			if (el.relevanceCategory === "PROJECT") {
+				projects++;
+			}
+			if (el.relevanceCategory === "OKR") {
+				okrs++
+			}
+		})
+	}
+	if (projects + okrs > 0) {
+		return `已关联${projects > 0 ? `${projects}个项目` : ''}${projects > 0 && okrs > 0 ? '、' : ''}${okrs > 0 ? `${okrs}个OKR` : ''}`
+	} else {
+		return ""
+	}
+};
+
+const handleCheckRelation = () => {
+	lookRelation.info.avatar = props.taskDetail.createUser.avatar;
+	lookRelation.info.content = props.taskDetail.content;
+	lookRelation.info.id = props.taskDetail.id;
+	lookRelation.info.name = props.taskDetail.createUser.name;
+	lookRelation.info.status = props.taskDetail.status;
+	lookRelation.visible = true;
+}
 const {
 	content,
 	createUser,

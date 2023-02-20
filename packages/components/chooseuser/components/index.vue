@@ -39,11 +39,12 @@
 								:key="item"
 								@click="searchAddOne(item)">
 								<Avatar
-									:data="{avatar: item.avatar, name: item.name}"
+									:userData="{avatar: item.avatar, name: item.name}"
 									:width="24" />
 								<span class="name"
 									>{{ item.name
-									}}<span v-if="item.roster">({{ item.roster }})</span></span
+									}}<span v-if="item.roster">({{ item.roster }})</span>
+									</span
 								>
 							</li>
 						</ul>
@@ -118,7 +119,7 @@
 								<span
 									v-if="o.isChecked"
 									class="checkbox iconfont icon-xuanze"></span>
-								<Avatar :data="{avatar: o.avatar, name: o.name}" :width="24" />
+								<Avatar :userData="{avatar: o.avatar, name: o.name}" :width="24" />
 								<span class="name"
 									>{{ o.name
 									}}<span v-if="o.roster">({{ o.roster }})</span></span
@@ -156,7 +157,7 @@
 								:key="item"
 								@click="addOneUser(item)">
 								<Avatar
-									:data="{avatar: item.avatar, name: item.name}"
+									:userData="{avatar: item.avatar, name: item.name}"
 									:width="24" />
 								<span class="name"
 									>{{ item.name
