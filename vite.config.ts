@@ -11,6 +11,9 @@ const includeStyles = {
     ".ant-btn-link:hover, .ant-btn-link:focus": {
         'border-color': "transparent",
     },
+    ".ant-btn-link": {
+        background: "transparent"
+    },
     ".ant-btn-primary:hover": {
         color: '#ffffff'
     },

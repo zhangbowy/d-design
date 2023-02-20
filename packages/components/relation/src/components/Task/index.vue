@@ -182,7 +182,10 @@ const rowSelection = computed(() => ({
 		const selectItem = tableData.value.filter(
 			(item) => item.link && selectedRowKeys.includes(item.id)
 		);
-		emit('handelCheckedCallback', toRaw(selectItem));
+		emit('handelCheckedCallback', {
+			type: 'TASK',
+			checkedArr: toRaw(selectItem),
+		});
 	},
 	selectedRowKeys: state.selectedRowKeys,
 	getCheckboxProps: (record: ITaskTableColumns) => ({

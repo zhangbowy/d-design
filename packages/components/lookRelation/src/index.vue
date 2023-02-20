@@ -73,7 +73,7 @@
 	</a-drawer>
 	<Relation
 		v-model:visible="show"
-		:tabs="['PROJECT', 'TASK']"
+		:tabs="['PROJECT', 'OKR']"
 		:info="relationInfo"
 		@refreshList="initRequest" />
 	<CreateTask
@@ -114,7 +114,7 @@ const props = defineProps({
 			indexId: 1,
 			content: 'mock',
 			id: 103224,
-			sourceType: 'OKR',
+			sourceType: 'TASK',
 			status: 'OKR_PURSUE',
 		},
 	},
@@ -146,7 +146,10 @@ const initRequest = async () => {
 };
 //是否可以操作
 const isOperable = computed(() => {
-	return props.info.status === OKR_PURSUE;
+	return (
+		props.info.sourceType !== 'OKR' ||
+		(props.info.sourceType === 'OKR' && props.info.status !== OKR_PURSUE)
+	);
 });
 // 添加任务
 const handelAddTask = () => {

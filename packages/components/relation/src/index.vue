@@ -57,7 +57,7 @@ import zhCN from 'ant-design-vue/es/locale/zh_CN';
 defineOptions({
 	name: 'Relation',
 });
-const emit = defineEmits(["update:visible", "refreshList"]);
+const emit = defineEmits(["update:visible", "refreshList","successCallback"]);
 const props = defineProps({
 	visible: {
 		type: Boolean,
@@ -86,29 +86,40 @@ const props = defineProps({
 const curTab = ref(props.tabs[0]);
 const confirmLoading = ref(false)
 const newCheckArr = ref([])
+const allRelation = ref({})
 // check的回调
 const handelCheckedCallback = (val) => {
-  newCheckArr.value = val;
+    allRelation.value[val.type] = val.checkedArr
+    console.log('allRelation.value',allRelation.value)
+//   newCheckArr.value = val;
 };
 // 成功回调
 const handleOk = async () => {
     confirmLoading.value = true
+    const formatArr = Object.keys(allRelation.value).filter(item=>allRelation.value[item].length>0).map(item=>{
+        const objArr = allRelation.value[item].map(list=>({
+            id:list.id||list.projectId,
+            relevanceType: relevanceType[list.type]||'PROJECT',
+            relevanceCategory: item,
+        }))
+        return objArr
+    })
     const params = {
     sourceInfo: {
       id: props.info.id,
       relevanceType: props.info.relevanceType,
       relevanceCategory: props.info.relevanceCategory,
     },
-    targetInfo: newCheckArr.value
-      .map((list) =>({
-        id: list.id || list.projectId,
-        relevanceType: relevanceType[list.type] || "PROJECT",
-        relevanceCategory: reverseTabEnum[curTab.value],
-      })
-     ),
+    targetInfo: formatArr.flat(Infinity),
     relevanceSource: "ADD",
   };
-  const res = curTab.value=='OKR'? await ADD_OKR_RELATION(params) : await ADD_RELATION(params);
+  if(!props.tabs.includes('TASK')){
+    emit('successCallback',params)
+    confirmLoading.value = false
+    emit("update:visible", false);
+    return false
+  }
+  const res =  await ADD_RELATION(params);
   if (res.code == 1) {
     message.success('关联成功!');
     emit("refreshList");
