@@ -1,0 +1,123 @@
+.renew-box {
+  .ant-modal {
+    width: 780px;
+    height: 550px;
+    border-radius: @border-radius-4;
+    overflow: hidden;
+    .ant-modal-content {
+      height: 100%;
+      .ant-modal-header {
+        border-bottom: none;
+        padding: 24px 32px;
+      }
+      .ant-modal-footer {
+        border-top: none;
+        padding: 24px 32px;
+        .ant-btn {
+          width: 65px;
+        }
+        .ant-btn-primary {
+          border-color: @primary-color;
+          background-color: @primary-color;
+        }
+      }
+      .ant-modal-body {
+        height: calc(100% - 150px);
+        padding: 0 32px;
+        overflow-y: auto;
+        .ant-input-textarea {
+          .ant-input {
+            border: 1px solid @border-deep;
+          }
+          .ant-input:focus,
+          .ant-input-focused {
+            border: 1px solid @primary-color;
+            box-shadow: none;
+          }
+          .ant-input:hover {
+            border: 1px solid @primary-color;
+          }
+        }
+        .upload-box {
+          margin-top: 16px;
+          display: flex;
+          .upload-btn {
+            width: 122px;
+            height: 28px;
+            margin-right: 8px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1px solid @border-general;
+            .btn-text {
+              font-size: 14px;
+              font-weight: 400;
+              color: @text-sub-main;
+              user-select: none;
+            }
+            .btn-icon {
+              font-size: 10px;
+              margin-right: 4px;
+            }
+          }
+        }
+        .file-box {
+          margin-top: 16px;
+          .dd-files {
+            height: 48px;
+            padding: 0 16px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            background-color: #f2f3f5;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            &:hover {
+              .file-name {
+                color: @primary-color;
+              }
+            }
+            .file-img {
+              width: 32px;
+              height: 32px;
+              min-width: 32px;
+              margin-right: 16px;
+              cursor: pointer;
+            }
+            .file-name {
+              height: 48px;
+              line-height: 48px;
+              margin-right: 16px;
+              font-weight: 400;
+              color: @text-main;
+              overflow: hidden;
+              white-space: normal;
+              word-break: break-all;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-line-clamp: 1;
+              -webkit-box-orient: vertical;
+              user-select: none;
+            }
+            .delete-icon {
+              margin-left: auto;
+              cursor: pointer;
+            }
+          }
+          .oss-files {
+            .dd-files;
+            .ant-image {
+                width: 32px;
+                margin-right: 8px;
+                &:nth-child(1) {
+                  width: 0;
+                }
+            }
+          }
+        }
+      }
+    }
+  }
+}
