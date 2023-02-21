@@ -1232,20 +1232,24 @@ const handleAddRelation = () => {
 const renderCorText = () => {
 	let projects = 0;
 	let okrs = 0;
+	let tasks = 0;
 	if (relationArr.value && relationArr.value.length > 0) {
 		relationArr.value.map(el => {
 			el.relevanceCount.map(i => {
-				if (i.category === "OKR") {
+				if (i.category === "PROJECT") {
 					projects += i.count;
 				}
 				if (i.category === "OKR") {
 					okrs += i.count;
 				}
+				if (i.category === "TASK") {
+					tasks += i.count;
+				}
 			})
 		})
 	}
 	if (projects + okrs > 0) {
-		return `已关联${projects > 0 ? `${projects}个项目` : ''}${projects > 0 && okrs > 0 ? '、' : ''}${okrs > 0 ? `${okrs}个OKR` : ''}`
+		return `已关联${projects > 0 ? `${projects}个项目` : ''}${projects > 0 && okrs > 0 ? '、' : ''}${okrs > 0 ? `${okrs}个OKR` : ''}${(projects > 0 && tasks > 0) || (okrs > 0 && tasks > 0) ? '、' : ''}${tasks > 0 ? `${okrs}个任务` : ''}`
 	} else {
 		return ""
 	}

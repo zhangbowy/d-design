@@ -224,7 +224,7 @@
 	<!-- dialog component -->
 	<DialogVue :dialogVisible="dialog.visible" :title="dialog.title" :content="dialog.content"
 		@cancelEvent="cancelEvent" @okEvent="okEvent" />
-	<Relation v-model:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :info="relation.info"
+	<Relation v-model:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :isDirectAdd="false" :info="relation.info"
 		@successCallback="relationConfirm" />
 </template>
 
