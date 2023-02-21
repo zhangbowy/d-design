@@ -10,6 +10,7 @@ export const RELATION_TYPE = {
 export const RELATION_TYPE_TEXT = {
     task: "任务",
     project: "项目",
+    OKR: "OKR"
 };
 
 

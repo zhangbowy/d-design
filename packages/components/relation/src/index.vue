@@ -1,7 +1,7 @@
 <template>
 	<a-modal
 		:visible="visible"
-		title="添加关联"
+		:title="title"
 		@ok="handleOk"
 		:width="980"
 		cancelText="取消"
@@ -17,6 +17,7 @@
 					v-for="item in tabs"
 					:key="item"
 					:value="item">
+					<i :class="`iconfont ${TABS_ENUM_ICON[item]}`"></i>
 					{{ TABS_ENUM[item] }}
 				</a-radio-button>
 			</a-radio-group>
@@ -26,17 +27,16 @@
 				<Okr
 					@handelCheckedCallback="handelCheckedCallback"
 					v-if="tabs.includes('OKR')"
-					:relevanceType="info.relevanceType"
-					:biz-id="info.id"
+					:info="info"
 					v-show="curTab == 'OKR'" />
 				<Project
 					v-if="tabs.includes('PROJECT')"
-					:okr-info="info"
+					:info="info"
 					v-show="curTab == 'PROJECT'"
 					@handelCheckedCallback="handelCheckedCallback" />
 				<Task
 					v-if="tabs.includes('TASK')"
-					:okr-info="info"
+					:info="info"
 					v-show="curTab == 'TASK'"
 					@handelCheckedCallback="handelCheckedCallback" />
 			</main>
@@ -51,7 +51,7 @@ import {ADD_RELATION, ADD_OKR_RELATION} from '@/api/api';
 import Project from './components/Project/index.vue';
 import Task from './components/Task/index.vue';
 import Okr from './components/Okr/index.vue';
-import {relevanceType, reverseTabEnum} from './enum';
+import {relevanceType, reverseTabEnum, TABS_ENUM_ICON} from './enum';
 import {message} from 'ant-design-vue';
 import zhCN from 'ant-design-vue/es/locale/zh_CN';
 import {ICheckedCallback, OperationType, RelevanceType} from './type';
@@ -90,6 +90,10 @@ const props = defineProps({
 	isDirectAdd: {
 		type: Boolean,
 		default: true,
+	},
+	title: {
+		type: String,
+		default: '添加关联',
 	},
 });
 const curTab = ref(props.tabs[0]);
