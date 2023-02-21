@@ -38,13 +38,9 @@
 								v-for="item in searchResultList"
 								:key="item"
 								@click="searchAddOne(item)">
-								<Avatar
-									:userData="{avatar: item.avatar, name: item.name}"
-									:width="24" />
-								<span class="name"
-									>{{ item.name
-									}}<span v-if="item.roster">({{ item.roster }})</span>
-									</span
+                                <img class="choose-avatar-img" v-if="item.avatar" :src="item.avatar" alt="" />
+			                    <span class="choose-avatar-text" v-else>{{ item.name?.slice(0, 1) }}</span>
+								<span class="name" >{{ item.name }}<span v-if="item.roster">({{ item.roster }})</span></span
 								>
 							</li>
 						</ul>
@@ -74,8 +70,8 @@
 								">
 								<span
 									v-if="!isSelectAll"
-									class="iconfont icon-fuxuankuang"></span>
-								<span v-if="isSelectAll" class="iconfont icon-xuanze"></span>
+									class="iconfont qzz_icon_checkbox-weixuan"></span>
+								<span v-if="isSelectAll" class="iconfont qzz_icon_checkbox-checked"></span>
 								<span class="text">全选</span>
 							</div>
 						</template>
@@ -95,10 +91,10 @@
 								<template v-if="this.showCheckbox">
 									<span
 										v-if="!i.isChecked"
-										class="checkbox iconfont icon-fuxuankuang"></span>
+										class="checkbox iconfont qzz_icon_checkbox-weixuan"></span>
 									<span
 										v-if="i.isChecked"
-										class="checkbox iconfont icon-xuanze"></span>
+										class="checkbox iconfont qzz_icon_checkbox-checked"></span>
 								</template>
 								<span class="name" :title="i.name"
 									>{{ formatText(i.name) }}（{{ i.cnt }}人）</span
@@ -115,11 +111,12 @@
 								@click="selectOne(o, 'user')">
 								<span
 									v-if="!o.isChecked"
-									class="checkbox iconfont icon-fuxuankuang"></span>
+									class="checkbox iconfont qzz_icon_checkbox-weixuan"></span>
 								<span
 									v-if="o.isChecked"
-									class="checkbox iconfont icon-xuanze"></span>
-								<Avatar :userData="{avatar: o.avatar, name: o.name}" :width="24" />
+									class="checkbox iconfont qzz_icon_checkbox-checked"></span>
+                                <img class="choose-avatar-img" v-if="o.avatar" :src="o.avatar" alt="" />
+			                    <span class="choose-avatar-text" v-else>{{ o.name?.slice(0, 1) }}</span>
 								<span class="name"
 									>{{ o.name
 									}}<span v-if="o.roster">({{ o.roster }})</span></span
@@ -156,9 +153,8 @@
 								v-for="item in searchResultList"
 								:key="item"
 								@click="addOneUser(item)">
-								<Avatar
-									:userData="{avatar: item.avatar, name: item.name}"
-									:width="24" />
+								<img class="choose-avatar-img" v-if="item.avatar" :src="item.avatar" alt="" />
+			                    <span class="choose-avatar-text" v-else>{{ item.name?.slice(0, 1) }}</span>
 								<span class="name"
 									>{{ item.name
 									}}<span v-if="item.roster">({{ item.roster }})</span></span
@@ -208,7 +204,6 @@
 <!--*-->
 <!--* */-->
 <script>
-import Avatar from '@/components/createTask/src/components/avatar/avatar.vue';
 import {
 	SEARCH_USER,
 	SEARCH_ZONE_USER,
@@ -223,9 +218,6 @@ let G_TIME = null;
 export default {
 	name: 'ChooseUser',
 	emits: ['updateUserIds', 'close'],
-	components: {
-		Avatar,
-	},
 	props: {
 		visible: {
 			type: Boolean,
@@ -233,7 +225,7 @@ export default {
 		},
         zIndex: {
             type: Number,
-            default: 1000000
+            default: 1000
         },
 		filterSelf: {
 			type: Boolean,
@@ -325,12 +317,13 @@ export default {
 		 * }
 		 * */
 		getDeptInfo(deptId) {
-			GET_DEPT_INFO({
+            const params = {
 				tpf: 1,
 				appId: G_APPID,
 				corpId: G_CORPID,
 				deptId: deptId,
-			})
+			}
+			GET_DEPT_INFO(params)
 				.then((res) => {
 					if (res.code == 1) {
 						//重置全选状态
@@ -808,392 +801,5 @@ export default {
 };
 </script>
 <style lang="less">
-.choose-user-dialog {
-	.el-dialog__header {
-		border-bottom: #f3f3f4 solid 1px;
-	}
-	.ant-modal-body {
-		padding: 0 24px;
-	}
-	.el-dialog__body {
-		padding: 0;
-	}
-
-	.choose-user-wrapper {
-		display: flex;
-		height: 480px;
-
-		/*** layout ***/
-		.choose-user-left {
-			width: 45%;
-			padding: 20px;
-			padding-right: 0;
-			border-right: #f3f3f4 solid 1px;
-			position: relative;
-			/*********input 容器*********/
-			.input-box {
-				// width: 304px;
-				width: 95%;
-				padding: 0 10px;
-				border: #c0c4cc solid 1px;
-				border-radius: 3px;
-				display: flex;
-				align-items: center;
-				margin-bottom: 10px;
-				outline: none;
-				input {
-					flex: 1;
-					height: 40px;
-					border: none;
-				}
-				input::placeholder {
-					color: #c0c4cc;
-				}
-				.iconfont {
-					width: 20px;
-					margin-left: 10px;
-					cursor: pointer;
-					color: #cccccc;
-					&:hover {
-						color: #c0c4cc;
-					}
-				}
-			}
-
-			.choose-user-input {
-				margin-bottom: 10px;
-			}
-		}
-
-		.choose-user-right {
-			flex: 1;
-			padding: 20px;
-
-			.choose-user-selected {
-				height: 390px;
-				overflow-y: auto;
-				margin-bottom: 10px;
-
-				.selected-box {
-					padding: 5px 10px;
-					background: rgba(@black, 0.04);
-					border-radius: 2px;
-					display: inline-flex;
-					align-items: center;
-					margin-bottom: 8px;
-					margin-right: 12px;
-
-					.text {
-						font-size: 14px;
-						font-weight: 400;
-						color: rgba(@black, 0.85);
-					}
-
-					.iconfont {
-						margin-left: 5px;
-						color: rgba(@black, 0.45);
-						cursor: pointer;
-						font-size: 12px;
-					}
-				}
-			}
-
-			.choose-user-selected:empty:before {
-				content: '请在左侧选择你的同事';
-				font-size: 14px;
-				font-weight: 400;
-				color: rgba(@black, 0.25);
-			}
-
-			.choose-user-btns {
-				display: flex;
-				justify-content: flex-end;
-				.common-btn {
-					width: 65px;
-					height: 32px;
-					text-align: center;
-					line-height: 32px;
-					border-radius: @button-radius;
-					margin-right: 8px;
-					cursor: pointer;
-				}
-				.cancel-btn {
-					border: 1px solid @border;
-					color: @font2;
-				}
-				.common-btn.sure-btn {
-					color: #fff;
-					background-color: @primary;
-					margin-right: 0;
-				}
-				.disabled-btn {
-					opacity: 0.3;
-					cursor: unset;
-				}
-			}
-		}
-
-		/** 面包屑&组织信息 **/
-		.choose-user-deps {
-			margin-bottom: 10px;
-			padding-left: 8px;
-			.choose-user-title {
-				font-size: 16px;
-				margin-bottom: 10px;
-				font-weight: 500;
-				color: rgba(@black, 0.85);
-			}
-
-			.choose-user-breadcrumb {
-				font-size: 12px;
-				font-weight: 400;
-				color: rgba(@black, 0.25);
-				display: flex;
-				align-content: center;
-				align-items: center;
-
-				.breadcrumb-item {
-					display: inline-block;
-					font-size: 12px;
-					font-weight: 400;
-					color: rgba(@black, 0.85);
-				}
-				.breadcrumb-item:last-child {
-					//cursor: not-allowed;
-					font-size: 12px;
-					font-weight: 400;
-					color: rgba(@black, 0.25);
-					.breadcrumb-item-separator {
-						display: none;
-					}
-				}
-				.breadcrumb-item:first-child {
-					cursor: pointer;
-					font-size: 16px;
-					font-weight: 500;
-					color: rgba(@black, 0.85);
-				}
-				.breadcrumb-item-active {
-					color: rgba(@black, 0.85);
-					.breadcrumb-item-inner {
-						margin-right: 5px;
-						cursor: pointer;
-						&:hover {
-							color: @primary;
-						}
-					}
-					.breadcrumb-item-separator {
-						padding-right: 5px;
-					}
-				}
-				.breadcrumb-item.breadcrumb-item-active:last-child {
-					.breadcrumb-item-inner {
-						&:hover {
-							color: rgba(@black, 0.25);
-							cursor: default;
-						}
-					}
-				}
-				.breadcrumb-item.breadcrumb-item-active:first-child {
-					.breadcrumb-item-inner {
-						&:hover {
-							cursor: pointer;
-						}
-					}
-				}
-			}
-		}
-
-		/** 组织人员列表 **/
-		.choose-user-cont {
-			.select-all {
-				height: 40px;
-				padding-left: 10px;
-				display: flex;
-				align-items: center;
-				align-content: center;
-
-				.iconfont {
-					margin-right: 5px;
-					font-size: 20px;
-				}
-				.icon-fuxuankuang {
-					color: @border;
-				}
-				.icon-xuanze {
-					color: @primary;
-				}
-				&:hover {
-					background: rgba(@black, 0.04);
-					cursor: pointer;
-					border-radius: 3px;
-				}
-			}
-
-			.choose-user-list {
-				height: 280px;
-				overflow-y: auto;
-
-				.dep-type,
-				.user-type {
-					display: flex;
-					align-content: center;
-					align-items: center;
-					height: 40px;
-					padding-left: 28px;
-
-					&:hover {
-						background: rgba(@black, 0.04);
-						cursor: pointer;
-						border-radius: 3px;
-					}
-				}
-
-				/**组织**/
-				.dep-type {
-					.checkbox {
-						width: 20px;
-						margin-right: 5px;
-						font-size: 20px;
-					}
-					.icon-fuxuankuang {
-						color: @border;
-					}
-					.icon-xuanze {
-						color: @primary;
-					}
-					.name {
-						flex: 1;
-						font-size: 14px;
-					}
-
-					.expand-btn {
-						width: 60px;
-						font-size: 12px;
-						color: rgba(@black, 0.25);
-						.text {
-							margin-right: 3px;
-							opacity: 0;
-						}
-						.iconfont {
-							font-size: 12px;
-						}
-						&:hover {
-							color: @primary;
-						}
-					}
-				}
-				.dep-type:hover {
-					.text {
-						opacity: 1;
-					}
-				}
-				.dep-type-selected {
-					.expand-btn {
-						cursor: not-allowed;
-						&:hover {
-							color: rgba(@black, 0.25);
-						}
-					}
-					.name {
-						color: #bfbfbf;
-					}
-				}
-
-				/**人员**/
-				.user-type {
-					.checkbox {
-						width: 20px;
-						margin-right: 5px;
-						font-size: 20px;
-					}
-					.icon-fuxuankuang {
-						color: @border;
-					}
-					.icon-xuanze {
-						color: @primary;
-					}
-					.user-img {
-						width: 24px;
-						height: 24px;
-						margin-right: 5px;
-						border-radius: 50%;
-					}
-				}
-			}
-		}
-
-		/*******搜索人员列表********/
-		.search-result {
-			// width: 324px;
-			width: 100%;
-			padding-right: 24px;
-			min-height: 50px;
-			max-height: 200px;
-			overflow-y: auto;
-			padding: 8px 0;
-			position: absolute;
-			top: 64px;
-			left: 20px;
-			z-index: 10;
-			background: #fff;
-			box-shadow: 0px 5px 40px 4px rgba(@black, 0.09),
-				0px 3px 18px 0px rgba(@black, 0.12), 0px 1px 2px -2px rgba(@black, 0.16);
-
-			.user-type {
-				display: flex;
-				align-content: center;
-				align-items: center;
-				height: 52px;
-				padding-left: 24px;
-
-				&:hover {
-					background: rgba(@black, 0.04);
-					cursor: pointer;
-					border-radius: 3px;
-				}
-
-				.checkbox {
-					width: 20px;
-					margin-right: 5px;
-				}
-
-				.user-img {
-					width: 32px;
-					height: 32px;
-					margin-right: 15px;
-					border-radius: 50%;
-				}
-				.name {
-					font-size: 14px;
-					font-weight: 400;
-					color: rgba(@black, 0.65);
-					margin-left: 12px;
-				}
-			}
-			.user-type-bg {
-				background: rgba(@black, 0.04);
-			}
-			.a-empty {
-				padding-top: 0;
-			}
-		}
-
-		.search-result-static {
-			position: static;
-			box-shadow: none;
-			padding: 0px 0px;
-			height: 380px;
-			min-height: none;
-			max-height: none;
-			padding-right: 24px;
-		}
-		.search-result-empty {
-			text-align: center;
-			padding-top: 15px;
-			font-size: 14px;
-			color: rgba(@black, 0.45);
-		}
-	}
-}
+@import './../style/index.less';
 </style>
