@@ -47,24 +47,24 @@
 <script setup lang='ts'>
 import {ref} from 'vue';
 import {TABS_ENUM} from './enum';
-import {ADD_RELATION,ADD_OKR_RELATION} from '@/api/api'
-import Project from './components/Project/index.vue'
-import Task from './components/Task/index.vue'
-import Okr from './components/Okr/index.vue'
-import { relevanceType,reverseTabEnum } from './enum';
+import {ADD_RELATION, ADD_OKR_RELATION} from '@/api/api';
+import Project from './components/Project/index.vue';
+import Task from './components/Task/index.vue';
+import Okr from './components/Okr/index.vue';
+import {relevanceType, reverseTabEnum} from './enum';
 import {message} from 'ant-design-vue';
 import zhCN from 'ant-design-vue/es/locale/zh_CN';
-import { ICheckedCallback, OperationType, RelevanceType } from './type';
+import {ICheckedCallback, OperationType, RelevanceType} from './type';
 defineOptions({
 	name: 'Relation',
 });
-const emit = defineEmits(["update:visible", "refreshList","successCallback"]);
+const emit = defineEmits(['update:visible', 'refreshList', 'successCallback']);
 const props = defineProps({
 	visible: {
 		type: Boolean,
 		default: false,
 	},
-    // 显示那些tab
+	// 显示那些tab
 	tabs: {
 		type: Array<'PROJECT' | 'TASK' | 'OKR'>,
 		require: true,
@@ -77,64 +77,70 @@ const props = defineProps({
 			);
 		},
 	},
-    // 关联的源信息
-    info: {
-        type: Object,
-        require: true,
-        default: {
-            id:0,
-            relevanceType:'',
-            relevanceCategory:''
-        },
-    }
+	// 关联的源信息
+	info: {
+		type: Object,
+		require: true,
+		default: {
+			id: 0,
+			relevanceType: '',
+			relevanceCategory: '',
+		},
+	},
+	isDirectAdd: {
+		type: Boolean,
+		default: true,
+	},
 });
 const curTab = ref(props.tabs[0]);
-const confirmLoading = ref(false)
-const allRelation = ref({})
+const confirmLoading = ref(false);
+const allRelation = ref({});
 
 // check的回调
-const handelCheckedCallback:ICheckedCallback = (val) => {
-    allRelation.value[val.type] = val.checkedArr
+const handelCheckedCallback: ICheckedCallback = (val) => {
+	allRelation.value[val.type] = val.checkedArr;
 };
 // 成功回调
 const handleOk = async () => {
-    confirmLoading.value = true
-    const formatArr = Object.keys(allRelation.value).filter((item)=>allRelation.value[item as OperationType].length>0).map(item=>{
-        const objArr = allRelation.value[item as OperationType].map(list=>({
-            id:list.id||list.projectId,
-            relevanceType: relevanceType[list.type as RelevanceType]||'PROJECT',
-            relevanceCategory: item,
-        }))
-        return objArr
-    })
-    const params = {
-    sourceInfo: {
-      id: props.info.id,
-      relevanceType: props.info.relevanceType,
-      relevanceCategory: props.info.relevanceCategory,
-    },
-    targetInfo: formatArr.flat(Infinity),
-    relevanceSource: "ADD",
-  };
-  if(!props.tabs.includes('TASK')){
-    emit('successCallback',params)
-    confirmLoading.value = false
-    emit("update:visible", false);
-    return false
-  }
-  const res =  await ADD_RELATION(params);
-  if (res.code == 1) {
-    message.success('关联成功!');
-    emit("refreshList");
-  }
-  confirmLoading.value = false
-  emit("update:visible", false);
+	confirmLoading.value = true;
+	const formatArr = Object.keys(allRelation.value)
+		.filter((item) => allRelation.value[item as OperationType].length > 0)
+		.map((item) => {
+			const objArr = allRelation.value[item as OperationType].map((list) => ({
+				id: list.id || list.projectId,
+				relevanceType: relevanceType[list.type as RelevanceType] || 'PROJECT',
+				relevanceCategory: item,
+			}));
+			return objArr;
+		});
+	const params = {
+		sourceInfo: {
+			id: props.info.id,
+			relevanceType: props.info.relevanceType,
+			relevanceCategory: props.info.relevanceCategory,
+		},
+		targetInfo: formatArr.flat(Infinity),
+		relevanceSource: 'ADD',
+	};
+	if (!props.isDirectAdd) {
+		emit('successCallback', params);
+		confirmLoading.value = false;
+		emit('update:visible', false);
+		return;
+	}
+	const res = await ADD_RELATION(params);
+	if (res.code == 1) {
+		message.success('关联成功!');
+		emit('refreshList');
+	}
+	confirmLoading.value = false;
+	emit('update:visible', false);
 };
 // 关闭弹窗
-const handelCancel =() =>{
-    emit("update:visible", false);
-    allRelation.value = {}
-}
+const handelCancel = () => {
+	emit('update:visible', false);
+	allRelation.value = {};
+};
 </script>
 
 <style scoped lang='less'>

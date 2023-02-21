@@ -134,11 +134,6 @@ export default defineConfig({
         themePreprocessorPlugin({
             less: {
                 multipleScopeVars: multipleScopeVars,
-                includeStyleWithColors: [
-                    {
-                        color: "#ffffff",
-                    }
-                ],
                 defaultScopeName: "task-theme-default",
                 extract: false,
                 // themeLinkTagInjectTo: "body"
