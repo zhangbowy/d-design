@@ -307,7 +307,7 @@
 	<FileListVue :appendixShow="files.show" :accessory="files.accessory" @hideFiles="hideCommentFiles" />
 	<Relation v-model:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :info="relation.info"
 		@successCallback="relationConfirm" />
-	<LookRelation v-if="lookRelation.visible" v-model:visible="lookRelation.visible" :info="lookRelation.info" />
+	<LookRelation v-model:visible="lookRelation.visible" :info="lookRelation.info" />
 </template>
 
 <script setup>

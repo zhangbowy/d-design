@@ -107,6 +107,7 @@ import {RELATION_TYPE, RELATION_TYPE_TEXT, OKR_PURSUE} from './enum';
 import {PlusOutlined} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
 import zhCN from 'ant-design-vue/es/locale/zh_CN';
+import  Relation  from '@/components/relation/index';
 // import CreateTask from '@/components/createTask/src/components/index/AddTask.vue';
 
 defineOptions({
