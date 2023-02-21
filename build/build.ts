@@ -8,6 +8,7 @@ import Components from "unplugin-vue-components/vite"
 import {AntDesignVueResolver} from "unplugin-vue-components/resolvers";
 import {themePreprocessorPlugin} from "@zougt/vite-plugin-theme-preprocessor/dist/index";
 import visualizer from "rollup-plugin-visualizer";
+import DefineOptions from 'unplugin-vue-define-options/vite';
 
 const entryDir = path.resolve(__dirname, '../packages/components');
 const outputDir = path.resolve(__dirname, '../dist');
@@ -40,6 +41,7 @@ const baseConfig = defineConfig({
     publicDir: false,
     plugins: [
         vue(),
+        DefineOptions(),
         Components({
             resolvers: [
                 // AntDesignVueResolver({
