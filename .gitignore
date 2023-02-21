@@ -91,7 +91,10 @@ dist
 # public
 
 # vuepress build output
-.vuepress/dist
+/docs/.vuepress/dist
+/docs/.vuepress/cache
+
+.vuepress/cache
 
 # Serverless directories
 .serverless/
@@ -116,3 +119,4 @@ dist
 .pnp.*
 
 /.idea
+

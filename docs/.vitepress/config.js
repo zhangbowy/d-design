@@ -59,7 +59,9 @@ function sidebarComponent() {
             text: '组件列表',
             items: [
                 { text: 'avatar', link: '/components/avatar/index' },
+                { text: 'test', link: '/components/test/index' },
             ]
         }
+
     ]
 }
