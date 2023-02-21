@@ -1,318 +1,318 @@
 <template>
-    <a-drawer :visible="visible" class="task-detail-drawer" placement="right" :width="480" :keyboard="false"
-        :zIndex="zIndex" :maskClosable="false" :destroyOnClose="true" :mask="mask" @close="handleDrawerClose">
-        <template #title>
-            <div class="task-detail-title">
-                <span>{{ title }}</span>
-                <a-popover :getPopupContainer="(triggerNode) => triggerNode.parentNode" trigger="click">
-                    <template #content>
-                        <span class="termination-task" @click="handleReloadTask(true)">终止任务</span>
-                    </template>
-                    <iconpark-icon v-if="taskDetail.status === 'NOT_BEGIN'" name="gengduo"
-                        class="operation-icon"></iconpark-icon>
-                </a-popover>
-            </div>
-        </template>
-        <!-- input box -->
-        <div class="content-box">
-            <a-textarea v-model:value="content" class="detail-textarea" placeholder="请填写任务内容"
-                :auto-size="{ minRows: 1 }" :maxlength="150" :autoFocus="true"
-                :disabled="role == 'EXECUTE' || status != 'NOT_BEGIN'" />
-            <a-spin v-if="taskDetail.type === 'MAIN_TASK'" :spinning="spinning">
-                <div class="upload-box">
-                    <div class="file-box">
-                        <div class="file-list" v-for="item in accessory.ossAccessory" :key="item.ossMaterialId"
-                            @click="handleDownloadFile(item)">
-                            <a-image v-if="returnType(item.cname)" class="file-img" :src="item.originalUrl" @click.stop>
-                                <template #previewMask>
-                                    <iconpark-icon name="preview"></iconpark-icon>
-                                </template>
-                            </a-image>
-                            <img v-else class="file-img-not_img"
-                                src="https://daily-static-file.oss-cn-shanghai.aliyuncs.com/file-icon.svg" alt="" />
-                            <span class="file-name">{{ item.fileName }}</span>
-                            <iconpark-icon v-if="status == 'NOT_BEGIN'" name="delete" class="delete-file-icon"
-                                @click.stop="
-                                    deleteFile(accessory.ossAccessory, item.ossMaterialId, 'oss')
-                                "></iconpark-icon>
-                        </div>
-                    </div>
-                    <OssUploadVue v-if="status == 'NOT_BEGIN'" class="upload-icon" :taskId="returnSnow()"
-                        @startUpload="startUpload" @endUpload="endUpload">
-                        <iconpark-icon class="icon" name="fujian"></iconpark-icon>
-                    </OssUploadVue>
-                </div>
-            </a-spin>
-        </div>
-        <!-- main task text -->
-        <div class="main-task-text" v-if="taskDetail.mainTaskContent">
-            <span class="main-task-content" @click="handleTaskTrace">{{ taskDetail.mainTaskContent }}</span>
-            <div v-if="accessory.ossAccessory.length > 0" class="file-btn" @click="handleCheckFiles">
-                <iconpark-icon name="uploadIcon"></iconpark-icon>
-                <span>附件{{ accessory.ossAccessory.length }}个</span>
-            </div>
-        </div>
-        <!-- task info box -->
-        <div class="task-info">
-            <span class="info-time">创建时间：{{ sliceSS(created) }}</span>
-            <span class="info-tag" :class="{
-                rp: status === 'NOT_BEGIN',
-                rd: status === 'DONE',
-                rt: status === 'TERMINATION',
-            }">{{ returnTaskMark(status) }}</span>
-        </div>
-        <!-- add creator box -->
-        <div class="add-creator">
-            <span class="public-title">创建人</span>
-            <div class="create-box">
-                <div v-if="checkNullObj(createUser)" class="empty-text">
-                    选择创建人
-                </div>
-                <div v-else class="user-box">
-                    <AvatarVue :userData="createUser" />
-                </div>
-            </div>
-        </div>
-        <!-- add principal box -->
-        <div class="add-principal">
-            <span class="public-title">负责人</span>
-            <div class="public-box" :class="{
-                // 'dis-bgc': role == 'EXECUTE' || status != 'NOT_BEGIN',
-                'prin-null': role == 'EXECUTE' || status != 'NOT_BEGIN',
-            }" @click="
-    role != 'EXECUTE' &&
-    status == 'NOT_BEGIN' &&
-    handleChooseUser('principal')
+	<a-drawer :visible="visible" class="task-detail-drawer" placement="right" :width="480" :keyboard="false"
+		:zIndex="zIndex" :maskClosable="false" :destroyOnClose="true" :mask="mask" @close="handleDrawerClose">
+		<template #title>
+			<div class="task-detail-title">
+				<span>{{ title }}</span>
+				<a-popover :getPopupContainer="(triggerNode) => triggerNode.parentNode" trigger="click">
+					<template #content>
+						<span class="termination-task" @click="handleReloadTask(true)">终止任务</span>
+					</template>
+					<iconpark-icon v-if="taskDetail.status === 'NOT_BEGIN'" name="gengduo"
+						class="operation-icon"></iconpark-icon>
+				</a-popover>
+			</div>
+		</template>
+		<!-- input box -->
+		<div class="content-box">
+			<a-textarea v-model:value="content" class="detail-textarea" placeholder="请填写任务内容"
+				:auto-size="{ minRows: 1 }" :maxlength="150" :autoFocus="true"
+				:disabled="role == 'EXECUTE' || status != 'NOT_BEGIN'" />
+			<a-spin v-if="taskDetail.type === 'MAIN_TASK'" :spinning="spinning">
+				<div class="upload-box">
+					<div class="file-box">
+						<div class="file-list" v-for="item in accessory.ossAccessory" :key="item.ossMaterialId"
+							@click="handleDownloadFile(item)">
+							<a-image v-if="returnType(item.cname)" class="file-img" :src="item.originalUrl" @click.stop>
+								<template #previewMask>
+									<iconpark-icon name="preview"></iconpark-icon>
+								</template>
+							</a-image>
+							<img v-else class="file-img-not_img"
+								src="https://daily-static-file.oss-cn-shanghai.aliyuncs.com/file-icon.svg" alt="" />
+							<span class="file-name">{{ item.fileName }}</span>
+							<iconpark-icon v-if="status == 'NOT_BEGIN'" name="delete" class="delete-file-icon"
+								@click.stop="
+									deleteFile(accessory.ossAccessory, item.ossMaterialId, 'oss')
+								"></iconpark-icon>
+						</div>
+					</div>
+					<OssUploadVue v-if="status == 'NOT_BEGIN'" class="upload-icon" :taskId="returnSnow()"
+						@startUpload="startUpload" @endUpload="endUpload">
+						<iconpark-icon class="icon" name="fujian"></iconpark-icon>
+					</OssUploadVue>
+				</div>
+			</a-spin>
+		</div>
+		<!-- main task text -->
+		<div class="main-task-text" v-if="taskDetail.mainTaskContent">
+			<span class="main-task-content" @click="handleTaskTrace">{{ taskDetail.mainTaskContent }}</span>
+			<div v-if="accessory.ossAccessory.length > 0" class="file-btn" @click="handleCheckFiles">
+				<iconpark-icon name="uploadIcon"></iconpark-icon>
+				<span>附件{{ accessory.ossAccessory.length }}个</span>
+			</div>
+		</div>
+		<!-- task info box -->
+		<div class="task-info">
+			<span class="info-time">创建时间：{{ sliceSS(created) }}</span>
+			<span class="info-tag" :class="{
+				rp: status === 'NOT_BEGIN',
+				rd: status === 'DONE',
+				rt: status === 'TERMINATION',
+			}">{{ returnTaskMark(status) }}</span>
+		</div>
+		<!-- add creator box -->
+		<div class="add-creator">
+			<span class="public-title">创建人</span>
+			<div class="create-box">
+				<div v-if="checkNullObj(createUser)" class="empty-text">
+					选择创建人
+				</div>
+				<div v-else class="user-box">
+					<AvatarVue :userData="createUser" />
+				</div>
+			</div>
+		</div>
+		<!-- add principal box -->
+		<div class="add-principal">
+			<span class="public-title">负责人</span>
+			<div class="public-box" :class="{
+				// 'dis-bgc': role == 'EXECUTE' || status != 'NOT_BEGIN',
+				'prin-null': role == 'EXECUTE' || status != 'NOT_BEGIN',
+			}" @click="
+	role != 'EXECUTE' &&
+	status == 'NOT_BEGIN' &&
+	handleChooseUser('principal')
 ">
-                <div v-if="checkNullObj(principalUser)" class="empty-text">
-                    {{
-    role == "EXECUTE" || status != "NOT_BEGIN"
-    ? "无"
-    : "选择负责人"
-                    }}
-                </div>
-                <div v-else class="user-box">
-                    <AvatarVue :userData="principalUser" />
-                </div>
-                <iconpark-icon name="right" class="right-icon"
-                    v-if="role != 'EXECUTE' && status == 'NOT_BEGIN'"></iconpark-icon>
-            </div>
-            <iconpark-icon name="delete" class="delete-icon" v-if="
-                role != 'EXECUTE' &&
-                status == 'NOT_BEGIN' &&
-                !checkNullObj(principalUser)
-            " @click="handleDeletePri()"></iconpark-icon>
-        </div>
-        <!-- add start time box -->
-        <div class="add-deadline">
-            <span class="public-title">任务开始时间</span>
-            <div class="deadline-box"
-                :class="{ 'dis-bgc': status != 'NOT_BEGIN', 'dis-text': (role == 'EXECUTE' && !checkCanUpdateTime(role)) }">
-                <template v-if="status != 'NOT_BEGIN'">
-                    {{ sliceSS(taskDetail?.startTime) }}
-                </template>
-                <template v-else>
-                    <a-date-picker v-model:value="startTime" format="YYYY-MM-DD HH:mm" placeholder="选择时间" :show-time="{
-                        hideDisabledOptions: true,
-                        defaultValue: dayjs('00:00:00', 'HH:mm:ss'),
-                    }" :allowClear="false" :autofocus="false" :showNow="false" :locale="locale"
-                        :disabled="status != 'NOT_BEGIN'" :disabledDate="disabledStartDate" @ok="confirmStartTime">
-                        <template v-slot:suffixIcon v-if="status == 'NOT_BEGIN'">
-                            <iconpark-icon name="right" class="right-icon"></iconpark-icon>
-                        </template>
-                    </a-date-picker>
-                </template>
-            </div>
-        </div>
-        <!-- add deadline box -->
-        <div class="add-deadline">
-            <span class="public-title">任务截止时间</span>
-            <div v-if="dayFormat || status == 'NOT_BEGIN'" class="deadline-box"
-                :class="{ 'dis-bgc': role == 'EXECUTE' || status != 'NOT_BEGIN', 'dis-text': (role == 'EXECUTE' && !checkCanUpdateTime(role)) }">
-                <template v-if="role == 'EXECUTE' && !checkCanUpdateTime(role)">
-                    {{ sliceSS(taskDetail?.abortTime) }}
-                </template>
-                <template v-else>
-                    <a-date-picker v-model:value="dayFormat" format="YYYY-MM-DD HH:mm" placeholder="选择时间"
-                        :show-time="{ defaultValue: dayjs('00:00:00', 'HH:mm:00') }" :allowClear="false"
-                        :autofocus="false" :showNow="false" :locale="locale" :disabledDate="disabledDeadDate"
-                        :disabled="status != 'NOT_BEGIN'" @ok="confirmDeadline">
-                        <template v-slot:suffixIcon v-if="role != 'EXECUTE' && status == 'NOT_BEGIN'">
-                            <iconpark-icon name="right" class="right-icon"></iconpark-icon>
-                        </template>
-                    </a-date-picker>
-                </template>
-            </div>
-            <div v-else class="deadline-null">无</div>
-            <template v-if="role == 'EXECUTE' && !checkCanUpdateTime(role)">
+				<div v-if="checkNullObj(principalUser)" class="empty-text">
+					{{
+	role == "EXECUTE" || status != "NOT_BEGIN"
+	? "无"
+	: "选择负责人"
+					}}
+				</div>
+				<div v-else class="user-box">
+					<AvatarVue :userData="principalUser" />
+				</div>
+				<iconpark-icon name="right" class="right-icon"
+					v-if="role != 'EXECUTE' && status == 'NOT_BEGIN'"></iconpark-icon>
+			</div>
+			<iconpark-icon name="delete" class="delete-icon" v-if="
+				role != 'EXECUTE' &&
+				status == 'NOT_BEGIN' &&
+				!checkNullObj(principalUser)
+			" @click="handleDeletePri()"></iconpark-icon>
+		</div>
+		<!-- add start time box -->
+		<div class="add-deadline">
+			<span class="public-title">任务开始时间</span>
+			<div class="deadline-box"
+				:class="{ 'dis-bgc': status != 'NOT_BEGIN', 'dis-text': (role == 'EXECUTE' && !checkCanUpdateTime(role)) }">
+				<template v-if="status != 'NOT_BEGIN'">
+					{{ sliceSS(taskDetail?.startTime) }}
+				</template>
+				<template v-else>
+					<a-date-picker v-model:value="startTime" format="YYYY-MM-DD HH:mm" placeholder="选择时间" :show-time="{
+						hideDisabledOptions: true,
+						defaultValue: dayjs('00:00:00', 'HH:mm:ss'),
+					}" :allowClear="false" :autofocus="false" :showNow="false" :locale="locale" :disabled="status != 'NOT_BEGIN'"
+						:disabledDate="disabledStartDate" @ok="confirmStartTime">
+						<template v-slot:suffixIcon v-if="status == 'NOT_BEGIN'">
+							<iconpark-icon name="right" class="right-icon"></iconpark-icon>
+						</template>
+					</a-date-picker>
+				</template>
+			</div>
+		</div>
+		<!-- add deadline box -->
+		<div class="add-deadline">
+			<span class="public-title">任务截止时间</span>
+			<div v-if="dayFormat || status == 'NOT_BEGIN'" class="deadline-box"
+				:class="{ 'dis-bgc': role == 'EXECUTE' || status != 'NOT_BEGIN', 'dis-text': (role == 'EXECUTE' && !checkCanUpdateTime(role)) }">
+				<template v-if="role == 'EXECUTE' && !checkCanUpdateTime(role)">
+					{{ sliceSS(taskDetail?.abortTime) }}
+				</template>
+				<template v-else>
+					<a-date-picker v-model:value="dayFormat" format="YYYY-MM-DD HH:mm" placeholder="选择时间"
+						:show-time="{ defaultValue: dayjs('00:00:00', 'HH:mm:00') }" :allowClear="false"
+						:autofocus="false" :showNow="false" :locale="locale" :disabledDate="disabledDeadDate"
+						:disabled="status != 'NOT_BEGIN'" @ok="confirmDeadline">
+						<template v-slot:suffixIcon v-if="role != 'EXECUTE' && status == 'NOT_BEGIN'">
+							<iconpark-icon name="right" class="right-icon"></iconpark-icon>
+						</template>
+					</a-date-picker>
+				</template>
+			</div>
+			<div v-else class="deadline-null">无</div>
+			<template v-if="role == 'EXECUTE' && !checkCanUpdateTime(role)">
 
-            </template>
-            <template v-else="">
-                <iconpark-icon name="delete" class="delete-icon" v-if="status == 'NOT_BEGIN' && dayFormat"
-                    @click="handleDelAbortTime"></iconpark-icon>
-            </template>
+			</template>
+			<template v-else="">
+				<iconpark-icon name="delete" class="delete-icon" v-if="status == 'NOT_BEGIN' && dayFormat"
+					@click="handleDelAbortTime"></iconpark-icon>
+			</template>
 
-        </div>
-        <!-- add time remind -->
-        <div class="add-remind" v-if="dayFormat != null && status == 'NOT_BEGIN'">
-            <!-- deadline remind box -->
-            <div class="remind-box">
-                <iconpark-icon name="tixing" class="remind-icon"></iconpark-icon>
-                <span class="remind-text">提醒时间</span>
-                <div class="custom-list">
-                    <div class="add-remind-btn" v-if="status == 'NOT_BEGIN'" @click="handleSelect">
-                        <iconpark-icon name="add" class="add-icon"></iconpark-icon>
-                        <a-select v-model:value="selectArr" mode="multiple" dropdownClassName="selector"
-                            :open="selectOpen" :dropdownMatchSelectWidth="false" @change="handleSelectChange"
-                            @blur="handleSelectBlur">
-                            <a-select-option class="remind-option" v-for="item in remindOptions.slice(0, 4)"
-                                :key="item.type" :value="item.type">{{ item.customTime }}</a-select-option>
-                            <a-select-option class="custom-option">
-                                <div class="custom-time">
-                                    <div class="custom-btn">+ 自定义</div>
-                                    <a-date-picker format="YYYY-MM-DD HH:mm" dropdownClassName="picker" :show-time="{
-                                        defaultValue: dayjs(
-                                            '00:00:00',
-                                            'HH:mm:00'
-                                        ),
-                                    }" :allowClear="false" :autofocus="false" :showNow="false" :locale="locale"
-                                        @openChange="handlePickerChange" @ok="confirmRemindDeadline">
-                                    </a-date-picker>
-                                </div>
-                            </a-select-option>
-                        </a-select>
-                    </div>
-                    <template v-for="item in remindOptions" :key="item.customTime">
-                        <div class="custom-box" v-if="item.choose">
-                            <span>{{ item.customTime }}</span>
-                            <iconpark-icon name="guanbi" class="close-icon"
-                                v-if="role != 'EXECUTE' && status == 'NOT_BEGIN'"
-                                @click="handleDeleteRemind(item)"></iconpark-icon>
-                        </div>
-                    </template>
-                </div>
-            </div>
-            <!-- add-schedule -->
-            <div class="schedule-box" v-if="role != 'EXECUTE'">
-                <iconpark-icon name="richeng" class="remind-icon"></iconpark-icon>
-                <span>插入钉钉日程</span>
-                <a-switch :checked="openSchedule" :disabled="status != 'NOT_BEGIN'"
-                    @change="status == 'NOT_BEGIN' && handleSchedule()" />
-            </div>
-            <!-- add cycle -->
-            <div v-if="cycleValue && role != 'EXECUTE' && trait === 'default'" class="cycle-box">
-                <iconpark-icon name="loop" class="remind-icon"></iconpark-icon>
-                <span class="cycle-title">任务循环</span>
-                <a-select v-model:value="cycleValue" :dropdownMatchSelectWidth="false" @change="cycleChange"
-                    @focus="() => (customCycleShow = false)">
-                    <a-select-option class="cycle-option" v-for="item in cycleList" :key="item.type"
-                        :value="item.type">{{ item.content }}</a-select-option>
-                    <template #dropdownRender="{ menuNode: menu }">
-                        <v-nodes :vnodes="menu" />
-                        <a-divider style="margin: 4px 0" />
-                        <div class="cycle-custom-btn" @click="handleCustomCycle">
-                            + 自定义
-                        </div>
-                    </template>
-                </a-select>
-                <div class="cycle-custom-box" v-if="customCycleShow">
-                    <a-input v-model:value="customCycleValue" placeholder="请填写">
-                        <template #addonAfter> 天 </template>
-                    </a-input>
-                    <a-button type="primary" :disabled="!customCycleValue" @click="handleConfirmCycle">确 定</a-button>
-                </div>
-            </div>
-        </div>
-        <!-- add exc box -->
-        <div class="add-exc" v-if="role != 'EXECUTE'">
-            <span class="public-title">参与人</span>
-            <span class="empty-exc" v-if="status != 'NOT_BEGIN' && subTasks.length === 0">无</span>
-            <div class="exc-list">
-                <div class="exc-box" v-for="item in subTasks" :key="item.id">
-                    <div class="exc-main" @click="handleCheckExc(item)">
-                        <AvatarVue :userData="item.executeUser" />
-                        <div class="main-right">
-                            <div class="user-name">
-                                <span class="name-list">{{
-                                    returnName(item.executeUser)
-                                }}</span>
-                                <span v-if="item.executeUser.length > 2">等{{ item.executeUser.length }}人</span>
-                                <iconpark-icon name="right" class="arrow-icon"
-                                    v-if="status == 'NOT_BEGIN'"></iconpark-icon>
-                            </div>
-                            <div class="task-data">
-                                <span v-if="item.leaderAbortTime" class="deadline-time">截止{{
-                                    returnTIme(item.leaderAbortTime)
-                                }}</span>
-                                <span class="side-task-content">{{
-                                    item.content
-                                }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <iconpark-icon name="delete" class="exc-delete" v-if="status == 'NOT_BEGIN'"
-                        @click="handleDeleteSub(item.index)"></iconpark-icon>
-                </div>
-                <div class="add-remind-btn" v-if="role != 'EXECUTE' && status == 'NOT_BEGIN'" @click="handleAddExc">
-                    <iconpark-icon name="add" class="add-icon"></iconpark-icon>
-                </div>
-            </div>
-        </div>
-        <!-- add correlation -->
-        <div v-if="trait === 'OKR'" class="add-correlation">
-            <span class="public-title">关联项</span>
-			<div class="add-cor-btn" @click="handleAddRelation()">
+		</div>
+		<!-- add time remind -->
+		<div class="add-remind" v-if="dayFormat != null && status == 'NOT_BEGIN'">
+			<!-- deadline remind box -->
+			<div class="remind-box">
+				<iconpark-icon name="tixing" class="remind-icon"></iconpark-icon>
+				<span class="remind-text">提醒时间</span>
+				<div class="custom-list">
+					<div class="add-remind-btn" v-if="status == 'NOT_BEGIN'" @click="handleSelect">
+						<iconpark-icon name="add" class="add-icon"></iconpark-icon>
+						<a-select v-model:value="selectArr" mode="multiple" dropdownClassName="selector"
+							:open="selectOpen" :dropdownMatchSelectWidth="false" @change="handleSelectChange"
+							@blur="handleSelectBlur">
+							<a-select-option class="remind-option" v-for="item in remindOptions.slice(0, 4)"
+								:key="item.type" :value="item.type">{{ item.customTime }}</a-select-option>
+							<a-select-option class="custom-option">
+								<div class="custom-time">
+									<div class="custom-btn">+ 自定义</div>
+									<a-date-picker format="YYYY-MM-DD HH:mm" dropdownClassName="picker" :show-time="{
+										defaultValue: dayjs(
+											'00:00:00',
+											'HH:mm:00'
+										),
+									}" :allowClear="false" :autofocus="false" :showNow="false" :locale="locale" @openChange="handlePickerChange"
+										@ok="confirmRemindDeadline">
+									</a-date-picker>
+								</div>
+							</a-select-option>
+						</a-select>
+					</div>
+					<template v-for="item in remindOptions" :key="item.customTime">
+						<div class="custom-box" v-if="item.choose">
+							<span>{{ item.customTime }}</span>
+							<iconpark-icon name="guanbi" class="close-icon"
+								v-if="role != 'EXECUTE' && status == 'NOT_BEGIN'"
+								@click="handleDeleteRemind(item)"></iconpark-icon>
+						</div>
+					</template>
+				</div>
+			</div>
+			<!-- add-schedule -->
+			<div class="schedule-box" v-if="role != 'EXECUTE'">
+				<iconpark-icon name="richeng" class="remind-icon"></iconpark-icon>
+				<span>插入钉钉日程</span>
+				<a-switch :checked="openSchedule" :disabled="status != 'NOT_BEGIN'"
+					@change="status == 'NOT_BEGIN' && handleSchedule()" />
+			</div>
+			<!-- add cycle -->
+			<div v-if="cycleValue && role != 'EXECUTE' && trait === 'default'" class="cycle-box">
+				<iconpark-icon name="loop" class="remind-icon"></iconpark-icon>
+				<span class="cycle-title">任务循环</span>
+				<a-select v-model:value="cycleValue" :dropdownMatchSelectWidth="false" @change="cycleChange"
+					@focus="() => (customCycleShow = false)">
+					<a-select-option class="cycle-option" v-for="item in cycleList" :key="item.type"
+						:value="item.type">{{ item.content }}</a-select-option>
+					<template #dropdownRender="{ menuNode: menu }">
+						<v-nodes :vnodes="menu" />
+						<a-divider style="margin: 4px 0" />
+						<div class="cycle-custom-btn" @click="handleCustomCycle">
+							+ 自定义
+						</div>
+					</template>
+				</a-select>
+				<div class="cycle-custom-box" v-if="customCycleShow">
+					<a-input v-model:value="customCycleValue" placeholder="请填写">
+						<template #addonAfter> 天 </template>
+					</a-input>
+					<a-button type="primary" :disabled="!customCycleValue" @click="handleConfirmCycle">确 定</a-button>
+				</div>
+			</div>
+		</div>
+		<!-- add exc box -->
+		<div class="add-exc" v-if="role != 'EXECUTE'">
+			<span class="public-title">参与人</span>
+			<span class="empty-exc" v-if="status != 'NOT_BEGIN' && subTasks.length === 0">无</span>
+			<div class="exc-list">
+				<div class="exc-box" v-for="item in subTasks" :key="item.id">
+					<div class="exc-main" @click="handleCheckExc(item)">
+						<AvatarVue :userData="item.executeUser" />
+						<div class="main-right">
+							<div class="user-name">
+								<span class="name-list">{{
+									returnName(item.executeUser)
+								}}</span>
+								<span v-if="item.executeUser.length > 2">等{{ item.executeUser.length }}人</span>
+								<iconpark-icon name="right" class="arrow-icon"
+									v-if="status == 'NOT_BEGIN'"></iconpark-icon>
+							</div>
+							<div class="task-data">
+								<span v-if="item.leaderAbortTime" class="deadline-time">截止{{
+									returnTIme(item.leaderAbortTime)
+								}}</span>
+								<span class="side-task-content">{{
+									item.content
+								}}</span>
+							</div>
+						</div>
+					</div>
+					<iconpark-icon name="delete" class="exc-delete" v-if="status == 'NOT_BEGIN'"
+						@click="handleDeleteSub(item.index)"></iconpark-icon>
+				</div>
+				<div class="add-remind-btn" v-if="role != 'EXECUTE' && status == 'NOT_BEGIN'" @click="handleAddExc">
+					<iconpark-icon name="add" class="add-icon"></iconpark-icon>
+				</div>
+			</div>
+		</div>
+		<!-- add correlation -->
+		<div v-if="trait === 'OKR'" class="add-correlation">
+			<span class="public-title">关联项</span>
+			<div v-if="!renderCorText()" class="add-cor-btn" @click="handleAddRelation()">
 				<iconpark-icon name="guanlian"></iconpark-icon>
 				<span>添加关联</span>
 			</div>
-			<div class="cor-text" v-if="renderCorText()" @click="handleCheckRelation()">
+			<div class="cor-text" :class="{'marginL': renderCorText()}" v-if="renderCorText()" @click="handleCheckRelation()">
 				<iconpark-icon name="guanlian"></iconpark-icon>
 				<span>{{ renderCorText() }}</span>
 			</div>
-        </div>
-        <!-- create task footer box -->
-        <template #footer>
-            <Transition>
-                <div class="add-footer" v-if="!isEdit">
-                    <a-button v-if="showDetail" class="cancel-btn" @click="handleTaskTrace">任务追踪</a-button>
-                    <a-button type="primary" class="sure-btn" :class="{ 'restart-btn': status != 'NOT_BEGIN' }"
-                        @click="handleReloadTask(false)">{{
-    status == "NOT_BEGIN" ? "完成任务" : "重启任务"
-                        }}</a-button>
-                </div>
-                <div class="save-footer" v-else>
-                    <a-button class="cancel-btn" @click="handleDrawerClose">取消</a-button>
-                    <a-button type="primary" class="sure-btn" :disabled="judgeStrNull(content)" :loading="loading"
-                        @click="handleCreateTask">保存修改</a-button>
-                </div>
-            </Transition>
-        </template>
-    </a-drawer>
-    <!-- choose user component -->
-    <ChooseUserVue :visible="choose.visible" :searchAllZone="choose.searchAllZone" :multiSelect="choose.multiSelect"
-        :title="choose.title" :selectedUsers="choose.selectedUsers" @updateUserIds="updateUserIds"
-        @close="handleChooseClose" />
-    <!-- add executor component -->
-    <AddExcVue :visible="addExcVisible" :subTask="curSubTask" :isDisable="execDisable" @closeAddExc="closeAddExc"
-        @addExc="addExc" />
-    <!-- dialog component -->
-    <DialogVue :dialogVisible="dialog.visible" :title="dialog.title" :content="dialog.content"
-        @cancelEvent="cancelEvent" @okEvent="okEvent" />
-    <!-- renew task status component -->
-    <RenewTask :renewVisible="renewVisible" :toStatus="toStatus" :dragEl="taskDetail" :zIndex="1200"
-        @closeRenew="closeRenew" />
-    <!-- task trace component -->
-    <TaskTrace :visible="map.visible" :taskData="taskDetail" :curUser="curUser" :trait="trait" @closeMap="closeMap" />
-    <!-- upload file list -->
-    <FileListVue :appendixShow="files.show" :accessory="files.accessory" @hideFiles="hideCommentFiles" />
+		</div>
+		<!-- create task footer box -->
+		<template #footer>
+			<Transition>
+				<div class="add-footer" v-if="!isEdit">
+					<a-button v-if="showDetail" class="cancel-btn" @click="handleTaskTrace">任务追踪</a-button>
+					<a-button type="primary" class="sure-btn" :class="{ 'restart-btn': status != 'NOT_BEGIN' }"
+						@click="handleReloadTask(false)">{{
+	status == "NOT_BEGIN" ? "完成任务" : "重启任务"
+						}}</a-button>
+				</div>
+				<div class="save-footer" v-else>
+					<a-button class="cancel-btn" @click="handleDrawerClose">取消</a-button>
+					<a-button type="primary" class="sure-btn" :disabled="judgeStrNull(content)" :loading="loading"
+						@click="handleCreateTask">保存修改</a-button>
+				</div>
+			</Transition>
+		</template>
+	</a-drawer>
+	<!-- choose user component -->
+	<ChooseUserVue :visible="choose.visible" :searchAllZone="choose.searchAllZone" :multiSelect="choose.multiSelect"
+		:title="choose.title" :selectedUsers="choose.selectedUsers" @updateUserIds="updateUserIds"
+		@close="handleChooseClose" />
+	<!-- add executor component -->
+	<AddExcVue :visible="addExcVisible" :subTask="curSubTask" :isDisable="execDisable" @closeAddExc="closeAddExc"
+		@addExc="addExc" />
+	<!-- dialog component -->
+	<DialogVue :dialogVisible="dialog.visible" :title="dialog.title" :content="dialog.content"
+		@cancelEvent="cancelEvent" @okEvent="okEvent" />
+	<!-- renew task status component -->
+	<RenewTask :renewVisible="renewVisible" :toStatus="toStatus" :dragEl="taskDetail" :zIndex="1200"
+		@closeRenew="closeRenew" />
+	<!-- task trace component -->
+	<TaskTrace :visible="map.visible" :taskData="taskDetail" :curUser="curUser" :trait="trait" @closeMap="closeMap" />
+	<!-- upload file list -->
+	<FileListVue :appendixShow="files.show" :accessory="files.accessory" @hideFiles="hideCommentFiles" />
 	<Relation v-model:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :info="relation.info"
 		@successCallback="relationConfirm" />
 	<LookRelation v-if="lookRelation.visible" v-model:visible="lookRelation.visible" :info="lookRelation.info" />
 </template>
 
 <script setup>
-import {ref, reactive, toRefs, watch} from 'vue';
-import {UP_DATA_TASK, GET_RELEVANCE_CNT} from '../../api';
+import { ref, reactive, toRefs, watch } from 'vue';
+import { UP_DATA_TASK, GET_RELEVANCE_CNT } from '../../api';
 import {
 	checkNullObj,
 	formatDate,
@@ -509,7 +509,8 @@ const execDisable = ref(false); //control executor disable
 const customCycleShow = ref(false); //control custom cycle box visible
 const customCycleValue = ref(''); //save custom cycle value
 const spinning = ref(false); //upload files loading control
-const relationCallback = ref({})
+const relationCallback = ref({});
+const relationArr = ref([]);
 
 watch(
 	() => props.visible,
@@ -564,6 +565,7 @@ watch(
 			});
 			taskFrom.selectArr = arr;
 			copyFrom.value = JSON.stringify(taskFrom);
+			relationCallback.value = {};
 		}
 	}
 );
@@ -806,7 +808,7 @@ const handleCreateTask = async () => {
 		item.ossId = el.ossMaterialId;
 		fileItem.ossAccessoryList.push(item);
 	});
-	const {code} = await UP_DATA_TASK({
+	const { code } = await UP_DATA_TASK({
 		content: taskFrom.content,
 		createUser: taskFrom.createUser,
 		principalUser: taskFrom.principalUser,
@@ -1169,9 +1171,9 @@ const handleDownloadFile = (file) => {
 				dd.biz.util.downloadFile({
 					url: originalUrl,
 					name: fileName,
-					onProgress: function (msg) {},
-					onSuccess: function (result) {},
-					onFail: function () {},
+					onProgress: function (msg) { },
+					onSuccess: function (result) { },
+					onFail: function () { },
 				});
 			});
 	} else {
@@ -1198,12 +1200,13 @@ const getRelevanceCnt = async () => {
 	} else {
 		type = 'TASK_SUB';
 	}
-	const {code, data} = await GET_RELEVANCE_CNT({
+	const { code, data } = await GET_RELEVANCE_CNT({
 		taskId: props.taskDetail.id,
 		relevanceType: type,
 	});
 	if (code === 1) {
 		console.log(data);
+		relationArr.value = data;
 	}
 };
 
@@ -1211,7 +1214,7 @@ const getRelevanceCnt = async () => {
  * handle add link callback
  * @param {Object} data 
  */
- const relationConfirm = (data) => {
+const relationConfirm = (data) => {
 	relationCallback.value = data;
 };
 
@@ -1239,6 +1242,18 @@ const renderCorText = () => {
 			}
 		})
 	}
+	else if (relationArr.value && relationArr.value.length > 0) {
+		relationArr.value.map(el => {
+			el.relevanceCount.map(i => {
+				if (i.category === "OKR") {
+					projects += i.count;
+				}
+				if (i.category === "OKR") {
+					okrs += i.count;
+				}
+			})
+		})
+	}
 	if (projects + okrs > 0) {
 		return `已关联${projects > 0 ? `${projects}个项目` : ''}${projects > 0 && okrs > 0 ? '、' : ''}${okrs > 0 ? `${okrs}个OKR` : ''}`
 	} else {
@@ -1252,8 +1267,10 @@ const handleCheckRelation = () => {
 	lookRelation.info.id = props.taskDetail.id;
 	lookRelation.info.name = props.taskDetail.createUser.name;
 	lookRelation.info.status = props.taskDetail.status;
+	lookRelation.info.type = props.taskDetail.type === 'MAIN_TASK' ? 'TASK_MAIN' : "TASK_SUB"
 	lookRelation.visible = true;
-}
+};
+
 const {
 	content,
 	createUser,
@@ -1276,12 +1293,12 @@ const {
 
 <script>
 export default {
-    name: 'TaskDetail',
-    components: {
-        VNodes: (_, { attrs }) => {
-            return attrs.vnodes;
-        },
-    },
+	name: 'TaskDetail',
+	components: {
+		VNodes: (_, { attrs }) => {
+			return attrs.vnodes;
+		},
+	},
 };
 </script>
 

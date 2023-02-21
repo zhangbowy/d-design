@@ -13,7 +13,6 @@ export const getQueryVariable = (sKey) => {
             ? (resObj[RegExp.$1] = [].concat(resObj[RegExp.$1], RegExp.$2))
             : (resObj[RegExp.$1] = RegExp.$2);
     }
-    console.log('resObj', resObj)
     if (sKey) {
         return resObj[sKey] ? resObj[sKey] : "";
     }
