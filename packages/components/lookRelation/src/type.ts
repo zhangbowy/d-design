@@ -11,6 +11,7 @@ export interface InfoList {
         status: string;
     }
     relevanceType: string
+    sort: number;
 }
 
 export interface RelationInfo {

@@ -69,7 +69,7 @@
         main {
             padding: 16px 24px;
             height: calc(100% - 80px);
-            overflow: scroll;
+            overflow: auto;
 
             .cor-project:not(:first-child) {
                 margin-top: 16px;
@@ -108,16 +108,48 @@
                     -webkit-box-orient: vertical;
                 }
 
-                .kr-index {
-                    width: 36px;
-                    height: 20px;
+                .o-style {
+                    background: linear-gradient(154deg, @bg1-gradient-shallow 0%, @bg1-gradient-deep 100%);
                     font-size: 12px;
-                    background-color: @bg-primary-shallow;
-                    color: @primary-color;
-                    line-height: 20px;
-                    text-align: center;
-                    margin-right: 8px;
+                    font-weight: @weight-500;
+                    color: @white;
+                    padding: 2px;
                     border-radius: 4px;
+                    width: 100px;
+                    text-align: center;
+                    margin-right: 5px;
+                    display: inline-block;
+                }
+
+                .kr-style {
+                    width: 56px;
+                    height: 20px;
+                    background: linear-gradient(154deg, @bg1-gradient-shallow 0%, @bg1-gradient-deep 100%);
+                    border-radius: 4px;
+                    display: flex;
+                    margin-bottom: 0;
+                    padding: 2px;
+                    align-items: center;
+                    margin-right: 5px;
+
+                    li:first-child {
+                        width: 24px;
+                        height: 16px;
+                        background: linear-gradient(137deg, @bg2-gradient-shallow 0%, @bg2-gradient-deep 100%);
+                        border-radius: 3px 9px 9px 3px;
+                        font-size: 12px;
+                        font-weight: @weight-500;
+                        color: @primary-color;
+                        text-align: center;
+                        line-height: 16px;
+                    }
+
+                    li:last-child {
+                        font-size: 12px;
+                        font-weight: @weight-500;
+                        color: @white;
+                        margin-left: 3px;
+                    }
                 }
 
                 .status-icon {
