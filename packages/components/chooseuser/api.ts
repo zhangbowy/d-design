@@ -7,12 +7,12 @@ export const SEARCH_ZONE_USER = (params: any) => {
     return http('/api/member/user/aggr/allUserFuzzy', { method: 'get', params });
 }
 /**********获取部门信息**********/
-export const GET_DEPT_INFO = (parmas: any) => {
+export const GET_DEPT_INFO = (params: any) => {
     // @ts-ignore
-    return http('/api/member/user/pick/dept', { method: 'get', parmas });
+    return http('/api/member/user/pick/dept', { method: 'get', params });
 }
 /**********获取筛选结果**********/
-export const GET_USERIDS = (parmas: any) => {
+export const GET_USERIDS = (params: any) => {
     // @ts-ignore
-    return http('/api/member/user/pick/getUserIds', { method: 'get', parmas });
+    return http('/api/member/user/pick/getUserIds', { method: 'get', params });
 }

@@ -1,14 +1,16 @@
 const fs = require('fs');
 import path from "path";
-import { resolve } from 'path'
-const { defineConfig, build } = require('vite');
+import {resolve} from 'path'
+
+const {defineConfig, build} = require('vite');
 const vue = require('@vitejs/plugin-vue');
 import Components from "unplugin-vue-components/vite"
-import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
-import { themePreprocessorPlugin } from "@zougt/vite-plugin-theme-preprocessor/dist/index";
+import {AntDesignVueResolver} from "unplugin-vue-components/resolvers";
+import {themePreprocessorPlugin} from "@zougt/vite-plugin-theme-preprocessor/dist/index";
 import visualizer from "rollup-plugin-visualizer";
+
 const entryDir = path.resolve(__dirname, '../packages/components');
-const outputDir = path.resolve(__dirname, '../dist2');
+const outputDir = path.resolve(__dirname, '../dist');
 
 
 const includeStyles = {
@@ -47,43 +49,43 @@ const baseConfig = defineConfig({
             ],
         }),
         themePreprocessorPlugin({
-        less: {
-            multipleScopeVars: [
-                {
-                    scopeName: "task-theme-default",
-                    path: path.resolve("./packages/assets/style/variables.less"),
-                    includeStyles
-                },
-                {
-                    scopeName: "task-theme-integration",
-                    path: path.resolve(
-                        "./packages/assets/style/variablesInte.less"
-                    ),
-                    includeStyles
-                },
-                {
-                    scopeName: "task-theme-okr",
-                    path: path.resolve(
-                        "./packages/assets/style/OKRvariables.less"
-                    ),
-                    includeStyles
-                },
-            ],
-            includeStyleWithColors: [
-                {
-                    color: "#ffffff",
-                }
-            ],
-            defaultScopeName: "task-theme-default",
-            extract: false,
-            // themeLinkTagInjectTo: "body"
-        },
-    }),
-        visualizer({
-            open: true,  //注意这里要设置为true，否则无效
-            gzipSize: true,
-            brotliSize: true
+            less: {
+                multipleScopeVars: [
+                    {
+                        scopeName: "task-theme-default",
+                        path: path.resolve("./packages/assets/style/variables.less"),
+                        includeStyles
+                    },
+                    {
+                        scopeName: "task-theme-integration",
+                        path: path.resolve(
+                            "./packages/assets/style/variablesInte.less"
+                        ),
+                        includeStyles
+                    },
+                    {
+                        scopeName: "task-theme-okr",
+                        path: path.resolve(
+                            "./packages/assets/style/OKRvariables.less"
+                        ),
+                        includeStyles
+                    },
+                ],
+                includeStyleWithColors: [
+                    {
+                        color: "#ffffff",
+                    }
+                ],
+                defaultScopeName: "task-theme-default",
+                extract: false,
+                // themeLinkTagInjectTo: "body"
+            },
         }),
+        // visualizer({
+        //     open: true,  //注意这里要设置为true，否则无效
+        //     gzipSize: true,
+        //     brotliSize: true
+        // }),
     ],
     css: {
         preprocessorOptions: {
@@ -115,6 +117,7 @@ const rollupOptions = {
         },
     },
 };
+
 const buildSingle = async (name) => {
     await build(
         defineConfig({

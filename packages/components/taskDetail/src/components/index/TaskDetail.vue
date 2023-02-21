@@ -259,9 +259,9 @@
 			</div>
 		</div>
 		<!-- add correlation -->
-		<div v-if="trait === 'OKR'" class="add-correlation">
+		<div v-if="trait !== 'QZP'" class="add-correlation">
 			<span class="public-title">关联项</span>
-			<div v-if="!renderCorText()" class="add-cor-btn" @click="handleAddRelation()">
+			<div v-if="!renderCorText() && (trait === 'OKR' || trait === 'INTE')" class="add-cor-btn" @click="handleAddRelation()">
 				<iconpark-icon name="guanlian"></iconpark-icon>
 				<span>添加关联</span>
 			</div>
@@ -307,7 +307,7 @@
 	<FileListVue :appendixShow="files.show" :accessory="files.accessory" @hideFiles="hideCommentFiles" />
 	<Relation v-model:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :info="relation.info"
 		@successCallback="relationConfirm" />
-	<LookRelation v-model:visible="lookRelation.visible" :info="lookRelation.info" />
+	<LookRelation v-model:visible="lookRelation.visible" :info="lookRelation.info" @lookDetailCallback="lookDetailCallback" @refreshList="refreshList" />
 </template>
 
 <script setup>
@@ -371,7 +371,7 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(['closeDrawer', 'saveCurTaskId', 'successChange']);
+const emit = defineEmits(['closeDrawer', 'saveCurTaskId', 'successChange', 'checkRelationDetail']);
 
 const cycleList = ref([
 	{
@@ -1205,7 +1205,6 @@ const getRelevanceCnt = async () => {
 		relevanceType: type,
 	});
 	if (code === 1) {
-		console.log(data);
 		relationArr.value = data;
 	}
 };
@@ -1216,6 +1215,7 @@ const getRelevanceCnt = async () => {
  */
 const relationConfirm = (data) => {
 	relationCallback.value = data;
+	getRelevanceCnt();
 };
 
 /**
@@ -1232,35 +1232,32 @@ const handleAddRelation = () => {
 const renderCorText = () => {
 	let projects = 0;
 	let okrs = 0;
-	if (relationCallback.value.targetInfo && relationCallback.value.targetInfo.length > 0) {
-		relationCallback.value.targetInfo.map(el => {
-			if (el.relevanceCategory === "PROJECT") {
-				projects++;
-			}
-			if (el.relevanceCategory === "OKR") {
-				okrs++
-			}
-		})
-	}
-	else if (relationArr.value && relationArr.value.length > 0) {
+	let tasks = 0;
+	if (relationArr.value && relationArr.value.length > 0) {
 		relationArr.value.map(el => {
 			el.relevanceCount.map(i => {
-				if (i.category === "OKR") {
+				if (i.category === "project") {
 					projects += i.count;
 				}
 				if (i.category === "OKR") {
 					okrs += i.count;
 				}
+				if (i.category === "TASK") {
+					tasks += i.count;
+				}
 			})
 		})
 	}
 	if (projects + okrs > 0) {
-		return `已关联${projects > 0 ? `${projects}个项目` : ''}${projects > 0 && okrs > 0 ? '、' : ''}${okrs > 0 ? `${okrs}个OKR` : ''}`
+		return `已关联${projects > 0 ? `${projects}个项目` : ''}${projects > 0 && okrs > 0 ? '、' : ''}${okrs > 0 ? `${okrs}个OKR` : ''}${(projects > 0 && tasks > 0) || (okrs > 0 && tasks > 0) ? '、' : ''}${tasks > 0 ? `${okrs}个任务` : ''}`
 	} else {
 		return ""
 	}
 };
 
+/**
+ * handle check relation event
+ */
 const handleCheckRelation = () => {
 	lookRelation.info.avatar = props.taskDetail.createUser.avatar;
 	lookRelation.info.content = props.taskDetail.content;
@@ -1269,6 +1266,22 @@ const handleCheckRelation = () => {
 	lookRelation.info.status = props.taskDetail.status;
 	lookRelation.info.type = props.taskDetail.type === 'MAIN_TASK' ? 'TASK_MAIN' : "TASK_SUB"
 	lookRelation.visible = true;
+};
+
+/**
+ * handle check relation detail event
+ * @param {Object} item 
+ * @param {String} type 
+ */
+const lookDetailCallback = (item, type) => {
+	emit("checkRelationDetail", item, type);
+};
+
+/**
+ * handle add task link event
+ */
+const refreshList = () => {
+	getRelevanceCnt();
 };
 
 const {

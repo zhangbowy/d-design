@@ -322,16 +322,9 @@
 		@closeAddExc="closeAddExc"
 		@addExc="addExc" />
 	<!-- dialog component -->
-	<DialogVue
-		:dialogVisible="dialog.visible"
-		:title="dialog.title"
-		:content="dialog.content"
-		@cancelEvent="cancelEvent"
-		@okEvent="okEvent" />
-	<Relation
-		v-model:visible="relation.visible"
-		:tabs="['OKR', 'PROJECT']"
-		:info="relation.info"
+	<DialogVue :dialogVisible="dialog.visible" :title="dialog.title" :content="dialog.content"
+		@cancelEvent="cancelEvent" @okEvent="okEvent" />
+	<Relation v-model:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :isDirectAdd="false" :info="relation.info"
 		@successCallback="relationConfirm" />
 </template>
 
@@ -368,7 +361,7 @@ const props = defineProps({
 	},
 	trait: {
 		type: String, // OKR/PROJECT/INTE/QZP
-		default: 'QZP',
+		default: 'OKR',
 		required: false,
 	},
 	projectId: {
@@ -495,8 +488,7 @@ const spinning = ref(false);
 const hours = ref([]);
 const mins = ref([]);
 const datePicker = ref(null);
-const trait = ref(sessionStorage.getItem('G_TRAIT') || 'QZP');
-const relationCallback = ref({});
+const relationCallback = ref({})
 const cache = reactive({
 	openData: null,
 	closeData: null,
