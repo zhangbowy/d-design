@@ -307,7 +307,7 @@
 	<FileListVue :appendixShow="files.show" :accessory="files.accessory" @hideFiles="hideCommentFiles" />
 	<Relation v-model:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :info="relation.info"
 		@successCallback="relationConfirm" />
-	<LookRelation v-model:visible="lookRelation.visible" :info="lookRelation.info" />
+	<LookRelation v-model:visible="lookRelation.visible" :info="lookRelation.info" @lookDetailCallback="lookDetailCallback" />
 </template>
 
 <script setup>
@@ -371,7 +371,7 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(['closeDrawer', 'saveCurTaskId', 'successChange']);
+const emit = defineEmits(['closeDrawer', 'saveCurTaskId', 'successChange', 'checkRelationDetail']);
 
 const cycleList = ref([
 	{
@@ -1232,17 +1232,7 @@ const handleAddRelation = () => {
 const renderCorText = () => {
 	let projects = 0;
 	let okrs = 0;
-	if (relationCallback.value.targetInfo && relationCallback.value.targetInfo.length > 0) {
-		relationCallback.value.targetInfo.map(el => {
-			if (el.relevanceCategory === "PROJECT") {
-				projects++;
-			}
-			if (el.relevanceCategory === "OKR") {
-				okrs++
-			}
-		})
-	}
-	else if (relationArr.value && relationArr.value.length > 0) {
+	if (relationArr.value && relationArr.value.length > 0) {
 		relationArr.value.map(el => {
 			el.relevanceCount.map(i => {
 				if (i.category === "OKR") {
@@ -1261,6 +1251,9 @@ const renderCorText = () => {
 	}
 };
 
+/**
+ * handle check relation event
+ */
 const handleCheckRelation = () => {
 	lookRelation.info.avatar = props.taskDetail.createUser.avatar;
 	lookRelation.info.content = props.taskDetail.content;
@@ -1270,6 +1263,15 @@ const handleCheckRelation = () => {
 	lookRelation.info.type = props.taskDetail.type === 'MAIN_TASK' ? 'TASK_MAIN' : "TASK_SUB"
 	lookRelation.visible = true;
 };
+
+/**
+ * handle check relation detail event
+ * @param {Object} item 
+ * @param {String} type 
+ */
+const lookDetailCallback = (item, type) => {
+	emit("checkRelationDetail", item, type);
+}
 
 const {
 	content,
