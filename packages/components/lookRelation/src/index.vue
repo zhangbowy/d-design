@@ -52,11 +52,21 @@
 								class="project-item"
 								v-for="(item, index) in result.infoList"
 								:key="item.id">
-								<span class="kr-index">KR{{ index + 1 }}</span>
+								<template v-if="result.category === 'OKR'">
+									<ul class="kr-style" v-if="item.relevanceType === 'KR'">
+										<li>O{{ item.sort }}</li>
+										<li>KR{{ index + 1 }}</li>
+									</ul>
+									<span class="o-style" v-else>O{{ item.sort }}</span>
+								</template>
+
 								<span class="project-text">{{ item.relevanceName.name }}</span>
-								<span class="status-icon" :class="item.relevanceName.status">{{
-									RELATION_TYPE[item.relevanceName.status]
-								}}</span>
+								<span
+									class="status-icon"
+									v-if="RELATION_TYPE[item.relevanceName.status]"
+									:class="item.relevanceName.status"
+									>{{ RELATION_TYPE[item.relevanceName.status] }}</span
+								>
 								<div class="item-op">
 									<a-button
 										type="link"
@@ -82,7 +92,10 @@
 		<template #footer>
 			<div class="drawer-footer">
 				<a-button @click="handelClose">关闭</a-button>
-				<a-button v-if="isOperable" type="primary" @click="handelAddRelation"
+				<a-button
+					v-if="isSureRelation"
+					type="primary"
+					@click="handelAddRelation"
 					>添加关联</a-button
 				>
 			</div>
@@ -138,7 +151,7 @@ const props = defineProps({
 			type: 'TASK_MAIN',
 			indexId: 1,
 			content: 'mock',
-			id: 6068,
+			id: 6071,
 			sourceType: 'TASK',
 			status: '',
 		},
@@ -157,6 +170,10 @@ const props = defineProps({
 	trait: {
 		type: String,
 		default: 'OKR',
+	},
+	isSureRelation: {
+		type: Boolean,
+		default: true,
 	},
 });
 const user = JSON.parse(localStorage.getItem('QZZ_DATA') || '{}').user;

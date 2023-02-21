@@ -10,17 +10,26 @@
 					<i class="iconfont icon-riqi2"></i>
 				</template>
 			</PeriodList>
+			<a-checkbox
+				class="head-checkbox"
+				v-model:checked="relatedMeCheckbox"
+				@change="handelRelatedChange"
+				>与我相关</a-checkbox
+			>
 		</header>
 		<main>
 			<template v-if="okrData.length > 0">
 				<a-checkbox-group
 					v-model:value="checkList"
 					@change="handelCheckboxChange">
-					<template v-for="(item, index) in okrData" :key="item.id">
+					<template v-for="(item, index) in allOkrData" :key="item.id">
 						<div class="checkbox-group">
 							<!-- <a-checkbox :value="item.id" :disabled="item?.disabled"> -->
-							<span class="O">O{{ item.importance }}</span>
-							<span>{{ item.content }} </span>
+							<ul class="o-wrapper">
+								<li class="O">O{{ item.importance }}</li>
+								<li>{{ item.content }}</li>
+								<li class="o-create">创建人：霞客</li>
+							</ul>
 							<!-- </a-checkbox> -->
 							<div class="kr-checkbox">
 								<a-checkbox
@@ -30,12 +39,19 @@
 									class="cur-checkbox"
 									:value="list.id">
 									<span class="KR">KR{{ idx + 1 }}</span>
-									<span>{{ list.content }} </span>
+									<span>
+										{{ list.content }}
+										<template
+											v-for="userInfo in list.assistUsers"
+											:key="userInfo.name">
+											<span class="assit-user">@{{ userInfo.name }}</span>
+										</template>
+									</span>
+									<span class="assit-user">@受益人</span>
 								</a-checkbox>
 							</div>
 						</div>
-
-						<a-divider v-if="index !== okrData.length - 1" />
+						<a-divider v-if="index !== allOkrData.length - 1" />
 					</template>
 				</a-checkbox-group>
 			</template>
@@ -43,7 +59,6 @@
 			<a-empty
 				v-else
 				description="暂无数据"
-				image="https://qzz-material.forwe.store/img/okr_backstage/1b5799a9470647498b42e88d2681a9be.png"
 				:image-style="{
 					height: '230px',
 				}">
@@ -55,12 +70,15 @@
 <script setup lang='ts'>
 import PeriodList from '@/components/periodList/src/index.vue';
 import {GET_OKRLIST_BY_USERID, GET_CORRELATION_INFO} from '@/api/api';
-import {onMounted, ref, toRaw} from 'vue';
+import {computed, onMounted, ref, toRaw} from 'vue';
 import {ProfileOutlined} from '@ant-design/icons-vue';
+import {CheckboxChangeEvent} from 'ant-design-vue/es/checkbox/interface';
 
-const okrData = ref([]);
-const checkList = ref([]);
+const okrData = ref([]); //okr数据
+const checkList = ref([]); //选中的数据
 const loading = ref(true);
+const relatedMeCheckbox = ref(false); // 与我相关checkbox
+const relatedMeData = ref([]);
 const props = defineProps({
 	info: {
 		type: Object,
@@ -98,9 +116,13 @@ const getOkrList = async (periodId?: string) => {
 		};
 		const result = await GET_CORRELATION_INFO(relationParams);
 		if (result.code == 1 && result.data.length > 0) {
-			const relationIdArr = result.data
-				.filter((item) => item.category == 'OKR')[0]
-				.infoList.map((list) => Number(list.id));
+			const okrRelationLen = result.data.filter(
+				(item) => item.category == 'OKR'
+			);
+			if (okrRelationLen.length < 1) return;
+			const relationIdArr = okrRelationLen[0].infoList.map((list) =>
+				Number(list.id)
+			);
 			checkList.value = relationIdArr;
 			okrData.value.forEach((item) => {
 				// if (relationIdArr.includes(item.id)) {
@@ -133,6 +155,13 @@ const handelCheckboxChange = (e: number[]) => {
 		checkedArr: arr,
 	});
 };
+// 与我相关点击
+const handelRelatedChange = (e: CheckboxChangeEvent) => {
+	console.log('e', e);
+};
+const allOkrData = computed(() => {
+	return [...okrData.value, ...relatedMeData.value];
+});
 onMounted(() => {
 	getOkrList();
 });

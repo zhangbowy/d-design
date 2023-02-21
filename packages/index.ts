@@ -18,9 +18,14 @@ if (trait === 'OKR') {
     });
 }
 
+const link1 = document.createElement('link');
+link1.setAttribute('rel', 'stylesheet')
+link1.setAttribute('href', "//at.alicdn.com/t/c/font_3907746_q0crnxjd0x9.css")
+const head = document.getElementsByTagName('head')[0]
+head.appendChild(link1)
+
 // 所有组件
 export * from './component'
-
 
 
 // 完整引入组件
