@@ -8,7 +8,7 @@ import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
 import { themePreprocessorPlugin } from "@zougt/vite-plugin-theme-preprocessor/dist/index";
 import visualizer from "rollup-plugin-visualizer";
 const entryDir = path.resolve(__dirname, '../packages/components');
-const outputDir = path.resolve(__dirname, '../dist2');
+const outputDir = path.resolve(__dirname, '../dist');
 
 
 const includeStyles = {
@@ -115,6 +115,7 @@ const rollupOptions = {
         },
     },
 };
+
 const buildSingle = async (name) => {
     await build(
         defineConfig({
