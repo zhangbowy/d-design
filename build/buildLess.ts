@@ -13,6 +13,8 @@ const targetEs = resolve(__dirname, '../dist/style')
 
 const srcDir = resolve(__dirname, '../packages')
 
+const gLessPath = resolve(__dirname, '../packages/style/global.less')
+
 const buildLess = async () => {
     //直接将less文件复制到打包后目录
     await cpy(`${sourceDir}/**/*.less`, targetLib)
@@ -27,11 +29,12 @@ const buildLess = async () => {
         const filePath = `${srcDir}/${lessFils[path]}`
         //获取less文件字符串
         const lessCode = await fs.readFile(filePath, 'utf-8')
+        const gLessCode = await fs.readFile(gLessPath, 'utf-8')
         //将less解析成css
 
-        const code = await less.render(lessCode, {
+        const code = await less.render(gLessCode + lessCode, {
             //指定src下对应less文件的文件夹为目录
-            paths: [srcDir, dirname(filePath)]
+            paths: [srcDir, dirname(filePath),  gLessPath],
         })
 
         //拿到.css后缀path

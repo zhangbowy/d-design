@@ -10,6 +10,10 @@ import { GET_STS, GET_FILES_PATH } from "../api";
 import { getQueryVariable } from "@/utils/utils";
 import ossClient from "@/utils/oss";
 
+defineOptions({
+  name: 'OssUpload'
+})
+
 const props = defineProps({
   bizId: [Number, String],
   corpId: {

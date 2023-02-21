@@ -104,7 +104,7 @@ import {formatDate, checkNullObj} from '../../utils/utils';
 import dayjs from 'dayjs';
 import locale from 'ant-design-vue/es/date-picker/locale/zh_CN';
 import AvatarVue from '../avatar/avatar.vue';
-import ChooseUserVue from '../../../../chooseuser/components/index1.vue';
+import ChooseUserVue from '../../../../chooseuser/components/index.vue';
 import DialogVue from '../dialog/Dialog.vue';
 
 const props = defineProps({

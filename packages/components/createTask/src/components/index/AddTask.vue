@@ -137,7 +137,7 @@
 				<a-switch :checked="openSchedule" @change="handleSchedule" />
 			</div>
 			<!-- add cycle -->
-			<div v-if="trait === 'default'" class="cycle-box">
+			<div v-if="trait === 'QZP'" class="cycle-box">
 				<iconpark-icon name="loop" class="remind-icon"></iconpark-icon>
 				<span class="cycle-title">任务循环</span>
 				<a-select v-model:value="cycleValue" :dropdownMatchSelectWidth="false" @change="cycleChange"
@@ -200,6 +200,10 @@
 				<iconpark-icon name="guanlian"></iconpark-icon>
 				<span>添加关联</span>
 			</div>
+			<div class="cor-text" v-if="renderCorText()">
+				<iconpark-icon name="guanlian"></iconpark-icon>
+				<span>{{ renderCorText() }}</span>
+			</div>
 		</div>
 		<!-- create task footer box -->
 		<template #footer>
@@ -220,27 +224,27 @@
 	<!-- dialog component -->
 	<DialogVue :dialogVisible="dialog.visible" :title="dialog.title" :content="dialog.content"
 		@cancelEvent="cancelEvent" @okEvent="okEvent" />
-	<Relation v-modal:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :info="relation.info" @successCallback="relationConfirm" />
+	<Relation v-model:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :info="relation.info"
+		@successCallback="relationConfirm" />
 </template>
 
 <script setup>
 import { ref, reactive, toRefs, watch } from 'vue';
-import { CREATE_TASK } from '../../api';
+import { CREATE_TASK, ADD_TASK_LINK } from '../../api';
 import { checkNullObj, formatDate, judgeStrNull } from '../../utils/utils';
 import { message } from 'ant-design-vue';
-import mitt from '@/utils/eventBus';
 import dayjs from 'dayjs';
 import locale from 'ant-design-vue/es/date-picker/locale/zh_CN';
 import AvatarVue from '../avatar/avatar.vue';
-import ChooseUserVue from '../../../../chooseuser/components/index1.vue';
+import ChooseUserVue from '../../../../chooseuser/components/index.vue';
 import AddExcVue from '../addExc/AddExc.vue';
 import DialogVue from '../dialog/Dialog.vue';
 import OssUploadVue from '../../../../upload/src/index';
 import Relation from '@/components/relation/index';
 import * as dd from 'dingtalk-jsapi';
-// import Comment from "./Comment.vue";
+
 dayjs.locale('zh-cn');
-// const curUser = JSON.parse(localStorage.getItem("QZZ_DATA") || localStorage.getItem("QZP_DATA")).user;
+
 const props = defineProps({
 	visible: Boolean,
 	curUser: {
@@ -256,7 +260,7 @@ const props = defineProps({
 		required: false,
 	},
 	trait: {
-		type: String, //OKR/PROJECT/INTE/default
+		type: String, // OKR/PROJECT/INTE/QZP
 		default: false,
 		required: false,
 	},
@@ -370,7 +374,7 @@ const relation = reactive({
 		relevanceType: 'TASK_MAIN',
 		relevanceCategory: 'TASK'
 	},
-})
+});
 
 const addExcVisible = ref(false); //control add executer component visible
 const curSubTask = ref({}); //save current subtask
@@ -384,7 +388,7 @@ const spinning = ref(false);
 const hours = ref([]);
 const mins = ref([]);
 const datePicker = ref(null);
-const trait = ref(sessionStorage.getItem('G_TRAIT') || 'default');
+const trait = ref(sessionStorage.getItem('G_TRAIT') || 'QZP');
 const relationCallback = ref({})
 const cache = reactive({
 	openData: null,
@@ -411,6 +415,7 @@ watch(
 			taskFrom.accessory.ossAccessoryList = [];
 			taskFrom.startTime = dayjs();
 			cache.openData = JSON.stringify(taskFrom);
+			relationCallback.value = {}
 		}
 	}
 );
@@ -653,15 +658,21 @@ const handleCreateTask = async () => {
 		resData = data;
 	}
 	if (resCode === 1) {
-		if (props.trait === 'OKR') {
+		if (props.trait === 'OKR' && relationCallback.value?.targetInfo.length > 0) {
+			relationCallback.value.sourceInfo.id = resData;
 			//关联todo
-			console.log(resData);
+			const { code } = await ADD_TASK_LINK({
+				...relationCallback.value
+			});
+			if (code === 1) {
+				emit('successCreate');
+				message.success('任务创建成功');
+				loading.value = false;
+			}
 		} else {
-			emit('successCreate', resData);
-			emit('closeDrawer');
+			emit('successCreate');
 			message.success('任务创建成功');
 			loading.value = false;
-			mitt.emit('reloadTask');
 		}
 	} else {
 		message.error('任务创建失败');
@@ -942,15 +953,44 @@ const returnSnow = () => {
 	return bizId;
 };
 
+/**
+ * handle add link callback
+ * @param {Object} data 
+ */
 const relationConfirm = (data) => {
-	relation.value = data;
+	relationCallback.value = data;
+};
 
-}
-
+/**
+ * handle click add relation event
+ */
 const handleAddRelation = () => {
 	relation.visible = true;
-	console.log(123);
 };
+
+/**
+ * render relation text
+ */
+const renderCorText = () => {
+	let projects = 0;
+	let okrs = 0;
+	if (relationCallback.value.targetInfo && relationCallback.value.targetInfo.length > 0) {
+		relationCallback.value.targetInfo.map(el => {
+			if (el.relevanceCategory === "PROJECT") {
+				projects++;
+			}
+			if (el.relevanceCategory === "OKR") {
+				okrs++
+			}
+		})
+	}
+	if (projects + okrs > 0) {
+		return `已关联${projects > 0 ? `${projects}个项目` : ''}${projects > 0 && okrs > 0 ? '、' : ''}${okrs > 0 ? `${okrs}个OKR` : ''}`
+	} else {
+		return ""
+	}
+};
+
 const {
 	content,
 	createUser,
