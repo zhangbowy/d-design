@@ -259,9 +259,9 @@
 			</div>
 		</div>
 		<!-- add correlation -->
-		<div v-if="trait === 'OKR'" class="add-correlation">
+		<div v-if="trait !== 'QZP'" class="add-correlation">
 			<span class="public-title">关联项</span>
-			<div v-if="!renderCorText()" class="add-cor-btn" @click="handleAddRelation()">
+			<div v-if="!renderCorText() && (trait === 'OKR' || trait === 'INTE')" class="add-cor-btn" @click="handleAddRelation()">
 				<iconpark-icon name="guanlian"></iconpark-icon>
 				<span>添加关联</span>
 			</div>
@@ -1236,7 +1236,7 @@ const renderCorText = () => {
 	if (relationArr.value && relationArr.value.length > 0) {
 		relationArr.value.map(el => {
 			el.relevanceCount.map(i => {
-				if (i.category === "PROJECT") {
+				if (i.category === "project") {
 					projects += i.count;
 				}
 				if (i.category === "OKR") {

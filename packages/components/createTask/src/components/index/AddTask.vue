@@ -261,7 +261,7 @@ const props = defineProps({
 	},
 	trait: {
 		type: String, // OKR/PROJECT/INTE/QZP
-		default: false,
+		default: 'OKR',
 		required: false,
 	},
 	projectId: {
@@ -388,7 +388,6 @@ const spinning = ref(false);
 const hours = ref([]);
 const mins = ref([]);
 const datePicker = ref(null);
-const trait = ref(sessionStorage.getItem('G_TRAIT') || 'QZP');
 const relationCallback = ref({})
 const cache = reactive({
 	openData: null,
@@ -415,7 +414,8 @@ watch(
 			taskFrom.accessory.ossAccessoryList = [];
 			taskFrom.startTime = dayjs();
 			cache.openData = JSON.stringify(taskFrom);
-			relationCallback.value = {}
+			relationCallback.value = {};
+			console.log(props);
 		}
 	}
 );
