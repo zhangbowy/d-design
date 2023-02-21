@@ -7,6 +7,7 @@ import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
 import { themePreprocessorPlugin } from "@zougt/vite-plugin-theme-preprocessor";
 import dts from 'vite-plugin-dts'
 import DefineOptions from 'unplugin-vue-define-options/vite';
+import { getLess } from '@zougt/some-loader-utils'
 const includeStyles = {
     ".ant-btn-link:hover, .ant-btn-link:focus": {
         'border-color': "transparent",
@@ -28,7 +29,31 @@ const includeStyles = {
         "background-color": '#f5f5f5'
     }
 };
+const multipleScopeVars = [
+    {
+        scopeName: "task-theme-default",
+        path: path.resolve("./packages/assets/style/variables.less"),
+        includeStyles
+    },
+    {
+        scopeName: "task-theme-integration",
+        path: path.resolve(
+            "./packages/assets/style/variablesInte.less"
+        ),
+        includeStyles
+    },
+    {
+        scopeName: "task-theme-okr",
+        path: path.resolve(
+            "./packages/assets/style/OKRvariables.less"
+        ),
+        includeStyles
+    },
+];
 
+// console.log(getLess({
+//     implementation: (lessOptions) => multipleScopeVars
+// }).render())
 export default defineConfig({
     server: {
         host: "localhost",
@@ -108,27 +133,7 @@ export default defineConfig({
         // dts({ include: './packages' }),
         themePreprocessorPlugin({
             less: {
-                multipleScopeVars: [
-                    {
-                        scopeName: "task-theme-default",
-                        path: path.resolve("./packages/assets/style/variables.less"),
-                        includeStyles
-                    },
-                    {
-                        scopeName: "task-theme-integration",
-                        path: path.resolve(
-                            "./packages/assets/style/variablesInte.less"
-                        ),
-                        includeStyles
-                    },
-                    {
-                        scopeName: "task-theme-okr",
-                        path: path.resolve(
-                            "./packages/assets/style/OKRvariables.less"
-                        ),
-                        includeStyles
-                    },
-                ],
+                multipleScopeVars: multipleScopeVars,
                 includeStyleWithColors: [
                     {
                         color: "#ffffff",

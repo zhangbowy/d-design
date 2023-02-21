@@ -90,17 +90,11 @@ const props = defineProps({
 });
 const curTab = ref(props.tabs[0]);
 const confirmLoading = ref(false)
-const newCheckArr = ref([])
-const allRelation = ref({
-    'OKR':[],
-    'TASK':[],
-    'PROJECT':[]
-})
+const allRelation = ref({})
+
 // check的回调
 const handelCheckedCallback:ICheckedCallback = (val) => {
     allRelation.value[val.type] = val.checkedArr
-    console.log('allRelation.value',allRelation.value)
-//   newCheckArr.value = val;
 };
 // 成功回调
 const handleOk = async () => {
@@ -139,6 +133,7 @@ const handleOk = async () => {
 // 关闭弹窗
 const handelCancel =() =>{
     emit("update:visible", false);
+    allRelation.value = {}
 }
 </script>
 

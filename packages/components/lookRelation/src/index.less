@@ -1,7 +1,8 @@
-.custom-class {
+.look-relation-drawer {
 
 
     .content {
+        height: 100%;
 
         header {
             position: sticky;
@@ -67,6 +68,7 @@
 
         main {
             padding: 16px 24px;
+            height: calc(100% - 80px);
 
             .cor-project:not(:first-child) {
                 margin-top: 16px;
@@ -159,6 +161,14 @@
                         box-sizing: border-box;
                     }
                 }
+            }
+
+            .ant-empty {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                height: 100%;
             }
         }
     }
