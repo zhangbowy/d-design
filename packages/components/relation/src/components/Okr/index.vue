@@ -88,25 +88,27 @@ const getOkrList = async (periodId?: string) => {
 		okrData.value = res.data;
 		loading.value = false;
 	}
-	const relationParams = {
-		bizId: props.bizId,
-		relevanceCategory: props.relevanceType,
-		relevanceType: props.relevanceType,
-	};
-	const result = await GET_CORRELATION_INFO(relationParams);
-	if (result.code == 1 && result.data.length > 0) {
-		const relationIdArr = result.data
-			.filter((item) => item.category == 'OKR')[0]
-			.infoList.map((list) => Number(list.id));
-		checkList.value = relationIdArr;
-		okrData.value.forEach((item) => {
-			if (relationIdArr.includes(item.id)) {
-				item.disabled = true;
-			}
-			item.keyResults.forEach((list) => {
-				relationIdArr.includes(list.id) && (list.disabled = true);
+	if (props.bizId) {
+		const relationParams = {
+			bizId: props.bizId,
+			relevanceCategory: props.relevanceType,
+			relevanceType: props.relevanceType,
+		};
+		const result = await GET_CORRELATION_INFO(relationParams);
+		if (result.code == 1 && result.data.length > 0) {
+			const relationIdArr = result.data
+				.filter((item) => item.category == 'OKR')[0]
+				.infoList.map((list) => Number(list.id));
+			checkList.value = relationIdArr;
+			okrData.value.forEach((item) => {
+				if (relationIdArr.includes(item.id)) {
+					item.disabled = true;
+				}
+				item.keyResults.forEach((list) => {
+					relationIdArr.includes(list.id) && (list.disabled = true);
+				});
 			});
-		});
+		}
 	}
 };
 // checkChange
