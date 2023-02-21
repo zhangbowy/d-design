@@ -89,13 +89,13 @@
 		:tabs="['PROJECT', 'OKR']"
 		:info="relationInfo"
 		@refreshList="initRequest" />
-	<!-- <CreateTask
+	<CreateTask
 		v-if="createTaskVisible"
 		:visible="createTaskVisible"
 		:title="'创建任务'"
 		:width="780"
 		@closeDrawer="createTaskVisible = false"
-		@successCreate="handelCreateTaskSuccess" /> -->
+		@successCreate="handelCreateTaskSuccess" />
 </template>
 
 <script setup lang='ts'>
@@ -107,8 +107,8 @@ import {RELATION_TYPE, RELATION_TYPE_TEXT, OKR_PURSUE} from './enum';
 import {PlusOutlined} from '@ant-design/icons-vue';
 import {message} from 'ant-design-vue';
 import zhCN from 'ant-design-vue/es/locale/zh_CN';
-import  Relation  from '@/components/relation/index';
-// import CreateTask from '@/components/createTask/src/components/index/AddTask.vue';
+import CreateTask from '@/components/createTask/src/components/index/AddTask.vue';
+import Relation from '@/components/relation/src/index.vue';
 
 defineOptions({
 	name: 'LookRelation',
