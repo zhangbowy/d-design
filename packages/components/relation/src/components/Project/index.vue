@@ -26,6 +26,7 @@
 			:data-source="tableData"
 			:rowSelection="rowSelection"
 			:pagination="false"
+			class="project-table"
 			:scroll="{y: 240}">
 			<template #bodyCell="{column, record}">
 				<template v-if="column.dataIndex === 'status'">
@@ -89,7 +90,7 @@ const projectStatus = {
 	},
 };
 const props = defineProps({
-	okrInfo: {
+	info: {
 		type: Object,
 		default: {
 			id: 0,
@@ -126,7 +127,7 @@ const getProjectList = async () => {
 	state.loading = true;
 	const params = {
 		status: curStatus.value,
-		bizId: props.okrInfo.id,
+		bizId: props.info.id,
 		bizType: 'KR',
 		ownerId: '',
 		projectName: projectName.value,

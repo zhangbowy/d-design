@@ -7,7 +7,7 @@
 				@updatePeriodInfo="queryOKRByUserId"
 				icon="qzz_icon_guize1">
 				<template #rightIcon>
-					<profile-outlined />
+					<i class="iconfont icon-riqi2"></i>
 				</template>
 			</PeriodList>
 		</header>
@@ -17,21 +17,24 @@
 					v-model:value="checkList"
 					@change="handelCheckboxChange">
 					<template v-for="(item, index) in okrData" :key="item.id">
-						<a-checkbox :value="item.id" :disabled="item?.disabled">
+						<div class="checkbox-group">
+							<!-- <a-checkbox :value="item.id" :disabled="item?.disabled"> -->
 							<span class="O">O{{ item.importance }}</span>
 							<span>{{ item.content }} </span>
-						</a-checkbox>
-						<div class="kr-checkbox">
-							<a-checkbox
-								v-for="(list, idx) in item.keyResults"
-								:disabled="list?.disabled"
-								:key="list.id"
-								class="cur-checkbox"
-								:value="list.id">
-								<span class="KR">KR{{ idx + 1 }}</span>
-								<span>{{ list.content }} </span>
-							</a-checkbox>
+							<!-- </a-checkbox> -->
+							<div class="kr-checkbox">
+								<a-checkbox
+									v-for="(list, idx) in item.keyResults"
+									:disabled="list?.disabled"
+									:key="list.id"
+									class="cur-checkbox"
+									:value="list.id">
+									<span class="KR">KR{{ idx + 1 }}</span>
+									<span>{{ list.content }} </span>
+								</a-checkbox>
+							</div>
 						</div>
+
 						<a-divider v-if="index !== okrData.length - 1" />
 					</template>
 				</a-checkbox-group>
@@ -59,13 +62,13 @@ const okrData = ref([]);
 const checkList = ref([]);
 const loading = ref(true);
 const props = defineProps({
-	bizId: {
-		type: Number,
-		default: 0,
-	},
-	relevanceType: {
-		type: String,
-		default: 'PROJECT',
+	info: {
+		type: Object,
+		default: {
+			id: 0,
+			relevanceType: '',
+			relevanceCategory: '',
+		},
 	},
 });
 const emit = defineEmits(['handelRelationCallback', 'handelCheckedCallback']);
@@ -76,7 +79,6 @@ const queryOKRByUserId = (info: {curPeriodId: string}) => {
 // 获取列表
 const getOkrList = async (periodId?: string) => {
 	loading.value = true;
-
 	const params = {
 		periodId,
 		processStatus: 'OKR_PURSUE',
@@ -88,11 +90,11 @@ const getOkrList = async (periodId?: string) => {
 		okrData.value = res.data;
 		loading.value = false;
 	}
-	if (props.bizId) {
+	if (props.info.id) {
 		const relationParams = {
-			bizId: props.bizId,
-			relevanceCategory: props.relevanceType,
-			relevanceType: props.relevanceType,
+			bizId: props.info.id,
+			relevanceType: props.info.relevanceType,
+			relevanceCategory: props.info.relevanceCategory,
 		};
 		const result = await GET_CORRELATION_INFO(relationParams);
 		if (result.code == 1 && result.data.length > 0) {
@@ -101,9 +103,9 @@ const getOkrList = async (periodId?: string) => {
 				.infoList.map((list) => Number(list.id));
 			checkList.value = relationIdArr;
 			okrData.value.forEach((item) => {
-				if (relationIdArr.includes(item.id)) {
-					item.disabled = true;
-				}
+				// if (relationIdArr.includes(item.id)) {
+				// 	item.disabled = true;
+				// }
 				item.keyResults.forEach((list) => {
 					relationIdArr.includes(list.id) && (list.disabled = true);
 				});
@@ -115,10 +117,10 @@ const getOkrList = async (periodId?: string) => {
 const handelCheckboxChange = (e: number[]) => {
 	const arr = [];
 	okrData.value.forEach((item) => {
-		if (!item.disabled && e.includes(item.id)) {
-			item.type = 'O';
-			arr.push(toRaw(item));
-		}
+		// if (!item.disabled && e.includes(item.id)) {
+		// 	item.type = 'O';
+		// 	arr.push(toRaw(item));
+		// }
 		item.keyResults.forEach((list) => {
 			if (!list.disabled && e.includes(list.id)) {
 				list.type = 'KR';

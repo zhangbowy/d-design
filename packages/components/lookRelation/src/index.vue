@@ -21,6 +21,9 @@
 						<span class="user-task" v-else-if="info.sourceType == 'TASK'">{{
 							`任务：${info.content}`
 						}}</span>
+						<span class="user-task" v-else-if="info.sourceType == 'PROJECT'">{{
+							`项目：${info.content}`
+						}}</span>
 					</div>
 				</div>
 			</header>
@@ -47,8 +50,9 @@
 							>
 							<div
 								class="project-item"
-								v-for="item in result.infoList"
+								v-for="(item, index) in result.infoList"
 								:key="item.id">
+								<span class="kr-index">KR{{ index + 1 }}</span>
 								<span class="project-text">{{ item.relevanceName.name }}</span>
 								<span class="status-icon" :class="item.relevanceName.status">{{
 									RELATION_TYPE[item.relevanceName.status]
@@ -85,15 +89,18 @@
 		</template>
 	</a-drawer>
 	<Relation
+		v-if="show"
 		v-model:visible="show"
-		:tabs="['PROJECT', 'OKR']"
+		:tabs="tabs"
 		:info="relationInfo"
 		@refreshList="initRequest" />
 	<CreateTask
 		v-if="createTaskVisible"
 		:visible="createTaskVisible"
+		:curUser="user"
 		:title="'创建任务'"
 		:width="780"
+		:trait="trait"
 		@closeDrawer="createTaskVisible = false"
 		@successCreate="handelCreateTaskSuccess" />
 </template>
@@ -113,7 +120,11 @@ import Relation from '@/components/relation/src/index.vue';
 defineOptions({
 	name: 'LookRelation',
 });
-const emit = defineEmits(['lookDetailCallback', 'update:visible']);
+const emit = defineEmits([
+	'lookDetailCallback',
+	'update:visible',
+	'refreshList',
+]);
 const props = defineProps({
 	visible: {
 		type: Boolean,
@@ -124,24 +135,41 @@ const props = defineProps({
 		default: {
 			avatar: '',
 			name: '暂无',
-			type: 'KR',
+			type: 'TASK_MAIN',
 			indexId: 1,
 			content: 'mock',
-			id: 0,
-			sourceType: '',
+			id: 6068,
+			sourceType: 'TASK',
 			status: '',
 		},
 	},
+	tabs: {
+		type: Array<'PROJECT' | 'TASK' | 'OKR'>,
+		default: ['OKR', 'PROJECT'],
+		validator: (value: Array<'PROJECT' | 'TASK' | 'OKR'>) => {
+			return (
+				value.includes('PROJECT') ||
+				value.includes('TASK') ||
+				value.includes('OKR')
+			);
+		},
+	},
+	trait: {
+		type: String,
+		default: 'OKR',
+	},
 });
-
+const user = JSON.parse(localStorage.getItem('QZZ_DATA') || '{}').user;
 const show = ref(false);
 const createTaskVisible = ref(false);
 const allRelationData = ref<IAllRelationData[]>([]); // 所有关联数据
-const relationInfo = reactive<RelationInfo>({
-	id: props.info.id,
-	relevanceType: props.info.type,
-	relevanceCategory: props.info.sourceType,
-});
+const relationInfo = computed(
+	(): RelationInfo => ({
+		id: props.info.id,
+		relevanceType: props.info.type,
+		relevanceCategory: props.info.sourceType,
+	})
+);
 // 初始化数据请求
 const initRequest = async () => {
 	try {
@@ -197,6 +225,7 @@ const handelCreateTaskSuccess = () => {
 // 关闭弹窗
 const handelClose = () => {
 	emit('update:visible', false);
+	emit('refreshList');
 };
 // 添加关联
 const handelAddRelation = () => {

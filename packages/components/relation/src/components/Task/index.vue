@@ -24,7 +24,8 @@
 						</li>
 					</ul>
 				</template>
-				<profile-outlined class="sort" />
+				<!-- <profile-outlined class="sort" /> -->
+				<i class="sort iconfont icon-paixu"></i>
 			</a-popover>
 			<a-input
 				v-model:value="taskName"
@@ -36,6 +37,7 @@
 		</header>
 		<main>
 			<a-table
+				class="task-table"
 				:loading="loading"
 				:columns="columns"
 				:rowKey="(row) => row.id"
@@ -81,12 +83,10 @@ import {SearchOutlined, ProfileOutlined} from '@ant-design/icons-vue';
 import {ITaskTableColumns, Key} from '../../type';
 
 const props = defineProps({
-	okrInfo: {
+	info: {
 		type: Object,
 		default: {
 			id: 0,
-			indexId: 0,
-			type: '',
 		},
 	},
 });
@@ -201,7 +201,7 @@ const getTaskList = async () => {
 	state.loading = true;
 	const params = {
 		sort: filterContent.curSort,
-		bizId: props.okrInfo.id,
+		bizId: props.info.id,
 		curPage: pagination.current,
 		angle: filterContent.curAngle,
 		fuzzy: filterContent.taskName,

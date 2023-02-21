@@ -4,6 +4,12 @@ export const TABS_ENUM = {
     'PROJECT': '项目'
 }
 
+export const TABS_ENUM_ICON = {
+    'OKR': 'icon-caidan_OKR',
+    'TASK': 'icon-caidan_renwu',
+    'PROJECT': 'icon-caidan_xiangmu'
+}
+
 export const PROJECT_STATUS = {
     underway: "进行中",
     closed: "已终止",
