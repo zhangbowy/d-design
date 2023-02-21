@@ -330,7 +330,7 @@
 
 <script setup>
 import {ref, reactive, toRefs, watch} from 'vue';
-import {CREATE_TASK, ADD_TASK_LINK} from '../../api';
+import {CREATE_TASK,CREATE_PROJECT_TASK, ADD_TASK_LINK} from '../../api';
 import {checkNullObj, formatDate, judgeStrNull} from '../../utils/utils';
 import {message} from 'ant-design-vue';
 import dayjs from 'dayjs';
@@ -515,6 +515,7 @@ watch(
 			taskFrom.startTime = dayjs();
 			cache.openData = JSON.stringify(taskFrom);
 			relationCallback.value = {};
+			console.log(11111111)
 		}
 	}
 );
@@ -722,7 +723,7 @@ const handleCreateTask = async () => {
 		el.ossId = el.ossMaterialId;
 	});
 	if (props.trait == 'PROJECT') {
-		const {code, data} = await CREATE_TASK({
+		const {code, data} = await CREATE_PROJECT_TASK({
 			content: taskFrom.content,
 			createUser: taskFrom.createUser,
 			principalUser: taskFrom.principalUser,

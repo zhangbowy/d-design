@@ -24,10 +24,10 @@ const includeStyles = {
     ".ant-checkbox-checked": {
         color: '@primary-color'
     },
-    ".add-exc-box .ant-modal .ant-modal-content .ant-modal-footer .ant-btn-primary": {
-        'border-color': "#d9d9d9",
-        "background-color": '#f5f5f5'
-    }
+    // ".add-exc-box .ant-modal .ant-modal-content .ant-modal-footer": {
+    //     'border-color': "#d9d9d9",
+    //     "background-color": '#f5f5f5'
+    // }
 };
 const multipleScopeVars = [
     {

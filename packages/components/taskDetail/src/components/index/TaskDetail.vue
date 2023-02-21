@@ -307,7 +307,7 @@
 	<FileListVue :appendixShow="files.show" :accessory="files.accessory" @hideFiles="hideCommentFiles" />
 	<Relation v-model:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :info="relation.info"
 		@successCallback="relationConfirm" />
-	<LookRelation v-model:visible="lookRelation.visible" :info="lookRelation.info" @lookDetailCallback="lookDetailCallback" @refreshList="refreshList" />
+	<LookRelation v-model:visible="lookRelation.visible" :info="lookRelation.info" :isSureRelation="trait !== 'PROJECT'" @lookDetailCallback="lookDetailCallback" @refreshList="refreshList" />
 </template>
 
 <script setup>
@@ -329,7 +329,7 @@ import AvatarVue from "@/components/createTask/src/components/avatar/avatar.vue"
 import ChooseUserVue from "@/components/chooseuser/components/index.vue";
 import AddExcVue from "@/components/createTask/src/components/addExc/AddExc.vue";
 import DialogVue from "@/components/createTask/src/components/dialog/Dialog.vue";
-import RenewTask from "@/components/renewTask/src/index";
+import RenewTask from "@/components/renewTask/index";
 import OssUploadVue from "@/components/upload/src/index";
 import FileListVue from "@/components/taskTrace/src/components/fileList/FileList.vue";
 import TaskTrace from '@/components/taskTrace/src/index';
