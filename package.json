@@ -10,6 +10,7 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "build:style": "npx esno build/buildLess",
+    "build:2": "npx esno build/build.ts",
     "test": "jest",
     "prepare": "husky install",
     "docs:dev": "vitepress dev docs",
