@@ -69,6 +69,7 @@
         main {
             padding: 16px 24px;
             height: calc(100% - 80px);
+            overflow: scroll;
 
             .cor-project:not(:first-child) {
                 margin-top: 16px;
@@ -105,6 +106,18 @@
                     display: -webkit-box;
                     -webkit-line-clamp: 1;
                     -webkit-box-orient: vertical;
+                }
+
+                .kr-index {
+                    width: 36px;
+                    height: 20px;
+                    font-size: 12px;
+                    background-color: @bg-primary-shallow;
+                    color: @primary-color;
+                    line-height: 20px;
+                    text-align: center;
+                    margin-right: 8px;
+                    border-radius: 4px;
                 }
 
                 .status-icon {

@@ -307,7 +307,7 @@
 	<FileListVue :appendixShow="files.show" :accessory="files.accessory" @hideFiles="hideCommentFiles" />
 	<Relation v-model:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :info="relation.info"
 		@successCallback="relationConfirm" />
-	<LookRelation v-model:visible="lookRelation.visible" :info="lookRelation.info" @lookDetailCallback="lookDetailCallback" />
+	<LookRelation v-model:visible="lookRelation.visible" :info="lookRelation.info" @lookDetailCallback="lookDetailCallback" @refreshList="refreshList" />
 </template>
 
 <script setup>
@@ -1205,7 +1205,6 @@ const getRelevanceCnt = async () => {
 		relevanceType: type,
 	});
 	if (code === 1) {
-		console.log(data);
 		relationArr.value = data;
 	}
 };
@@ -1216,6 +1215,7 @@ const getRelevanceCnt = async () => {
  */
 const relationConfirm = (data) => {
 	relationCallback.value = data;
+	getRelevanceCnt();
 };
 
 /**
@@ -1275,7 +1275,14 @@ const handleCheckRelation = () => {
  */
 const lookDetailCallback = (item, type) => {
 	emit("checkRelationDetail", item, type);
-}
+};
+
+/**
+ * handle add task link event
+ */
+const refreshList = () => {
+	getRelevanceCnt();
+};
 
 const {
 	content,
