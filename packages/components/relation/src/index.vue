@@ -1,7 +1,7 @@
 <template>
 	<a-modal
 		:visible="visible"
-		title="添加关联"
+		:title="title"
 		@ok="handleOk"
 		:width="980"
 		cancelText="取消"
@@ -10,7 +10,7 @@
 		@cancel="handelCancel"
 		:confirmLoading="confirmLoading"
 		centered>
-		<header>
+		<header v-if="showTab">
 			<a-radio-group v-model:value="curTab">
 				<a-radio-button
 					class="radio-btn"
@@ -58,7 +58,7 @@ import {ICheckedCallback, OperationType, RelevanceType} from './type';
 defineOptions({
 	name: 'Relation',
 });
-const emit = defineEmits(['update:visible', 'refreshList', 'successCallback']);
+const emit = defineEmits(['update:visible', 'refreshList', 'successCallback', 'close']);
 const props = defineProps({
 	visible: {
 		type: Boolean,
@@ -87,10 +87,21 @@ const props = defineProps({
 			relevanceCategory: '',
 		},
 	},
+    // 确定是否调用接口
 	isDirectAdd: {
 		type: Boolean,
 		default: true,
 	},
+    // title
+    title: {
+        type: String,
+		default: '添加关联',
+    },
+    // 是否显示tabs
+    showTab: {
+        type: Boolean,
+		default: true,
+    }
 });
 const curTab = ref(props.tabs[0]);
 const confirmLoading = ref(false);
@@ -139,6 +150,7 @@ const handleOk = async () => {
 // 关闭弹窗
 const handelCancel = () => {
 	emit('update:visible', false);
+    emit('close')
 	allRelation.value = {};
 };
 </script>
