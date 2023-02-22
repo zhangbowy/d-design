@@ -18,51 +18,53 @@
 			>
 		</header>
 		<main>
-			<template v-if="okrData.length > 0">
-				<a-checkbox-group
-					v-model:value="checkList"
-					@change="handelCheckboxChange">
-					<template v-for="(item, index) in allOkrData" :key="item.id">
-						<div class="checkbox-group">
-							<!-- <a-checkbox :value="item.id" :disabled="item?.disabled"> -->
-							<ul class="o-wrapper">
-								<li class="O">O{{ item.importance }}</li>
-								<li>{{ item.content }}</li>
-								<li class="o-create">创建人：霞客</li>
-							</ul>
-							<!-- </a-checkbox> -->
-							<div class="kr-checkbox">
-								<a-checkbox
-									v-for="(list, idx) in item.keyResults"
-									:disabled="list?.disabled"
-									:key="list.id"
-									class="cur-checkbox"
-									:value="list.id">
-									<span class="KR">KR{{ idx + 1 }}</span>
-									<span>
-										{{ list.content }}
-										<template
-											v-for="userInfo in list.assistUsers"
-											:key="userInfo.name">
-											<span class="assit-user">@{{ userInfo.name }}</span>
-										</template>
-									</span>
-									<span class="assit-user">@受益人</span>
-								</a-checkbox>
+			<a-spin :spinning="loading">
+				<template v-if="okrData.length > 0">
+					<a-checkbox-group
+						v-model:value="checkList"
+						@change="handelCheckboxChange">
+						<template v-for="(item, index) in allOkrData" :key="item.id">
+							<div class="checkbox-group">
+								<!-- <a-checkbox :value="item.id" :disabled="item?.disabled"> -->
+								<ul class="o-wrapper">
+									<li class="O">O{{ item.importance }}</li>
+									<li>{{ item.content }}</li>
+									<li class="o-create">创建人：霞客</li>
+								</ul>
+								<!-- </a-checkbox> -->
+								<div class="kr-checkbox">
+									<a-checkbox
+										v-for="(list, idx) in item.keyResults"
+										:disabled="list?.disabled"
+										:key="list.id"
+										class="cur-checkbox"
+										:value="list.id">
+										<span class="KR">KR{{ idx + 1 }}</span>
+										<span>
+											{{ list.content }}
+											<template
+												v-for="userInfo in list.assistUsers"
+												:key="userInfo.name">
+												<span class="assit-user">@{{ userInfo.name }}</span>
+											</template>
+										</span>
+										<span class="assit-user">@受益人</span>
+									</a-checkbox>
+								</div>
 							</div>
-						</div>
-						<a-divider v-if="index !== allOkrData.length - 1" />
-					</template>
-				</a-checkbox-group>
-			</template>
+							<a-divider v-if="index !== allOkrData.length - 1" />
+						</template>
+					</a-checkbox-group>
+				</template>
 
-			<a-empty
-				v-else
-				description="暂无数据"
-				:image-style="{
-					height: '230px',
-				}">
-			</a-empty>
+				<a-empty
+					v-else
+					description="暂无数据"
+					:image-style="{
+						height: '230px',
+					}">
+				</a-empty>
+			</a-spin>
 		</main>
 	</div>
 </template>
@@ -157,7 +159,7 @@ const handelCheckboxChange = (e: number[]) => {
 };
 // 与我相关点击
 const handelRelatedChange = (e: CheckboxChangeEvent) => {
-	console.log('e', e);
+	console.log('e', e.target.checked);
 };
 const allOkrData = computed(() => {
 	return [...okrData.value, ...relatedMeData.value];

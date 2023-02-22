@@ -5,6 +5,7 @@
 		title="查看关联"
 		placement="right"
 		:width="780"
+		@afterVisibleChange="afterVisibleChange"
 		@close="handelClose">
 		<div class="content">
 			<header>
@@ -54,10 +55,10 @@
 								:key="item.id">
 								<template v-if="result.category === 'OKR'">
 									<ul class="kr-style" v-if="item.relevanceType === 'KR'">
-										<li>O{{ item.sort }}</li>
+										<li>O{{ item.parentSort }}</li>
 										<li>KR{{ index + 1 }}</li>
 									</ul>
-									<span class="o-style" v-else>O{{ item.sort }}</span>
+									<span class="o-style" v-else>O{{ item.parentSort }}</span>
 								</template>
 
 								<span class="project-text">{{ item.relevanceName.name }}</span>
@@ -119,7 +120,7 @@
 </template>
 
 <script setup lang='ts'>
-import {computed, onUpdated, reactive, ref, watch} from 'vue';
+import {computed, onUpdated, reactive, ref, watch, watchEffect} from 'vue';
 import {GET_CORRELATION_INFO, DELETE_CORRELATION} from '@/api/api';
 import {onMounted} from 'vue';
 import {IAllRelationData, InfoList, RelationInfo} from './type';
@@ -158,7 +159,7 @@ const props = defineProps({
 	},
 	tabs: {
 		type: Array<'PROJECT' | 'TASK' | 'OKR'>,
-		default: ['OKR', 'PROJECT'],
+		default: [],
 		validator: (value: Array<'PROJECT' | 'TASK' | 'OKR'>) => {
 			return (
 				value.includes('PROJECT') ||
@@ -248,12 +249,9 @@ const handelClose = () => {
 const handelAddRelation = () => {
 	show.value = true;
 };
-watch(
-	() => props.visible,
-	() => {
-		props.visible && initRequest();
-	}
-);
+const afterVisibleChange = (visible) => {
+	visible && initRequest();
+};
 </script>
 
 <style scoped lang='less'>

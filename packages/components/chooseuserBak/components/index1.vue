@@ -907,17 +907,17 @@ export default {
 					height: 32px;
 					text-align: center;
 					line-height: 32px;
-					border-radius: @button-radius;
+					border-radius: @border-radius-4;
 					margin-right: 8px;
 					cursor: pointer;
 				}
 				.cancel-btn {
-					border: 1px solid @border;
-					color: @font2;
+					border: 1px solid @border-deep;
+					color: @text-sub-main;
 				}
 				.common-btn.sure-btn {
 					color: #fff;
-					background-color: @primary;
+					background-color: @primary-color;
 					margin-right: 0;
 				}
 				.disabled-btn {
@@ -973,7 +973,7 @@ export default {
 						margin-right: 5px;
 						cursor: pointer;
 						&:hover {
-							color: @primary;
+							color: @primary-color;
 						}
 					}
 					.breadcrumb-item-separator {
@@ -1012,10 +1012,10 @@ export default {
 					font-size: 20px;
 				}
 				.icon-fuxuankuang {
-					color: @border;
+					color: @border-deep;
 				}
 				.icon-xuanze {
-					color: @primary;
+					color: @primary-color;
 				}
 				&:hover {
 					background: rgba(@black, 0.04);
@@ -1051,10 +1051,10 @@ export default {
 						font-size: 20px;
 					}
 					.icon-fuxuankuang {
-						color: @border;
+						color: @border-deep;
 					}
 					.icon-xuanze {
-						color: @primary;
+						color: @primary-color;
 					}
 					.name {
 						flex: 1;
@@ -1073,7 +1073,7 @@ export default {
 							font-size: 12px;
 						}
 						&:hover {
-							color: @primary;
+							color: @primary-color;
 						}
 					}
 				}
@@ -1102,10 +1102,10 @@ export default {
 						font-size: 20px;
 					}
 					.icon-fuxuankuang {
-						color: @border;
+						color: @border-deep;
 					}
 					.icon-xuanze {
-						color: @primary;
+						color: @primary-color;
 					}
 					.user-img {
 						width: 24px;
