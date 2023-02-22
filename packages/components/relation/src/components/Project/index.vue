@@ -27,7 +27,7 @@
 			:rowSelection="rowSelection"
 			:pagination="false"
 			class="project-table"
-			:scroll="{y: 240}">
+			:scroll="{y: 270}">
 			<template #bodyCell="{column, record}">
 				<template v-if="column.dataIndex === 'status'">
 					<span class="default-status" :style="projectStatus[record.status]">{{

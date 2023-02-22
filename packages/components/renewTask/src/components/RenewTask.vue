@@ -74,8 +74,8 @@ import {
 import { getQueryVariable, judgeStrNull } from "../utils/utils";
 import { message } from "ant-design-vue";
 import * as dd from "dingtalk-jsapi";
-import OssUploadVue from "@/components/upload/src/index";
-import DDUploadVue from "@/components/ddUpload/src/index";
+import OssUploadVue from "@/components/upload/index";
+import DDUploadVue from "@/components/ddUpload/index";
 
 defineOptions({
 	name: 'RenewTask',

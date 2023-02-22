@@ -7,7 +7,7 @@ import { AntDesignVueResolver } from "unplugin-vue-components/resolvers";
 import { themePreprocessorPlugin } from "@zougt/vite-plugin-theme-preprocessor";
 import dts from 'vite-plugin-dts'
 import DefineOptions from 'unplugin-vue-define-options/vite';
-import { getLess } from '@zougt/some-loader-utils'
+
 const includeStyles = {
     ".ant-btn-link:hover, .ant-btn-link:focus": {
         'border-color': "transparent",
@@ -24,10 +24,10 @@ const includeStyles = {
     ".ant-checkbox-checked": {
         color: '@primary-color'
     },
-    ".add-exc-box .ant-modal .ant-modal-content .ant-modal-footer .ant-btn-primary": {
-        'border-color': "#d9d9d9",
-        "background-color": '#f5f5f5'
-    }
+    // ".add-exc-box .ant-modal .ant-modal-content .ant-modal-footer": {
+    //     'border-color': "#d9d9d9",
+    //     "background-color": '#f5f5f5'
+    // }
 };
 const multipleScopeVars = [
     {
@@ -104,7 +104,7 @@ export default defineConfig({
                 javascriptEnabled: true,
                 charset: false,
                 // 注入样式变量（根据自己需求注入其他）
-                additionalData: '@import "@/style/global.less";',
+                // additionalData: '@import "@/style/global.less";',
             },
         },
     },

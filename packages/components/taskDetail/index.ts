@@ -1,5 +1,5 @@
 import { App } from 'vue'
-import TaskDetail from "./components/index/TaskDetail.vue"
+import TaskDetail from "./src/components/index/TaskDetail.vue"
 
 (TaskDetail as any).install = function (app: App) {
     // 组件注册，按需引入

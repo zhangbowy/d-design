@@ -330,7 +330,7 @@
 
 <script setup>
 import {ref, reactive, toRefs, watch} from 'vue';
-import {CREATE_TASK, ADD_TASK_LINK} from '../../api';
+import {CREATE_TASK,CREATE_PROJECT_TASK, ADD_TASK_LINK} from '../../api';
 import {checkNullObj, formatDate, judgeStrNull} from '../../utils/utils';
 import {message} from 'ant-design-vue';
 import dayjs from 'dayjs';
@@ -339,7 +339,7 @@ import AvatarVue from '../avatar/avatar.vue';
 import ChooseUserVue from '../../../../chooseuser/components/index.vue';
 import AddExcVue from '../addExc/AddExc.vue';
 import DialogVue from '../dialog/Dialog.vue';
-import OssUploadVue from '../../../../upload/src/index';
+import OssUploadVue from '../../../../upload/index';
 import Relation from '@/components/relation/index';
 import * as dd from 'dingtalk-jsapi';
 
@@ -361,7 +361,7 @@ const props = defineProps({
 	},
 	trait: {
 		type: String, // OKR/PROJECT/INTE/QZP
-		default: 'OKR',
+		default: 'QZP',
 		required: false,
 	},
 	projectId: {
@@ -515,6 +515,7 @@ watch(
 			taskFrom.startTime = dayjs();
 			cache.openData = JSON.stringify(taskFrom);
 			relationCallback.value = {};
+			console.log(11111111)
 		}
 	}
 );
@@ -722,7 +723,7 @@ const handleCreateTask = async () => {
 		el.ossId = el.ossMaterialId;
 	});
 	if (props.trait == 'PROJECT') {
-		const {code, data} = await CREATE_TASK({
+		const {code, data} = await CREATE_PROJECT_TASK({
 			content: taskFrom.content,
 			createUser: taskFrom.createUser,
 			principalUser: taskFrom.principalUser,
@@ -772,7 +773,7 @@ const handleCreateTask = async () => {
 				loading.value = false;
 			}
 		} else {
-			emit('successCreate');
+			emit('successCreate', resData);
 			message.success('任务创建成功');
 			loading.value = false;
 		}
