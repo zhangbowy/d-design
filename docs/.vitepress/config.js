@@ -67,5 +67,6 @@ function sidebarComponent() {
                 { text: 'DDUpload', link: '/components/DDUpload/index'}
             ]
         }
+
     ]
 }
