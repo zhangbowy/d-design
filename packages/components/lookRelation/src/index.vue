@@ -4,7 +4,9 @@
 		class="look-relation-drawer"
 		title="查看关联"
 		placement="right"
-		:width="780"
+		:width="width"
+		@afterVisibleChange="afterVisibleChange"
+		:zIndex="zIndex"
 		@close="handelClose">
 		<div class="content">
 			<header>
@@ -36,7 +38,7 @@
 							:key="result.category">
 							<span class="project-title"
 								>已关联的{{ RELATION_TYPE_TEXT[result.category] }}
-								<span v-if="result.category == 'task'">
+								<span v-if="result.category === 'task' && isOperate">
 									<a-button
 										type="link"
 										@click="handelAddTask"
@@ -54,10 +56,10 @@
 								:key="item.id">
 								<template v-if="result.category === 'OKR'">
 									<ul class="kr-style" v-if="item.relevanceType === 'KR'">
-										<li>O{{ item.sort }}</li>
+										<li>O{{ item.parentSort }}</li>
 										<li>KR{{ index + 1 }}</li>
 									</ul>
-									<span class="o-style" v-else>O{{ item.sort }}</span>
+									<span class="o-style" v-else>O{{ item.parentSort }}</span>
 								</template>
 
 								<span class="project-text">{{ item.relevanceName.name }}</span>
@@ -93,7 +95,7 @@
 			<div class="drawer-footer">
 				<a-button @click="handelClose">关闭</a-button>
 				<a-button
-					v-if="isSureRelation"
+					v-if="isSureRelation && isOperate"
 					type="primary"
 					@click="handelAddRelation"
 					>添加关联</a-button
@@ -119,7 +121,7 @@
 </template>
 
 <script setup lang='ts'>
-import {computed, onUpdated, reactive, ref, watch} from 'vue';
+import {computed, onUpdated, reactive, ref, watch, watchEffect} from 'vue';
 import {GET_CORRELATION_INFO, DELETE_CORRELATION} from '@/api/api';
 import {onMounted} from 'vue';
 import {IAllRelationData, InfoList, RelationInfo} from './type';
@@ -148,17 +150,17 @@ const props = defineProps({
 		default: {
 			avatar: '',
 			name: '暂无',
-			type: 'TASK_MAIN',
+			type: 'TASK_MAIN', // 当前类型
 			indexId: 1,
 			content: 'mock',
 			id: 6071,
-			sourceType: 'TASK',
-			status: '',
+			sourceType: 'TASK', // 目标来源   OKR  TASK  PROJECT
+			status: '', // 当前O的状态
 		},
 	},
 	tabs: {
 		type: Array<'PROJECT' | 'TASK' | 'OKR'>,
-		default: ['OKR', 'PROJECT'],
+		default: [],
 		validator: (value: Array<'PROJECT' | 'TASK' | 'OKR'>) => {
 			return (
 				value.includes('PROJECT') ||
@@ -171,9 +173,23 @@ const props = defineProps({
 		type: String,
 		default: 'OKR',
 	},
+	zIndex: {
+		type: Number,
+		default: 1000,
+	},
+	// 是否可以关联
 	isSureRelation: {
 		type: Boolean,
 		default: true,
+	},
+	// 页面是否可以操作
+	isOperate: {
+		type: Boolean,
+		default: true,
+	},
+	width: {
+		type: Number,
+		default: 780,
 	},
 });
 const user = JSON.parse(localStorage.getItem('QZZ_DATA') || '{}').user;
@@ -206,8 +222,10 @@ const initRequest = async () => {
 //是否可以操作
 const isOperable = computed(() => {
 	return (
-		props.info.sourceType !== 'OKR' ||
-		(props.info.sourceType === 'OKR' && props.info.status === OKR_PURSUE)
+		(props.info.sourceType !== 'OKR' && props.isOperate) ||
+		(props.info.sourceType === 'OKR' &&
+			props.info.status === OKR_PURSUE &&
+			props.isOperate)
 	);
 });
 // 添加任务
@@ -248,12 +266,9 @@ const handelClose = () => {
 const handelAddRelation = () => {
 	show.value = true;
 };
-watch(
-	() => props.visible,
-	() => {
-		props.visible && initRequest();
-	}
-);
+const afterVisibleChange = (visible) => {
+	visible && initRequest();
+};
 </script>
 
 <style scoped lang='less'>

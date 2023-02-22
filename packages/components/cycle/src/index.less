@@ -3,8 +3,8 @@
 .period-card {
     padding: 0 13px;
     display: inline-block;
-    border: 1px solid @border;
-    border-radius: @button-radius;
+    border: 1px solid @border-deep;
+    border-radius: @border-radius-4;
     cursor: pointer;
     background-color: #fff;
     transition: border-color 0.5s ease-in;
@@ -14,7 +14,7 @@
     position: relative;
 
     &:hover {
-        border-color: @primary-hover;
+        border-color: @btn-color;
     }
 
     span:nth-child(2) {
@@ -43,7 +43,7 @@
     &::-webkit-scrollbar-thumb,
         {
         border-radius: 10px;
-        background-color: @border-fail;
+        background-color: @border-deep;
     }
 
     li {
@@ -52,15 +52,15 @@
         position: relative;
 
         &:hover {
-            background-color: @border-bg;
+            background-color: @border-shallow;
         }
 
         &.active {
-            background-color: @primary-hover-thin;
+            background-color: fade(@primary-color, 30%);
         }
 
         .outlined {
-            color: @primary-click;
+            color: @btn-click-color;
             right: 10px;
             top: 50%;
             position: absolute;
