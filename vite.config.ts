@@ -73,6 +73,7 @@ export default defineConfig({
         },
     },
     build: {
+        sourcemap: true,
         lib: {
             entry: resolve(__dirname, './packages/index.ts'),
             name: 'pu-ui',

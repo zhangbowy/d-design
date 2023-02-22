@@ -18,6 +18,22 @@ if (trait === 'OKR') {
     });
 }
 
+const themelist = ["task-theme-okr", "task-theme-integration",  "task-theme-default"]
+
+const htmlCassName = document.documentElement.className
+
+if (!themelist.some(item => htmlCassName.includes(item))) {
+    let c;
+    if (trait === 'OKR') {
+        c = "task-theme-okr"
+    } else if (trait === 'INTE') {
+        c = "task-theme-integration"
+    } else {
+        c = "task-theme-default"
+    }
+    document.documentElement.className = `${htmlCassName} ${c}`
+}
+
 // 所有组件
 export * from './component'
 
