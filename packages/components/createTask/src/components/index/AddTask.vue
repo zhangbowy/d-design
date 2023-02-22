@@ -773,7 +773,7 @@ const handleCreateTask = async () => {
 				loading.value = false;
 			}
 		} else {
-			emit('successCreate');
+			emit('successCreate', resData);
 			message.success('任务创建成功');
 			loading.value = false;
 		}

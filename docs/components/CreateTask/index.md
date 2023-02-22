@@ -23,7 +23,7 @@
 |   参数名称    | 类型  | 默认值 | 是否可为空 |             含义             | 回调提供参数 |
 | :-----------: | :---: | :----: | :--------: | :--------------------------: | :----------: |
 |  closeDrawer  |  Fun  |   /    |   false    |   close component callback   |      /       |
-| successCreate |  Fun  |   /    |   false    | success create task callback |      /       |
+| successCreate |  Fun  |   /    |   false    | success create task callback |      taskId       |
 
 ### 示例
 
@@ -34,7 +34,7 @@
      //to do...
    };
 
-   const successCreate = () => {
+   const successCreate = (taskId) => {
       //to do...
    }
 ```   
