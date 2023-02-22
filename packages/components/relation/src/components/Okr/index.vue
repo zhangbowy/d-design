@@ -23,13 +23,13 @@
 					<a-checkbox-group
 						v-model:value="checkList"
 						@change="handelCheckboxChange">
-						<template v-for="(item, index) in allOkrData" :key="item.id">
+						<template v-for="(item, index) in okrData" :key="item.id">
 							<div class="checkbox-group">
 								<!-- <a-checkbox :value="item.id" :disabled="item?.disabled"> -->
 								<ul class="o-wrapper">
 									<li class="O">O{{ item.importance }}</li>
 									<li>{{ item.content }}</li>
-									<li class="o-create">创建人：霞客</li>
+									<li class="o-create" v-if="item.assist">创建人：{{ item.creator.name }}</li>
 								</ul>
 								<!-- </a-checkbox> -->
 								<div class="kr-checkbox">
@@ -40,19 +40,20 @@
 										class="cur-checkbox"
 										:value="list.id">
 										<span class="KR">KR{{ idx + 1 }}</span>
-										<span>
+										<span >
 											{{ list.content }}
-											<template
-												v-for="userInfo in list.assistUsers"
-												:key="userInfo.name">
-												<span class="assit-user">@{{ userInfo.name }}</span>
-											</template>
+                                            <template v-if="list.assistants.length>0">
+                                                <template
+                                                    v-for="userInfo in list.assistants"
+                                                    :key="userInfo.id">
+                                                    <span class="assit-user">@{{ userInfo?.targetUser?.name }}</span>
+                                                </template>
+                                            </template>
 										</span>
-										<span class="assit-user">@受益人</span>
 									</a-checkbox>
 								</div>
 							</div>
-							<a-divider v-if="index !== allOkrData.length - 1" />
+							<a-divider v-if="index !== okrData.length - 1" />
 						</template>
 					</a-checkbox-group>
 				</template>
@@ -80,7 +81,6 @@ const okrData = ref([]); //okr数据
 const checkList = ref([]); //选中的数据
 const loading = ref(true);
 const relatedMeCheckbox = ref(false); // 与我相关checkbox
-const relatedMeData = ref([]);
 const props = defineProps({
 	info: {
 		type: Object,
@@ -104,9 +104,11 @@ const getOkrList = async (periodId?: string) => {
 		processStatus: 'OKR_PURSUE',
 		curPage: 1,
 		pageSize: 1000,
+        assist:relatedMeCheckbox.value
 	};
 	const res = await GET_OKRLIST_BY_USERID(params);
 	if (res.code == 1) {
+
 		okrData.value = res.data;
 		loading.value = false;
 	}
@@ -159,11 +161,8 @@ const handelCheckboxChange = (e: number[]) => {
 };
 // 与我相关点击
 const handelRelatedChange = (e: CheckboxChangeEvent) => {
-	console.log('e', e.target.checked);
+    getOkrList()
 };
-const allOkrData = computed(() => {
-	return [...okrData.value, ...relatedMeData.value];
-});
 onMounted(() => {
 	getOkrList();
 });

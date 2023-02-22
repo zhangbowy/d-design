@@ -54,6 +54,12 @@
 				}"
 				:scroll="{y: 240}">
 				<template #bodyCell="{column, record}">
+					<template v-if="column.dataIndex === 'content'">
+						<span>
+							{{ record.content }}
+							<span class="extend-style" v-if="record.isExtend">继承</span>
+						</span>
+					</template>
 					<template v-if="column.dataIndex === 'status'">
 						<span class="default-status" :style="taskStatus[record.status]">{{
 							taskStatusEnum[record.status]
