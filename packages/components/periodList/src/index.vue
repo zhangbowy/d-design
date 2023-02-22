@@ -104,7 +104,7 @@ export default {
 			// 是否渲染全部周期类型
 			type: Boolean,
 			default: false,
-		},
+		}
 	},
 	data() {
 		// 设置年默认值
