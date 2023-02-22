@@ -38,7 +38,7 @@
 							:key="result.category">
 							<span class="project-title"
 								>已关联的{{ RELATION_TYPE_TEXT[result.category] }}
-								<span v-if="result.category === 'task' && iSOperate">
+								<span v-if="result.category === 'task' && isOperate">
 									<a-button
 										type="link"
 										@click="handelAddTask"
@@ -95,7 +95,7 @@
 			<div class="drawer-footer">
 				<a-button @click="handelClose">关闭</a-button>
 				<a-button
-					v-if="isSureRelation && iSOperate"
+					v-if="isSureRelation && isOperate"
 					type="primary"
 					@click="handelAddRelation"
 					>添加关联</a-button
@@ -222,10 +222,10 @@ const initRequest = async () => {
 //是否可以操作
 const isOperable = computed(() => {
 	return (
-		(props.info.sourceType !== 'OKR' && props.iSOperate) ||
+		(props.info.sourceType !== 'OKR' && props.isOperate) ||
 		(props.info.sourceType === 'OKR' &&
 			props.info.status === OKR_PURSUE &&
-			props.iSOperate)
+			props.isOperate)
 	);
 });
 // 添加任务
