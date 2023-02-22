@@ -183,7 +183,7 @@ const props = defineProps({
 		default: true,
 	},
 	// 页面是否可以操作
-	iSOperate: {
+	isOperate: {
 		type: Boolean,
 		default: true,
 	},
