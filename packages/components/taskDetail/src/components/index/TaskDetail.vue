@@ -275,7 +275,7 @@
 			<Transition>
 				<div class="add-footer" v-if="!isEdit">
 					<a-button v-if="showDetail" class="cancel-btn" @click="handleTaskTrace">任务追踪</a-button>
-					<a-button type="primary" class="sure-btn" :class="{ 'restart-btn': status != 'NOT_BEGIN' }"
+					<a-button v-if="taskDetail.role != 'INDEPENDENT'" type="primary" class="sure-btn" :class="{ 'restart-btn': status != 'NOT_BEGIN' }"
 						@click="handleReloadTask(false)">{{
 	status == "NOT_BEGIN" ? "完成任务" : "重启任务"
 						}}</a-button>
@@ -330,9 +330,9 @@ import ChooseUserVue from "@/components/chooseuser/components/index.vue";
 import AddExcVue from "@/components/createTask/src/components/addExc/AddExc.vue";
 import DialogVue from "@/components/createTask/src/components/dialog/Dialog.vue";
 import RenewTask from "@/components/renewTask/index";
-import OssUploadVue from "@/components/upload/src/index";
+import OssUploadVue from "@/components/upload/index";
 import FileListVue from "@/components/taskTrace/src/components/fileList/FileList.vue";
-import TaskTrace from '@/components/taskTrace/src/index';
+import TaskTrace from '@/components/taskTrace/index';
 import Relation from '@/components/relation/src/index.vue';
 import LookRelation from '@/components/lookRelation/index';
 import * as dd from 'dingtalk-jsapi';
@@ -341,15 +341,21 @@ dayjs.locale('zh-cn');
 
 const props = defineProps({
 	visible: Boolean,
-	title: String,
+	title: {
+		type: String,
+		default: '任务详情',
+		required: false
+	},
 	taskDetail: Object,
 	isCut: {
 		type: Boolean,
-		defaultValue: false,
+		default: false,
+		required: false
 	},
 	mask: {
 		type: Boolean,
-		defaultValue: true,
+		default: true,
+		required: false
 	},
 	showDetail: {
 		type: Boolean,

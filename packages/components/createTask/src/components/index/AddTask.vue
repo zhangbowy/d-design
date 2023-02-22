@@ -339,7 +339,7 @@ import AvatarVue from '../avatar/avatar.vue';
 import ChooseUserVue from '../../../../chooseuser/components/index.vue';
 import AddExcVue from '../addExc/AddExc.vue';
 import DialogVue from '../dialog/Dialog.vue';
-import OssUploadVue from '../../../../upload/src/index';
+import OssUploadVue from '../../../../upload/index';
 import Relation from '@/components/relation/index';
 import * as dd from 'dingtalk-jsapi';
 
