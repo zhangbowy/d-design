@@ -107,7 +107,7 @@
 		<div class="add-deadline">
 			<span class="public-title">任务开始时间</span>
 			<div class="deadline-box"
-				:class="{ 'dis-bgc': status != 'NOT_BEGIN', 'dis-text': (role == 'EXECUTE' && !checkCanUpdateTime(role)) }">
+				:class="{ 'dis-text': (role == 'EXECUTE' && !checkCanUpdateTime(role)) }">
 				<template v-if="status != 'NOT_BEGIN'">
 					{{ sliceSS(taskDetail?.startTime) }}
 				</template>
@@ -129,7 +129,7 @@
 			<span class="public-title">任务截止时间</span>
 			<div v-if="dayFormat || status == 'NOT_BEGIN'" class="deadline-box"
 				:class="{ 'dis-bgc': role == 'EXECUTE' || status != 'NOT_BEGIN', 'dis-text': (role == 'EXECUTE' && !checkCanUpdateTime(role)) }">
-				<template v-if="role == 'EXECUTE' && !checkCanUpdateTime(role)">
+				<template v-if="role == 'EXECUTE' && dayFormat && !checkCanUpdateTime(role)">
 					{{ sliceSS(taskDetail?.abortTime) }}
 				</template>
 				<template v-else>
