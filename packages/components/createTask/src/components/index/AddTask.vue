@@ -361,7 +361,7 @@ const props = defineProps({
 	},
 	trait: {
 		type: String, // OKR/PROJECT/INTE/QZP
-		default: 'OKR',
+		default: 'QZP',
 		required: false,
 	},
 	projectId: {
