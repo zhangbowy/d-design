@@ -1,5 +1,5 @@
 import { App } from 'vue'
-import TaskTrace from "./components/index/TaskTrace.vue"
+import TaskTrace from "./src/components/index/TaskTrace.vue"
 
 (TaskTrace as any).install = function (app: App) {
     // 组件注册，按需引入

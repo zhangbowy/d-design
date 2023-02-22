@@ -59,7 +59,12 @@ function sidebarComponent() {
             text: '组件列表',
             items: [
                 { text: 'avatar', link: '/components/avatar/index' },
-                { text: 'test', link: '/components/test/index' },
+                { text: 'CreateTask', link: '/components/CreateTask/index'},
+                { text: 'TaskDetail', link: '/components/TaskDetail/index'},
+                { text: 'TaskTrace', link: '/components/TaskTrace/index'},
+                { text: 'RenewTask', link: '/components/RenewTask/index'},
+                { text: 'OssUpload', link: '/components/OssUpload/index'},
+                { text: 'DDUpload', link: '/components/DDUpload/index'}
             ]
         }
 

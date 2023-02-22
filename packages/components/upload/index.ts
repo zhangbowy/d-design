@@ -1,5 +1,5 @@
 import { App } from 'vue'
-import OssUpload from "./components/OssUpload.vue"
+import OssUpload from "./src/components/OssUpload.vue"
 
 (OssUpload as any).install = function (app: App) {
     // 组件注册，按需引入

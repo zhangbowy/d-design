@@ -422,7 +422,7 @@ import AvatarGroupVue from '@/components/createTask/src/components/avatar/Avatar
 import ExcListVue from '../excList/ExcList.vue';
 import KeyEventVue from '../keyEvent/KeyEvent.vue';
 import FileListVue from '../fileList/FileList.vue';
-import OssUploadVue from '@/components/upload/src/index';
+import OssUploadVue from '@/components/upload/index';
 import Edit from '@/components/edit/src/index';
 
 defineOptions({
@@ -440,7 +440,7 @@ const props = defineProps({
 	},
 	trait: {
 		type: String,
-		default: 'default',
+		default: 'QZP',
 		required: true,
 	},
 });
