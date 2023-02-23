@@ -307,7 +307,7 @@
 	<FileListVue :appendixShow="files.show" :accessory="files.accessory" @hideFiles="hideCommentFiles" />
 	<Relation v-model:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :info="relation.info"
 		@successCallback="relationConfirm" />
-	<LookRelation v-model:visible="lookRelation.visible" :info="lookRelation.info" :isSureRelation="trait !== 'PROJECT'" @lookDetailCallback="lookDetailCallback" @refreshList="refreshList" />
+	<LookRelation v-model:visible="lookRelation.visible" :tabs="['OKR', 'PROJECT']" :info="lookRelation.info" :isSureRelation="trait !== 'PROJECT'" @lookDetailCallback="lookDetailCallback" @refreshList="refreshList" />
 </template>
 
 <script setup>
@@ -319,9 +319,7 @@ import {
 	judgeStrNull,
 	sliceSS,
 } from '../../utils/utils';
-// import { useStore } from "vuex";
 import { message } from "ant-design-vue";
-import mitt from "@/utils/eventBus";
 import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
 import locale from "ant-design-vue/es/date-picker/locale/zh_CN";
