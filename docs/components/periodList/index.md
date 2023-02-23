@@ -17,11 +17,6 @@ const queryOKRByUserId = (info: {curPeriodId}) => {
 </script>
 <style>
 .period-demo-1 {
-	width: 100vw;
-	height: 100vh;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 }
 </style>
 ```
