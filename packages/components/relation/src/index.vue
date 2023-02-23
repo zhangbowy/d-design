@@ -116,7 +116,6 @@ const props = defineProps({
 const curTab = ref(props.tabs[0]);
 const confirmLoading = ref(false);
 const allRelation = ref({});
-console.log('relation', props.zIndex);
 // check的回调
 const handelCheckedCallback: ICheckedCallback = (val) => {
 	allRelation.value[val.type] = val.checkedArr;

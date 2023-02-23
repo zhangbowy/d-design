@@ -212,7 +212,6 @@ const relationInfo = computed(
 		relevanceCategory: props.info.sourceType,
 	})
 );
-console.log('lookRelation', props.zIndex);
 // 初始化数据请求
 const initRequest = async () => {
 	loading.value = true;

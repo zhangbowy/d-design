@@ -126,10 +126,11 @@ export default defineConfig(() => {
             DefineOptions(),
             Components({
                 resolvers: [
-                    // AntDesignVueResolver({
-                    //     importStyle: "less",
-                    // }),
-                    AntDesignVueResolver()
+                    AntDesignVueResolver(
+                        //     {
+                        //     importStyle: "less",
+                        // }
+                    ),
                 ],
             }),
             // dts({ include: './packages' }),

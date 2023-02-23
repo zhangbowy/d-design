@@ -19,7 +19,7 @@ if (trait === 'OKR') {
     });
 }
 
-const themelist = ["task-theme-okr", "task-theme-integration",  "task-theme-default"]
+const themelist = ["task-theme-okr", "task-theme-integration", "task-theme-default"]
 
 const htmlCassName = document.documentElement.className
 

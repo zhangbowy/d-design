@@ -14,6 +14,7 @@
 		:zIndex="3000"
 		v-model:visible="visible"
 		:tabs="['OKR', 'PROJECT', 'TASK']" />
+	<a-button type="primary">测试</a-button>
 </template>
 
 <script setup lang="ts">

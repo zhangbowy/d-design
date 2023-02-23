@@ -1,8 +1,7 @@
 import DevUI from 'vue-devui';
 import 'vue-devui/style.css';
 import '@devui-design/icons/icomoon/devui-icon.css';
-import Antd from 'ant-design-vue';
-import "ant-design-vue/dist/antd.less";
+// import "ant-design-vue/dist/antd.less";
 // import { ThemeServiceInit, infinityTheme } from 'devui-theme/index.es';
 //
 // ThemeServiceInit({ infinityTheme }, 'infinityTheme');
@@ -24,7 +23,6 @@ export default {
     ...DefaultTheme,
     enhanceApp({ app }) {
         app.use(DevUI)
-        app.use(Antd)
         if (inBrowser) {
             app.use(OssUpload)
         }

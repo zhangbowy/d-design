@@ -12,7 +12,6 @@ import {
   Transition,
   TransitionGroup,
   VueElement,
-  assertNumber,
   callWithAsyncErrorHandling,
   callWithErrorHandling,
   camelize,
@@ -145,7 +144,7 @@ import {
   withMemo,
   withModifiers,
   withScopeId
-} from "./chunk-LZPJ5JBW.js";
+} from "./chunk-KGXFO7RQ.js";
 export {
   BaseTransition,
   Comment,
@@ -160,7 +159,6 @@ export {
   Transition,
   TransitionGroup,
   VueElement,
-  assertNumber,
   callWithAsyncErrorHandling,
   callWithErrorHandling,
   camelize,

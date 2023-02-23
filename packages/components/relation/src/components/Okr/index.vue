@@ -29,7 +29,9 @@
 								<ul class="o-wrapper">
 									<li class="O">O{{ item.importance }}</li>
 									<li>{{ item.content }}</li>
-									<li class="o-create" v-if="item.assist">创建人：{{ item.creator.name }}</li>
+									<li class="o-create" v-if="item.assist">
+										创建人：{{ item.creator.name }}
+									</li>
 								</ul>
 								<!-- </a-checkbox> -->
 								<div class="kr-checkbox">
@@ -40,15 +42,17 @@
 										class="cur-checkbox"
 										:value="list.id">
 										<span class="KR">KR{{ idx + 1 }}</span>
-										<span >
+										<span>
 											{{ list.content }}
-                                            <template v-if="list.assistants.length>0">
-                                                <template
-                                                    v-for="userInfo in list.assistants"
-                                                    :key="userInfo.id">
-                                                    <span class="assit-user">@{{ userInfo?.targetUser?.name }}</span>
-                                                </template>
-                                            </template>
+											<template v-if="list.assistants.length > 0">
+												<template
+													v-for="userInfo in list.assistants"
+													:key="userInfo.id">
+													<span class="assit-user"
+														>@{{ userInfo?.targetUser?.name }}</span
+													>
+												</template>
+											</template>
 										</span>
 									</a-checkbox>
 								</div>
@@ -81,6 +85,7 @@ const okrData = ref([]); //okr数据
 const checkList = ref([]); //选中的数据
 const loading = ref(true);
 const relatedMeCheckbox = ref(false); // 与我相关checkbox
+const headerRef = ref();
 const props = defineProps({
 	info: {
 		type: Object,
@@ -104,11 +109,10 @@ const getOkrList = async (periodId?: string) => {
 		processStatus: 'OKR_PURSUE',
 		curPage: 1,
 		pageSize: 1000,
-        assist:relatedMeCheckbox.value
+		assist: relatedMeCheckbox.value,
 	};
 	const res = await GET_OKRLIST_BY_USERID(params);
 	if (res.code == 1) {
-
 		okrData.value = res.data;
 		loading.value = false;
 	}
@@ -161,7 +165,7 @@ const handelCheckboxChange = (e: number[]) => {
 };
 // 与我相关点击
 const handelRelatedChange = (e: CheckboxChangeEvent) => {
-    getOkrList()
+	getOkrList();
 };
 onMounted(() => {
 	getOkrList();
