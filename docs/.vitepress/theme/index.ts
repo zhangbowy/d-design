@@ -7,12 +7,17 @@ import '@devui-design/icons/icomoon/devui-icon.css';
 import 'vitepress-theme-demoblock/dist/theme/styles/index.css'
 import { registerComponents } from './register-components.js'
 import DefaultTheme from 'vitepress/theme'
-import {OssUpload} from '../../../dist/pu-ui.es'
+import { computed, defineAsyncComponent } from 'vue'
+import { inBrowser } from 'vitepress'
 
+const OssUpload = defineAsyncComponent(() => import('../../../dist/pu-ui.es.js').OssUpload)
 export default {
   ...DefaultTheme,
   enhanceApp({ app }) {
-    app.use(DevUI).use(OssUpload)
+    app.use(DevUI)
+    if(inBrowser) {
+      app.use(OssUpload)
+    }
     registerComponents(app)
   }
 }

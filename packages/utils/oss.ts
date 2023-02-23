@@ -1,1 +1,4 @@
-import OSS from 'ali-oss';export default (ossConf) => {	return new OSS(ossConf);};
+import OSS from 'ali-oss';
+export default (ossConf) => {
+	return new OSS(ossConf);
+};
