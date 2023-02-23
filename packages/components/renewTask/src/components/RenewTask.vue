@@ -1,5 +1,5 @@
 <template>
-    <a-modal :visible="renewVisible" title="更新说明" :keyboard="false" width="780" okText="确定" cancelText="取消"
+    <a-modal :visible="visible" title="更新说明" :keyboard="false" width="780" okText="确定" cancelText="取消"
         wrapClassName="renew-box" :destroyOnClose="true" :maskClosable="false" :centered="true" :zIndex="zIndex"
         :okButtonProps="{ disabled: judgeStrNull(inputVal), loading: btnLoading }" :cancelButtonProps="{
             class: 'cancel-btn'
@@ -83,7 +83,7 @@ defineOptions({
 
 const G_corpId = getQueryVariable("corpId");
 const props = defineProps({
-    renewVisible: Boolean,
+    visible: Boolean,
     dragEl: Object,
     toStatus: String,
     zIndex: {

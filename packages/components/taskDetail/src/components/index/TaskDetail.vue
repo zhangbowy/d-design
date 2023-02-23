@@ -299,7 +299,7 @@
 	<DialogVue :dialogVisible="dialog.visible" :title="dialog.title" :content="dialog.content"
 		@cancelEvent="cancelEvent" @okEvent="okEvent" />
 	<!-- renew task status component -->
-	<RenewTask :renewVisible="renewVisible" :toStatus="toStatus" :dragEl="taskDetail" :zIndex="1200"
+	<RenewTask :visible="renewVisible" :toStatus="toStatus" :dragEl="taskDetail" :zIndex="1200"
 		@closeRenew="closeRenew" />
 	<!-- task trace component -->
 	<TaskTrace :visible="map.visible" :taskData="taskDetail" :curUser="curUser" :trait="trait" @closeMap="closeMap" />
