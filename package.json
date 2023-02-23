@@ -1,5 +1,5 @@
 {
-	"name": "d-design",
+	"name": "@qzz/d-design",
 	"version": "0.0.11",
 	"description": "",
 	"main": "./dist/pu-ui.umd.js",
