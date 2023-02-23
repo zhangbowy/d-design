@@ -9,87 +9,93 @@
 		:zIndex="zIndex"
 		@close="handelClose">
 		<div class="content">
-			<header>
-				<div class="user-info">
-					<img v-if="info.avatar" :src="info.avatar" alt="" />
-					<span v-else class="nick">{{
-						info.name && info.name.substring(0, 1)
-					}}</span>
-					<div class="info-detail">
-						<span class="user-name">{{ info.name }}</span>
-						<span class="user-task" v-if="info.sourceType == 'OKR'">{{
-							`${info.type}${info.indexId}：${info.content}`
+			<a-spin :spinning="loading">
+				<header>
+					<div class="user-info">
+						<img v-if="info.avatar" :src="info.avatar" alt="" />
+						<span v-else class="nick">{{
+							info.name && info.name.substring(0, 1)
 						}}</span>
-						<span class="user-task" v-else-if="info.sourceType == 'TASK'">{{
-							`任务：${info.content}`
-						}}</span>
-						<span class="user-task" v-else-if="info.sourceType == 'PROJECT'">{{
-							`项目：${info.content}`
-						}}</span>
-					</div>
-				</div>
-			</header>
-			<a-config-provider :locale="zhCN">
-				<main>
-					<template v-if="allRelationData.length > 0">
-						<div
-							class="cor-project"
-							v-for="result in allRelationData"
-							:key="result.category">
-							<span class="project-title"
-								>已关联的{{ RELATION_TYPE_TEXT[result.category] }}
-								<span v-if="result.category === 'task' && isOperate">
-									<a-button
-										type="link"
-										@click="handelAddTask"
-										class="add-text-color"
-										><template #icon><plus-outlined /></template>
-										<span class="add-text" style="margin: 0"
-											>新建</span
-										></a-button
-									></span
-								></span
+						<div class="info-detail">
+							<span class="user-name">{{ info.name }}</span>
+							<span class="user-task" v-if="info.sourceType == 'OKR'">{{
+								`${info.type}${info.indexId}：${info.content}`
+							}}</span>
+							<span class="user-task" v-else-if="info.sourceType == 'TASK'">{{
+								`任务：${info.content}`
+							}}</span>
+							<span
+								class="user-task"
+								v-else-if="info.sourceType == 'PROJECT'"
+								>{{ `项目：${info.content}` }}</span
 							>
+						</div>
+					</div>
+				</header>
+				<a-config-provider :locale="zhCN">
+					<main>
+						<template v-if="allRelationData.length > 0">
 							<div
-								class="project-item"
-								v-for="(item, index) in result.infoList"
-								:key="item.id">
-								<template v-if="result.category === 'OKR'">
-									<ul class="kr-style" v-if="item.relevanceType === 'KR'">
-										<li>O{{ item.parentSort }}</li>
-										<li>KR{{ index + 1 }}</li>
-									</ul>
-									<span class="o-style" v-else>O{{ item.parentSort }}</span>
-								</template>
-
-								<span class="project-text">{{ item.relevanceName.name }}</span>
-								<span
-									class="status-icon"
-									v-if="RELATION_TYPE[item.relevanceName.status]"
-									:class="item.relevanceName.status"
-									>{{ RELATION_TYPE[item.relevanceName.status] }}</span
-								>
-								<div class="item-op">
-									<a-button
-										type="link"
-										@click="handleDetail(item, result.category)"
-										>查看详情</a-button
-									>
-									<template v-if="isOperable">
-										<a-divider style="margin: 0" type="vertical" />
+								class="cor-project"
+								v-for="result in allRelationData"
+								:key="result.category">
+								<span class="project-title"
+									>已关联的{{ RELATION_TYPE_TEXT[result.category] }}
+									<span v-if="result.category === 'task' && isOperate">
 										<a-button
 											type="link"
-											@click="handleDelCor(item.relevanceId)"
-											>移除关联</a-button
-										>
+											@click="handelAddTask"
+											class="add-text-color"
+											><template #icon><plus-outlined /></template>
+											<span class="add-text" style="margin: 0"
+												>新建</span
+											></a-button
+										></span
+									></span
+								>
+								<div
+									class="project-item"
+									v-for="(item, index) in result.infoList"
+									:key="item.id">
+									<template v-if="result.category === 'OKR'">
+										<ul class="kr-style" v-if="item.relevanceType === 'KR'">
+											<li>O{{ item.parentSort }}</li>
+											<li>KR{{ index + 1 }}</li>
+										</ul>
+										<span class="o-style" v-else>O{{ item.parentSort }}</span>
 									</template>
+
+									<span class="project-text">{{
+										item.relevanceName.name
+									}}</span>
+									<span
+										class="status-icon"
+										v-if="RELATION_TYPE[item.relevanceName.status]"
+										:class="item.relevanceName.status"
+										>{{ RELATION_TYPE[item.relevanceName.status] }}</span
+									>
+									<div class="item-op">
+										<a-button
+											type="link"
+											@click="handleDetail(item, result.category)"
+											>查看详情</a-button
+										>
+										<template v-if="isOperable && item.canDelete">
+											<a-divider style="margin: 0" type="vertical" />
+											<a-button
+												type="link"
+												@click="handleDelCor(item.relevanceId)"
+												>移除关联</a-button
+											>
+										</template>
+									</div>
 								</div>
 							</div>
-						</div>
-					</template>
-					<a-empty v-else />
-				</main>
-			</a-config-provider>
+						</template>
+						<a-empty v-else />
+					</main>
+				</a-config-provider>
+			</a-spin>
 		</div>
 		<template #footer>
 			<div class="drawer-footer">
@@ -105,6 +111,7 @@
 	</a-drawer>
 	<Relation
 		v-if="show"
+		:zIndex="zIndex + 1"
 		v-model:visible="show"
 		:tabs="tabs"
 		:info="relationInfo"
@@ -140,6 +147,7 @@ const emit = defineEmits([
 	'update:visible',
 	'refreshList',
 ]);
+
 const props = defineProps({
 	visible: {
 		type: Boolean,
@@ -194,6 +202,7 @@ const props = defineProps({
 });
 const user = JSON.parse(localStorage.getItem('QZZ_DATA') || '{}').user;
 const show = ref(false);
+const loading = ref(true);
 const createTaskVisible = ref(false);
 const allRelationData = ref<IAllRelationData[]>([]); // 所有关联数据
 const relationInfo = computed(
@@ -203,8 +212,10 @@ const relationInfo = computed(
 		relevanceCategory: props.info.sourceType,
 	})
 );
+console.log('lookRelation', props.zIndex);
 // 初始化数据请求
 const initRequest = async () => {
+	loading.value = true;
 	try {
 		const params = {
 			bizId: props.info.id,
@@ -214,9 +225,11 @@ const initRequest = async () => {
 		const res = await GET_CORRELATION_INFO(params);
 		if (res.code == 1) {
 			allRelationData.value = res.data;
+			loading.value = false;
 		}
 	} catch (err) {
 		console.log('查看关联初始化数据失败：', err);
+		loading.value = false;
 	}
 };
 //是否可以操作

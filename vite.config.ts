@@ -54,90 +54,93 @@ const multipleScopeVars = [
 // console.log(getLess({
 //     implementation: (lessOptions) => multipleScopeVars
 // }).render())
-export default defineConfig({
-    server: {
-        host: "localhost",
-        hmr: true,
-        open: true,
-        cors: true,
-        headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "*",
-            "Access-Control-Allow-Headers": "*",
-        },
-        proxy: {
-            "/api": {
-                target: "http://daily-assign.sunmeta.top",
-                changeOrigin: true,
+export default defineConfig(() => {
+    return {
+        server: {
+            host: "localhost",
+            hmr: true,
+            open: true,
+            cors: true,
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "*",
+                "Access-Control-Allow-Headers": "*",
             },
-        },
-    },
-    build: {
-        lib: {
-            entry: resolve(__dirname, './packages/index.ts'),
-            name: 'pu-ui',
-            fileName: (format) => `pu-ui.${format}.js`,
-            formats: ['es', 'umd'],
-        },
-        rollupOptions: {
-            external: ['vue'],
-            output: {
-                globals: {
-                    vue: 'Vue'
-                }
-            }
-        }
-    },
-    resolve: {
-        alias: {
-            '@': resolve(__dirname, 'packages'), //设置别名
-        },
-        extensions: ['.js', '.vue', '.json', '.ts'],
-    },
-    css: {
-        preprocessorOptions: {
-            less: {
-                // modifyVars: {
-                //     "primary-color": "#00A48A",
-                // },
-                javascriptEnabled: true,
-                charset: false,
-                // 注入样式变量（根据自己需求注入其他）
-                // additionalData: '@import "@/style/global.less";',
-            },
-        },
-    },
-    plugins: [
-        vue({
-            template: {
-                compilerOptions: {
-                    // 将所有带短横线的标签名都视为自定义元素
-                    isCustomElement: (tag) => tag === "iconpark-icon",
+            proxy: {
+                "/api": {
+                    target: "http://daily-assign.sunmeta.top",
+                    changeOrigin: true,
                 },
             },
-        }),
-        // visualizer({
-        //     open: true,  //注意这里要设置为true，否则无效
-        //     gzipSize: true,
-        //     brotliSize: true
-        // }),
-        DefineOptions(),
-        Components({
-            resolvers: [
-                // AntDesignVueResolver({
-                //     importStyle: "less",
-                // }),
-                AntDesignVueResolver()
-            ],
-        }),
-        // dts({ include: './packages' }),
-        themePreprocessorPlugin({
-            less: {
-                multipleScopeVars: multipleScopeVars,
-                defaultScopeName: "task-theme-default",
-                extract: false,
-                // themeLinkTagInjectTo: "body"
+        },
+        build: {
+            lib: {
+                entry: resolve(__dirname, './packages/index.ts'),
+                name: 'pu-ui',
+                fileName: (format) => `pu-ui.${format}.js`,
+                formats: ['es', 'umd'],
             },
-        }),
-    ]
+            rollupOptions: {
+                external: ['vue'],
+                output: {
+                    globals: {
+                        vue: 'Vue'
+                    }
+                }
+            }
+        },
+        resolve: {
+            alias: {
+                '@': resolve(__dirname, 'packages'), //设置别名
+            },
+            extensions: ['.js', '.vue', '.json', '.ts'],
+        },
+        css: {
+            preprocessorOptions: {
+                less: {
+                    // modifyVars: {
+                    //     "primary-color": "#00A48A",
+                    // },
+                    javascriptEnabled: true,
+                    charset: false,
+                    // 注入样式变量（根据自己需求注入其他）
+                    // additionalData: '@import "@/style/global.less";',
+                },
+            },
+        },
+        plugins: [
+            vue({
+                template: {
+                    compilerOptions: {
+                        // 将所有带短横线的标签名都视为自定义元素
+                        isCustomElement: (tag) => tag === "iconpark-icon",
+                    },
+                },
+            }),
+            // visualizer({
+            //     open: true,  //注意这里要设置为true，否则无效
+            //     gzipSize: true,
+            //     brotliSize: true
+            // }),
+            DefineOptions(),
+            Components({
+                resolvers: [
+                    // AntDesignVueResolver({
+                    //     importStyle: "less",
+                    // }),
+                    AntDesignVueResolver()
+                ],
+            }),
+            // dts({ include: './packages' }),
+            themePreprocessorPlugin({
+                less: {
+                    multipleScopeVars: multipleScopeVars,
+                    defaultScopeName: "task-theme-default",
+                    extract: false,
+                    // themeLinkTagInjectTo: "body"
+                },
+            }),
+        ]
+    }
+
 })
