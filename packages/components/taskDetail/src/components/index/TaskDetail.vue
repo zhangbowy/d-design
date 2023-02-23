@@ -107,7 +107,7 @@
 		<div class="add-deadline">
 			<span class="public-title">任务开始时间</span>
 			<div class="deadline-box"
-				:class="{ 'dis-bgc': status != 'NOT_BEGIN', 'dis-text': (role == 'EXECUTE' && !checkCanUpdateTime(role)) }">
+				:class="{ 'dis-text': (role == 'EXECUTE' && !checkCanUpdateTime(role)) }">
 				<template v-if="status != 'NOT_BEGIN'">
 					{{ sliceSS(taskDetail?.startTime) }}
 				</template>
@@ -129,7 +129,7 @@
 			<span class="public-title">任务截止时间</span>
 			<div v-if="dayFormat || status == 'NOT_BEGIN'" class="deadline-box"
 				:class="{ 'dis-bgc': role == 'EXECUTE' || status != 'NOT_BEGIN', 'dis-text': (role == 'EXECUTE' && !checkCanUpdateTime(role)) }">
-				<template v-if="role == 'EXECUTE' && !checkCanUpdateTime(role)">
+				<template v-if="role == 'EXECUTE' && dayFormat && !checkCanUpdateTime(role)">
 					{{ sliceSS(taskDetail?.abortTime) }}
 				</template>
 				<template v-else>
@@ -275,7 +275,7 @@
 			<Transition>
 				<div class="add-footer" v-if="!isEdit">
 					<a-button v-if="showDetail" class="cancel-btn" @click="handleTaskTrace">任务追踪</a-button>
-					<a-button type="primary" class="sure-btn" :class="{ 'restart-btn': status != 'NOT_BEGIN' }"
+					<a-button v-if="taskDetail.role != 'INDEPENDENT'" type="primary" class="sure-btn" :class="{ 'restart-btn': status != 'NOT_BEGIN' }"
 						@click="handleReloadTask(false)">{{
 	status == "NOT_BEGIN" ? "完成任务" : "重启任务"
 						}}</a-button>
@@ -299,7 +299,7 @@
 	<DialogVue :dialogVisible="dialog.visible" :title="dialog.title" :content="dialog.content"
 		@cancelEvent="cancelEvent" @okEvent="okEvent" />
 	<!-- renew task status component -->
-	<RenewTask :renewVisible="renewVisible" :toStatus="toStatus" :dragEl="taskDetail" :zIndex="1200"
+	<RenewTask :visible="renewVisible" :toStatus="toStatus" :dragEl="taskDetail" :zIndex="1200"
 		@closeRenew="closeRenew" />
 	<!-- task trace component -->
 	<TaskTrace :visible="map.visible" :taskData="taskDetail" :curUser="curUser" :trait="trait" @closeMap="closeMap" />
@@ -307,7 +307,7 @@
 	<FileListVue :appendixShow="files.show" :accessory="files.accessory" @hideFiles="hideCommentFiles" />
 	<Relation v-model:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :info="relation.info"
 		@successCallback="relationConfirm" />
-	<LookRelation v-model:visible="lookRelation.visible" :info="lookRelation.info" @lookDetailCallback="lookDetailCallback" @refreshList="refreshList" />
+	<LookRelation v-model:visible="lookRelation.visible" :tabs="['OKR', 'PROJECT']" :info="lookRelation.info" :isSureRelation="trait !== 'PROJECT'" @lookDetailCallback="lookDetailCallback" @refreshList="refreshList" />
 </template>
 
 <script setup>
@@ -319,9 +319,7 @@ import {
 	judgeStrNull,
 	sliceSS,
 } from '../../utils/utils';
-// import { useStore } from "vuex";
 import { message } from "ant-design-vue";
-import mitt from "@/utils/eventBus";
 import dayjs from "dayjs";
 import "dayjs/locale/zh-cn";
 import locale from "ant-design-vue/es/date-picker/locale/zh_CN";
@@ -329,10 +327,10 @@ import AvatarVue from "@/components/createTask/src/components/avatar/avatar.vue"
 import ChooseUserVue from "@/components/chooseuser/components/index.vue";
 import AddExcVue from "@/components/createTask/src/components/addExc/AddExc.vue";
 import DialogVue from "@/components/createTask/src/components/dialog/Dialog.vue";
-import RenewTask from "@/components/renewTask/src/index";
-import OssUploadVue from "@/components/upload/src/index";
+import RenewTask from "@/components/renewTask/index";
+import OssUploadVue from "@/components/upload/index";
 import FileListVue from "@/components/taskTrace/src/components/fileList/FileList.vue";
-import TaskTrace from '@/components/taskTrace/src/index';
+import TaskTrace from '@/components/taskTrace/index';
 import Relation from '@/components/relation/src/index.vue';
 import LookRelation from '@/components/lookRelation/index';
 import * as dd from 'dingtalk-jsapi';
@@ -341,15 +339,21 @@ dayjs.locale('zh-cn');
 
 const props = defineProps({
 	visible: Boolean,
-	title: String,
+	title: {
+		type: String,
+		default: '任务详情',
+		required: false
+	},
 	taskDetail: Object,
 	isCut: {
 		type: Boolean,
-		defaultValue: false,
+		default: false,
+		required: false
 	},
 	mask: {
 		type: Boolean,
-		defaultValue: true,
+		default: true,
+		required: false
 	},
 	showDetail: {
 		type: Boolean,
