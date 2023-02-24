@@ -767,7 +767,7 @@ const handleCreateTask = async () => {
 	if (resCode === 1) {
 		if (
 			props.trait === 'OKR' &&
-			relationCallback.value?.targetInfo.length > 0
+			relationCallback.value?.targetInfo?.length > 0
 		) {
 			relationCallback.value.sourceInfo.id = resData;
 			//关联todo
