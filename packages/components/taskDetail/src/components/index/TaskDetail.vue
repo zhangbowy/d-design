@@ -106,8 +106,7 @@
 		<!-- add start time box -->
 		<div class="add-deadline">
 			<span class="public-title">任务开始时间</span>
-			<div class="deadline-box"
-				:class="{ 'dis-text': (role == 'EXECUTE' && !checkCanUpdateTime(role)) }">
+			<div class="deadline-box" :class="{ 'dis-text': (role == 'EXECUTE' && !checkCanUpdateTime(role)) }">
 				<template v-if="status != 'NOT_BEGIN'">
 					{{ sliceSS(taskDetail?.startTime) }}
 				</template>
@@ -261,11 +260,13 @@
 		<!-- add correlation -->
 		<div v-if="trait !== 'QZP'" class="add-correlation">
 			<span class="public-title">关联项</span>
-			<div v-if="!renderCorText() && (trait === 'OKR' || trait === 'INTE')" class="add-cor-btn" @click="handleAddRelation()">
+			<div v-if="!renderCorText() && judgeCorBtnShow()"
+				class="add-cor-btn" @click="handleAddRelation()">
 				<iconpark-icon name="guanlian"></iconpark-icon>
 				<span>添加关联</span>
 			</div>
-			<div class="cor-text" :class="{'marginL': renderCorText()}" v-if="renderCorText()" @click="handleCheckRelation()">
+			<div class="cor-text" :class="{ 'marginL': renderCorText() }" v-if="renderCorText()"
+				@click="handleCheckRelation()">
 				<iconpark-icon name="guanlian"></iconpark-icon>
 				<span>{{ renderCorText() }}</span>
 			</div>
@@ -275,8 +276,8 @@
 			<Transition>
 				<div class="add-footer" v-if="!isEdit">
 					<a-button v-if="showDetail" class="cancel-btn" @click="handleTaskTrace">任务追踪</a-button>
-					<a-button v-if="taskDetail.role != 'INDEPENDENT'" type="primary" class="sure-btn" :class="{ 'restart-btn': status != 'NOT_BEGIN' }"
-						@click="handleReloadTask(false)">{{
+					<a-button v-if="taskDetail.role != 'INDEPENDENT'" type="primary" class="sure-btn"
+						:class="{ 'restart-btn': status != 'NOT_BEGIN' }" @click="handleReloadTask(false)">{{
 	status == "NOT_BEGIN" ? "完成任务" : "重启任务"
 						}}</a-button>
 				</div>
@@ -307,7 +308,9 @@
 	<FileListVue :appendixShow="files.show" :accessory="files.accessory" @hideFiles="hideCommentFiles" />
 	<Relation v-model:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :info="relation.info"
 		@successCallback="relationConfirm" />
-	<LookRelation v-model:visible="lookRelation.visible" :tabs="['OKR', 'PROJECT']" :info="lookRelation.info" :isSureRelation="trait !== 'PROJECT'" @lookDetailCallback="lookDetailCallback" @refreshList="refreshList" />
+	<LookRelation v-model:visible="lookRelation.visible" :tabs="['OKR', 'PROJECT']" :info="lookRelation.info"
+		:isSureRelation="trait !== 'PROJECT'" :isOperate="taskDetail?.role != 'INDEPENDENT'"
+		@lookDetailCallback="lookDetailCallback" @refreshList="refreshList" />
 </template>
 
 <script setup>
@@ -462,7 +465,7 @@ const relation = reactive({
 		id: null,
 		relevanceType: 'TASK_MAIN',
 		relevanceCategory: 'TASK'
-	},
+	}
 });
 const lookRelation = reactive({
 	visible: false,
@@ -1288,6 +1291,17 @@ const refreshList = () => {
 	getRelevanceCnt();
 };
 
+const judgeCorBtnShow = () => {
+	let bol = false;
+	if(props.trait === 'OKR' || props.trait === 'INTE') {
+		if(taskDetail?.role != 'EXECUTE' && taskDetail?.role != 'INDEPENDENT') {
+			bol = true;
+		}
+	} else if (props.trait === 'WEEKLY') {
+		bol = true;
+	}
+	return bol;
+};
 const {
 	content,
 	createUser,
