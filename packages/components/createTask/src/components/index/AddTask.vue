@@ -1,61 +1,33 @@
 <template>
-	<a-drawer
-		:visible="visible"
-		class="add-task-drawer"
-		placement="right"
-		:title="title"
-		:width="width"
-		:keyboard="false"
-		:maskClosable="false"
-		:destroyOnClose="true"
-		@close="handleDrawerClose">
+	<a-drawer :visible="visible" class="add-task-drawer" placement="right" :title="title" :width="width"
+		:keyboard="false" :maskClosable="false" :destroyOnClose="true" @close="handleDrawerClose">
 		<!-- input box -->
 		<div class="content-box">
-			<a-textarea
-				v-model:value="content"
-				placeholder="请填写任务内容"
-				:auto-size="{minRows: 5}"
-				:maxlength="150"
+			<a-textarea v-model:value="content" placeholder="请填写任务内容" :auto-size="{ minRows: 5 }" :maxlength="150"
 				:autoFocus="true" />
 			<a-spin :spinning="spinning">
 				<div class="upload-box">
 					<div class="file-box">
-						<div
-							class="file-list"
-							v-for="item in accessory.ossAccessoryList"
-							:key="item.ossMaterialId"
+						<div class="file-list" v-for="item in accessory.ossAccessoryList" :key="item.ossMaterialId"
 							@click="handleDownloadFile(item)">
-							<a-image
-								v-if="returnType(item.cname)"
-								class="file-img"
-								:src="item.originalUrl"
-								@click.stop>
+							<a-image v-if="returnType(item.cname)" class="file-img" :src="item.originalUrl" @click.stop>
 								<template #previewMask>
 									<iconpark-icon name="preview"></iconpark-icon>
 								</template>
 							</a-image>
-							<img
-								v-else
-								class="file-img-not_img"
-								src="https://daily-static-file.oss-cn-shanghai.aliyuncs.com/file-icon.svg"
-								alt="" />
+							<img v-else class="file-img-not_img"
+								src="https://daily-static-file.oss-cn-shanghai.aliyuncs.com/file-icon.svg" alt="" />
 							<span class="file-name">{{ item.fileName }}</span>
-							<iconpark-icon
-								name="delete"
-								class="delete-file-icon"
-								@click.stop="
-									deleteFile(
-										accessory.ossAccessoryList,
-										item.ossMaterialId,
-										'oss'
-									)
-								"></iconpark-icon>
+							<iconpark-icon name="delete" class="delete-file-icon" @click.stop="
+								deleteFile(
+									accessory.ossAccessoryList,
+									item.ossMaterialId,
+									'oss'
+								)
+							"></iconpark-icon>
 						</div>
 					</div>
-					<OssUploadVue
-						class="upload-icon"
-						:bizId="returnSnow()"
-						@startUpload="startUpload"
+					<OssUploadVue class="upload-icon" :bizId="returnSnow()" @startUpload="startUpload"
 						@endUpload="endUpload">
 						<iconpark-icon class="icon" name="fujian"></iconpark-icon>
 					</OssUploadVue>
@@ -86,29 +58,17 @@
 				</div>
 				<iconpark-icon name="right" class="right-icon"></iconpark-icon>
 			</div>
-			<iconpark-icon
-				v-if="!checkNullObj(principalUser)"
-				name="delete"
-				class="delete-icon"
+			<iconpark-icon v-if="!checkNullObj(principalUser)" name="delete" class="delete-icon"
 				@click="handleDeletePri()"></iconpark-icon>
 		</div>
 		<!-- add start time box -->
 		<div class="add-deadline">
 			<span class="public-title">任务开始时间</span>
 			<div class="deadline-box">
-				<a-date-picker
-					v-model:value="startTime"
-					format="YYYY-MM-DD HH:mm"
-					placeholder="选择时间"
-					:show-time="{
-						hideDisabledOptions: false,
-						defaultValue: dayjs('00:00:00', 'HH:mm:ss'),
-					}"
-					:allowClear="false"
-					:autofocus="false"
-					:showNow="false"
-					:locale="locale"
-					:disabledDate="disabledStartDate"
+				<a-date-picker v-model:value="startTime" format="YYYY-MM-DD HH:mm" placeholder="选择时间" :show-time="{
+					hideDisabledOptions: false,
+					defaultValue: dayjs('00:00:00', 'HH:mm:ss'),
+				}" :allowClear="false" :autofocus="false" :showNow="false" :locale="locale" :disabledDate="disabledStartDate"
 					@ok="confirmStartTime">
 					<template v-slot:suffixIcon>
 						<iconpark-icon name="right" class="right-icon"></iconpark-icon>
@@ -119,30 +79,18 @@
 		<div class="add-deadline">
 			<span class="public-title">任务截止时间</span>
 			<div class="deadline-box">
-				<a-date-picker
-					ref="datePicker"
-					v-model:value="dayFormat"
-					format="YYYY-MM-DD HH:mm"
-					placeholder="选择时间"
+				<a-date-picker ref="datePicker" v-model:value="dayFormat" format="YYYY-MM-DD HH:mm" placeholder="选择时间"
 					:show-time="{
 						hideDisabledOptions: false,
 						defaultValue: dayjs('00:00:00', 'HH:mm:ss'),
-					}"
-					:allowClear="false"
-					:autofocus="false"
-					:showNow="false"
-					:locale="locale"
-					:disabledDate="disabledDeadDate"
+					}" :allowClear="false" :autofocus="false" :showNow="false" :locale="locale" :disabledDate="disabledDeadDate"
 					@ok="confirmDeadline">
 					<template v-slot:suffixIcon>
 						<iconpark-icon name="right" class="right-icon"></iconpark-icon>
 					</template>
 				</a-date-picker>
 			</div>
-			<iconpark-icon
-				v-if="abortTime"
-				name="delete"
-				class="delete-icon"
+			<iconpark-icon v-if="abortTime" name="delete" class="delete-icon"
 				@click="handleDelAbortTime"></iconpark-icon>
 		</div>
 		<!-- add time remind -->
@@ -154,36 +102,19 @@
 				<div class="custom-list">
 					<div class="add-remind-btn" @click="handleSelect">
 						<iconpark-icon name="add" class="add-icon"></iconpark-icon>
-						<a-select
-							v-model:value="selectArr"
-							mode="multiple"
-							dropdownClassName="selector"
-							:open="selectOpen"
-							:dropdownMatchSelectWidth="false"
-							@change="handleSelectChange"
+						<a-select v-model:value="selectArr" mode="multiple" dropdownClassName="selector"
+							:open="selectOpen" :dropdownMatchSelectWidth="false" @change="handleSelectChange"
 							@blur="handleSelectBlur">
-							<a-select-option
-								class="remind-option"
-								v-for="item in remindOptions.slice(0, 4)"
-								:key="item.type"
-								:value="item.type"
-								>{{ item.customTime }}
+							<a-select-option class="remind-option" v-for="item in remindOptions.slice(0, 4)"
+								:key="item.type" :value="item.type">{{ item.customTime }}
 							</a-select-option>
 							<a-select-option class="custom-option">
 								<div class="custom-time">
 									<div class="custom-btn">+ 自定义</div>
-									<a-date-picker
-										format="YYYY-MM-DD HH:mm"
-										dropdownClassName="picker"
-										:show-time="{
-											hideDisabledOptions: true,
-											defaultValue: dayjs('00:00:00', 'HH:mm'),
-										}"
-										:allowClear="false"
-										:autofocus="false"
-										:showNow="false"
-										:locale="locale"
-										@openChange="handlePickerChange"
+									<a-date-picker format="YYYY-MM-DD HH:mm" dropdownClassName="picker" :show-time="{
+										hideDisabledOptions: true,
+										defaultValue: dayjs('00:00:00', 'HH:mm'),
+									}" :allowClear="false" :autofocus="false" :showNow="false" :locale="locale" @openChange="handlePickerChange"
 										@ok="confirmRemindDeadline">
 									</a-date-picker>
 								</div>
@@ -193,9 +124,7 @@
 					<template v-for="item in remindOptions" :key="item.customTime">
 						<div class="custom-box" v-if="item.choose">
 							<span>{{ item.customTime }}</span>
-							<iconpark-icon
-								name="guanbi"
-								class="close-icon"
+							<iconpark-icon name="guanbi" class="close-icon"
 								@click="handleDeleteRemind(item)"></iconpark-icon>
 						</div>
 					</template>
@@ -211,19 +140,11 @@
 			<div v-if="trait === 'QZP'" class="cycle-box">
 				<iconpark-icon name="loop" class="remind-icon"></iconpark-icon>
 				<span class="cycle-title">任务循环</span>
-				<a-select
-					v-model:value="cycleValue"
-					:dropdownMatchSelectWidth="false"
-					@change="cycleChange"
+				<a-select v-model:value="cycleValue" :dropdownMatchSelectWidth="false" @change="cycleChange"
 					@focus="() => (customCycleShow = false)">
-					<a-select-option
-						class="cycle-option"
-						v-for="item in cycleList"
-						:key="item.type"
-						:value="item.type"
-						>{{ item.content }}</a-select-option
-					>
-					<template #dropdownRender="{menuNode: menu}">
+					<a-select-option class="cycle-option" v-for="item in cycleList" :key="item.type"
+						:value="item.type">{{ item.content }}</a-select-option>
+					<template #dropdownRender="{ menuNode: menu }">
 						<v-nodes :vnodes="menu" />
 						<a-divider style="margin: 4px 0" />
 						<div class="cycle-custom-btn" @click="handleCustomCycle">
@@ -235,12 +156,7 @@
 					<a-input v-model:value="customCycleValue" placeholder="请填写">
 						<template #addonAfter> 天 </template>
 					</a-input>
-					<a-button
-						type="primary"
-						:disabled="!customCycleValue"
-						@click="handleConfirmCycle"
-						>确 定</a-button
-					>
+					<a-button type="primary" :disabled="!customCycleValue" @click="handleConfirmCycle">确 定</a-button>
 				</div>
 			</div>
 		</div>
@@ -256,22 +172,20 @@
 								<span class="name-list">{{
 									returnName(item?.executeUser)
 								}}</span>
-								<span v-if="item?.executeUser?.length > 2" class="name-length"
-									>等{{ item?.executeUser?.length }}人</span
-								>
+								<span v-if="item?.executeUser?.length > 2" class="name-length">等{{
+									item?.executeUser?.length
+								}}人</span>
 								<iconpark-icon name="right" class="arrow-icon"></iconpark-icon>
 							</div>
 							<div class="task-data">
-								<span v-if="item?.abortTime" class="deadline-time"
-									>截止{{ returnTIme(item?.abortTime) }}</span
-								>
+								<span v-if="item?.abortTime" class="deadline-time">截止{{
+									returnTIme(item?.abortTime)
+								}}</span>
 								<span class="side-task-content">{{ item?.content }}</span>
 							</div>
 						</div>
 					</div>
-					<iconpark-icon
-						name="delete"
-						class="exc-delete"
+					<iconpark-icon name="delete" class="exc-delete"
 						@click="handleDeleteSub(item.index)"></iconpark-icon>
 				</div>
 				<div class="add-remind-btn" @click="handleAddExc">
@@ -295,52 +209,30 @@
 		<template #footer>
 			<div class="add-footer">
 				<a-button class="cancel-btn" @click="handleDrawerClose">取消</a-button>
-				<a-button
-					type="primary"
-					class="sure-btn"
-					:disabled="judgeStrNull(content) || spinning"
-					:loading="loading"
-					@click="handleCreateTask"
-					>新建任务
+				<a-button type="primary" class="sure-btn" :disabled="judgeStrNull(content) || spinning"
+					:loading="loading" @click="handleCreateTask">新建任务
 				</a-button>
 			</div>
 		</template>
 	</a-drawer>
 	<!-- choose user component -->
-	<ChooseUserVue
-		:visible="choose.visible"
-		:searchAllZone="choose.searchAllZone"
-		:multiSelect="choose.multiSelect"
-		:title="choose.title"
-		:selectedUsers="choose.selectedUsers"
-		@updateUserIds="updateUserIds"
+	<ChooseUserVue :visible="choose.visible" :searchAllZone="choose.searchAllZone" :multiSelect="choose.multiSelect"
+		:title="choose.title" :selectedUsers="choose.selectedUsers" @updateUserIds="updateUserIds"
 		@close="handleChooseClose" />
 	<!-- add executor component -->
-	<AddExcVue
-		:visible="addExcVisible"
-		:subTask="curSubTask"
-		@closeAddExc="closeAddExc"
-		@addExc="addExc" />
+	<AddExcVue :visible="addExcVisible" :subTask="curSubTask" @closeAddExc="closeAddExc" @addExc="addExc" />
 	<!-- dialog component -->
-	<DialogVue
-		:dialogVisible="dialog.visible"
-		:title="dialog.title"
-		:content="dialog.content"
-		@cancelEvent="cancelEvent"
-		@okEvent="okEvent" />
-	<Relation
-		v-model:visible="relation.visible"
-		:tabs="['OKR', 'PROJECT']"
-		:isDirectAdd="false"
-		:info="relation.info"
-		@successCallback="relationConfirm" />
+	<DialogVue :dialogVisible="dialog.visible" :title="dialog.title" :content="dialog.content"
+		@cancelEvent="cancelEvent" @okEvent="okEvent" />
+	<Relation v-model:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :isDirectAdd="false" :info="relation.info"
+		:defaultChecked="relation.defaultChecked" @successCallback="relationConfirm" />
 </template>
 
 <script setup>
-import {ref, reactive, toRefs, watch} from 'vue';
-import {CREATE_TASK, CREATE_PROJECT_TASK, ADD_TASK_LINK} from '../../api';
-import {checkNullObj, formatDate, judgeStrNull} from '../../utils/utils';
-import {message} from 'ant-design-vue';
+import { ref, reactive, toRefs, watch } from 'vue';
+import { CREATE_TASK, CREATE_PROJECT_TASK, ADD_TASK_LINK } from '../../api';
+import { checkNullObj, formatDate, judgeStrNull } from '../../utils/utils';
+import { message } from 'ant-design-vue';
 import dayjs from 'dayjs';
 import locale from 'ant-design-vue/es/date-picker/locale/zh_CN';
 import AvatarVue from '../avatar/avatar.vue';
@@ -482,6 +374,11 @@ const relation = reactive({
 		relevanceType: 'TASK_MAIN',
 		relevanceCategory: 'TASK',
 	},
+	defaultChecked: {
+		okrDefaultCheck: [],
+		taskDefaultCheck: [],
+		projectDefaultCheck: []
+	}
 });
 
 const addExcVisible = ref(false); //control add executer component visible
@@ -523,6 +420,9 @@ watch(
 			taskFrom.startTime = dayjs();
 			cache.openData = JSON.stringify(taskFrom);
 			relationCallback.value = {};
+			Object.keys(relation.defaultChecked).forEach(el => {
+				relation.defaultChecked[el] = [];
+			})
 		}
 	}
 );
@@ -730,7 +630,7 @@ const handleCreateTask = async () => {
 		el.ossId = el.ossMaterialId;
 	});
 	if (props.trait == 'PROJECT') {
-		const {code, data} = await CREATE_PROJECT_TASK({
+		const { code, data } = await CREATE_PROJECT_TASK({
 			content: taskFrom.content,
 			createUser: taskFrom.createUser,
 			principalUser: taskFrom.principalUser,
@@ -748,7 +648,7 @@ const handleCreateTask = async () => {
 		resCode = code;
 		resData = data;
 	} else {
-		const {code, data} = await CREATE_TASK({
+		const { code, data } = await CREATE_TASK({
 			content: taskFrom.content,
 			createUser: taskFrom.createUser,
 			principalUser: taskFrom.principalUser,
@@ -767,11 +667,10 @@ const handleCreateTask = async () => {
 	if (resCode === 1) {
 		if (
 			props.trait === 'OKR' &&
-			relationCallback.value?.targetInfo?.length > 0
+			relationCallback.value && relationCallback.value?.targetInfo?.length > 0
 		) {
 			relationCallback.value.sourceInfo.id = resData;
-			//关联todo
-			const {code} = await ADD_TASK_LINK({
+			const { code } = await ADD_TASK_LINK({
 				...relationCallback.value,
 			});
 			if (code === 1) {
@@ -1044,9 +943,9 @@ const handleDownloadFile = (file) => {
 				dd.biz.util.downloadFile({
 					url: originalUrl,
 					name: fileName,
-					onProgress: function (msg) {},
-					onSuccess: function (result) {},
-					onFail: function () {},
+					onProgress: function (msg) { },
+					onSuccess: function (result) { },
+					onFail: function () { },
 				});
 			});
 	} else {
@@ -1069,6 +968,24 @@ const returnSnow = () => {
  */
 const relationConfirm = (data) => {
 	relationCallback.value = data;
+	data.targetInfo.map(el => {
+		Object.keys(relation.defaultChecked).map(i => {
+			if (i.includes(el.relevanceCategory.toLowerCase())) relation.defaultChecked[i].push(el.id)
+		})
+		// switch(el.relevanceCategory) {
+		// 	case 'OKR':
+		// 		relation.defaultChecked.okrDefaultCheck.push(el.id);
+		// 		break;
+		// 	case 'TASK':
+		// 		relation.defaultChecked.taskDefaultCheck.push(el.id);
+		// 		break;
+		// 	case 'PROJECT':
+		// 		relation.defaultChecked.projectDefaultCheck.push(el.id);
+		// 		break;
+		// 	default:
+		// 		break;
+		// }
+	})
 };
 
 /**
@@ -1098,9 +1015,8 @@ const renderCorText = () => {
 		});
 	}
 	if (projects + okrs > 0) {
-		return `已关联${projects > 0 ? `${projects}个项目` : ''}${
-			projects > 0 && okrs > 0 ? '、' : ''
-		}${okrs > 0 ? `${okrs}个OKR` : ''}`;
+		return `已关联${projects > 0 ? `${projects}个项目` : ''}${projects > 0 && okrs > 0 ? '、' : ''
+			}${okrs > 0 ? `${okrs}个OKR` : ''}`;
 	} else {
 		return '';
 	}
@@ -1127,7 +1043,7 @@ const {
 export default {
 	name: 'CreateTask',
 	components: {
-		VNodes: (_, {attrs}) => {
+		VNodes: (_, { attrs }) => {
 			return attrs.vnodes;
 		},
 	},
