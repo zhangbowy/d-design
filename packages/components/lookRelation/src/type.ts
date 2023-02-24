@@ -10,9 +10,10 @@ export interface InfoList {
         name: string;
         status: string;
     }
-    relevanceType: string
+    relevanceType: string;
     sort: number;
-    parentSort: number
+    parentSort: number;
+    canDelete: boolean;
 }
 
 export interface RelationInfo {

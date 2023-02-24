@@ -10,7 +10,8 @@
 			a1vatar="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/031893abb64b40d6b4e14d0aad8e7760~tplv-k3u1fbpfcp-zoom-crop-mark:3024:3024:3024:1702.awebp"></Avatar> -->
 	<!-- </div> -->
 	<!-- <CreateTask :visible="true" :title="'创建任务'" /> -->
-	<LookRelation v-model:visible="visible" :tabs="['OKR', 'PROJECT','TASK']" />
+	<LookRelation v-model:visible="visible" :tabs="['OKR', 'PROJECT', 'TASK']" />
+	<a-button type="primary">测试</a-button>
 </template>
 
 <script setup lang="ts">

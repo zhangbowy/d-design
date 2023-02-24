@@ -107,11 +107,14 @@ const props = defineProps({
 		type: Boolean,
 		default: true,
 	},
+	zIndex: {
+		type: Number,
+		default: 1000,
+	},
 });
 const curTab = ref(props.tabs[0]);
 const confirmLoading = ref(false);
 const allRelation = ref({});
-
 // check的回调
 const handelCheckedCallback: ICheckedCallback = (val) => {
 	allRelation.value[val.type] = val.checkedArr;
