@@ -8,7 +8,6 @@
 		okText="确定"
 		class="relation-wrapper"
 		@cancel="handelCancel"
-		:zIndex="zIndex"
 		:confirmLoading="confirmLoading"
 		centered>
 		<header v-if="showTab">

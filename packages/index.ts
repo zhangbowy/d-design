@@ -2,7 +2,7 @@ import { App } from 'vue'
 import components from './component'
 import util from './utils/index'
 import { toggleTheme } from "@zougt/vite-plugin-theme-preprocessor/dist/browser-utils.js";
-import './style/antdreset.less'
+// import './style/antdreset.less'
 
 const trait = sessionStorage.getItem("G_TRAIT") || 'default'
 

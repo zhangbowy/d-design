@@ -7,7 +7,6 @@
 			:show-arrow="true"
 			:offset="6"
 			:width="512"
-			:overlayStyle="{zIndex: zIndex}"
 			trigger="click">
 			<template #content>
 				<div class="period-list-wrapper">

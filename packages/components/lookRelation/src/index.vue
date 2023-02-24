@@ -6,7 +6,6 @@
 		placement="right"
 		:width="width"
 		@afterVisibleChange="afterVisibleChange"
-		:zIndex="zIndex"
 		@close="handelClose">
 		<div class="content">
 			<a-spin :spinning="loading">
@@ -39,57 +38,59 @@
 								class="cor-project"
 								v-for="result in allRelationData"
 								:key="result.category">
-								<span class="project-title"
-									>已关联的{{ RELATION_TYPE_TEXT[result.category] }}
-									<span v-if="result.category === 'task' && isOperate">
-										<a-button
-											type="link"
-											@click="handelAddTask"
-											class="add-text-color"
-											><template #icon><plus-outlined /></template>
-											<span class="add-text" style="margin: 0"
-												>新建</span
-											></a-button
-										></span
-									></span
-								>
-								<div
-									class="project-item"
-									v-for="(item, index) in result.infoList"
-									:key="item.id">
-									<template v-if="result.category === 'OKR'">
-										<ul class="kr-style" v-if="item.relevanceType === 'KR'">
-											<li>O{{ item.parentSort }}</li>
-											<li>KR{{ index + 1 }}</li>
-										</ul>
-										<span class="o-style" v-else>O{{ item.parentSort }}</span>
-									</template>
-
-									<span class="project-text">{{
-										item.relevanceName.name
-									}}</span>
-									<span
-										class="status-icon"
-										v-if="RELATION_TYPE[item.relevanceName.status]"
-										:class="item.relevanceName.status"
-										>{{ RELATION_TYPE[item.relevanceName.status] }}</span
-									>
-									<div class="item-op">
-										<a-button
-											type="link"
-											@click="handleDetail(item, result.category)"
-											>查看详情</a-button
-										>
-										<template v-if="isOperable && item.canDelete">
-											<a-divider style="margin: 0" type="vertical" />
+								<template v-if="result.infoList.length > 0">
+									<span class="project-title"
+										>已关联的{{ RELATION_TYPE_TEXT[result.category] }}
+										<span v-if="result.category === 'task' && isOperate">
 											<a-button
 												type="link"
-												@click="handleDelCor(item.relevanceId)"
-												>移除关联</a-button
-											>
+												@click="handelAddTask"
+												class="add-text-color"
+												><template #icon><plus-outlined /></template>
+												<span class="add-text" style="margin: 0"
+													>新建</span
+												></a-button
+											></span
+										></span
+									>
+									<div
+										class="project-item"
+										v-for="(item, index) in result.infoList"
+										:key="item.id">
+										<template v-if="result.category === 'OKR'">
+											<ul class="kr-style" v-if="item.relevanceType === 'KR'">
+												<li>O{{ item.parentSort }}</li>
+												<li>KR{{ index + 1 }}</li>
+											</ul>
+											<span class="o-style" v-else>O{{ item.parentSort }}</span>
 										</template>
+
+										<span class="project-text">{{
+											item.relevanceName.name
+										}}</span>
+										<span
+											class="status-icon"
+											v-if="RELATION_TYPE[item.relevanceName.status]"
+											:class="item.relevanceName.status"
+											>{{ RELATION_TYPE[item.relevanceName.status] }}</span
+										>
+										<div class="item-op">
+											<a-button
+												type="link"
+												@click="handleDetail(item, result.category)"
+												>查看详情</a-button
+											>
+											<template v-if="isOperable && item.canDelete">
+												<a-divider style="margin: 0" type="vertical" />
+												<a-button
+													type="link"
+													@click="handleDelCor(item.relevanceId)"
+													>移除关联</a-button
+												>
+											</template>
+										</div>
 									</div>
-								</div>
+								</template>
 							</div>
 						</template>
 						<a-empty v-else />
@@ -111,7 +112,6 @@
 	</a-drawer>
 	<Relation
 		v-if="show"
-		:zIndex="zIndex + 1"
 		v-model:visible="show"
 		:tabs="tabs"
 		:info="relationInfo"
