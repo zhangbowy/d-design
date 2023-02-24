@@ -1,5 +1,5 @@
 <template>
-	<div class="task-wrapper">
+	<div class="relation-task-wrapper">
 		<header>
 			<a-select
 				v-model:value="curAngle"
