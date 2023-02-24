@@ -127,9 +127,10 @@ export default defineConfig(() => {
             Components({
                 resolvers: [
                     AntDesignVueResolver(
-                        //     {
-                        //     importStyle: "less",
-                        // }
+                            {
+                                prefix: '__d_design',
+                            importStyle: "less",
+                        }
                     ),
                 ],
             }),

@@ -16,7 +16,8 @@ import {defineConfig} from 'vitepress';
 
 export default defineConfig({
 	themeConfig: {
-		nav: [
+        demoblock: lang,
+        nav: [
 			{
 				text: '指南',
 				link: '/guide',
@@ -39,8 +40,11 @@ export default defineConfig({
 			message: '',
 			copyright: 'Copyright © 2023 蒲公英前端团队',
 		},
+
+        logo:'./../assets/favicon.ico'
 	},
 	title: 'D-design',
+    favicon: './../assets/favicon.ico',
 	description: '蒲公英前端团队开发的ui组件库',
 	lastUpdated: true,
 	markdown,

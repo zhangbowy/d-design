@@ -1,6 +1,7 @@
 import DevUI from 'vue-devui';
 import 'vue-devui/style.css';
 import '@devui-design/icons/icomoon/devui-icon.css';
+import '../../../dist/style.css'
 // import "ant-design-vue/dist/antd.less";
 // import { ThemeServiceInit, infinityTheme } from 'devui-theme/index.es';
 //
@@ -10,16 +11,17 @@ import { registerComponents } from './register-components.js'
 import DefaultTheme from 'vitepress/theme'
 import { computed, defineAsyncComponent } from 'vue'
 import { inBrowser } from 'vitepress'
+// const Ddesign = defineAsyncComponent(() => import('../../../dist/pu-ui.es.js'))
+import  Ddesign from '../../../dist/pu-ui.es.js'
+// const Ddesign = import('../../../dist/pu-ui.es.js')
 
-
-const OssUpload = defineAsyncComponent(() => import('../../../dist/pu-ui.es.js').OssUpload)
 export default {
     ...DefaultTheme,
-    enhanceApp({ app }) {
+    enhanceApp({Vue, app }) {
         app.use(DevUI)
-        if (inBrowser) {
-            app.use(OssUpload)
-        }
+        app.use(Ddesign)
+        // Ddesign = import('../../../dist/pu-ui.es.js').then(m => {
+        // })
         registerComponents(app)
     }
 }

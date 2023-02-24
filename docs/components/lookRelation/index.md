@@ -4,12 +4,14 @@
 
 :::demo
 
-```js
+```vue
 <template>
 	<div class="look-relation-demo-1">
+      <button @click="onClick_show">点击展开</button>
+      <ClientOnly>
 		<LookRelation
 			:zIndex="3000"
-			v-model:visible="visible"
+			:visible="visible"
 			:tabs="['OKR', 'PROJECT', 'TASK']"
 			:info="{
 				avatar: '',
@@ -21,15 +23,32 @@
 				sourceType: 'TASK',
 				status: '',
 			}" />
+        </ClientOnly>
 	</div>
 </template>
 
-<script setup>
-import {ref} from 'vue';
-const visible = ref(false);
+<script>
+import { defineComponent, ref } from 'vue';
+export default defineComponent({
+  setup() {
+    const visible = ref(false);
+
+    const onClick_show = () => {
+      debugger
+      visible.value = true
+    }
+    
+    return {
+      onClick_show,
+      visible
+    }
+  }
+})
+
 </script>
 <style></style>
 ```
+:::
 
 ### LookRelation 参数
 
