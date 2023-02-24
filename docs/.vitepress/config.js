@@ -40,7 +40,7 @@ export default defineConfig({
 			copyright: 'Copyright © 2023 蒲公英前端团队',
 		},
 	},
-	title: 'd-design',
+	title: 'D-design',
 	description: '蒲公英前端团队开发的ui组件库',
 	lastUpdated: true,
 	markdown,
