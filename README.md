@@ -62,7 +62,7 @@ createApp(App).use(DDesign).mount('#app');
 ```js
 npm link
 ```
-#### 3、其他任意项目 把d-design link到本项目node_modules
+#### 3、其他任意项目 把D-design link到本项目node_modules
 ```js
 npm link d-design
 ```
