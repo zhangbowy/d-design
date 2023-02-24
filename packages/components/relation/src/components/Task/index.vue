@@ -1,5 +1,5 @@
 <template>
-	<div class="task-wrapper">
+	<div class="relation-task-wrapper">
 		<header>
 			<a-select
 				v-model:value="curAngle"
@@ -25,7 +25,10 @@
 					</ul>
 				</template>
 				<!-- <profile-outlined class="sort" /> -->
-				<i class="sort iconfont icon-paixu"></i>
+				<!-- <i class="sort iconfont icon-paixu"></i> -->
+				<a-button class="sort">
+					<template #icon><i class="iconfont icon-paixu"></i></template>
+				</a-button>
 			</a-popover>
 			<a-input
 				v-model:value="taskName"

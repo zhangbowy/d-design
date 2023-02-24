@@ -7,7 +7,7 @@
 		width="720px"
 		centered
 		:footer="null"
-        :zIndex="zIndex"
+		:zIndex="zIndex"
 		@cancel="closeDialog">
 		<div class="choose-user-wrapper">
 			<div class="choose-user-left">
@@ -38,9 +38,17 @@
 								v-for="item in searchResultList"
 								:key="item"
 								@click="searchAddOne(item)">
-                                <img class="choose-avatar-img" v-if="item.avatar" :src="item.avatar" alt="" />
-			                    <span class="choose-avatar-text" v-else>{{ item.name?.slice(0, 1) }}</span>
-								<span class="name" >{{ item.name }}<span v-if="item.roster">({{ item.roster }})</span></span
+								<img
+									class="choose-avatar-img"
+									v-if="item.avatar"
+									:src="item.avatar"
+									alt="" />
+								<span class="choose-avatar-text" v-else>{{
+									item.name?.slice(0, 1)
+								}}</span>
+								<span class="name"
+									>{{ item.name
+									}}<span v-if="item.roster">({{ item.roster }})</span></span
 								>
 							</li>
 						</ul>
@@ -71,7 +79,9 @@
 								<span
 									v-if="!isSelectAll"
 									class="iconfont qzz_icon_checkbox-weixuan"></span>
-								<span v-if="isSelectAll" class="iconfont qzz_icon_checkbox-checked"></span>
+								<span
+									v-if="isSelectAll"
+									class="iconfont qzz_icon_checkbox-checked"></span>
 								<span class="text">全选</span>
 							</div>
 						</template>
@@ -115,8 +125,14 @@
 								<span
 									v-if="o.isChecked"
 									class="checkbox iconfont qzz_icon_checkbox-checked"></span>
-                                <img class="choose-avatar-img" v-if="o.avatar" :src="o.avatar" alt="" />
-			                    <span class="choose-avatar-text" v-else>{{ o.name?.slice(0, 1) }}</span>
+								<img
+									class="choose-avatar-img"
+									v-if="o.avatar"
+									:src="o.avatar"
+									alt="" />
+								<span class="choose-avatar-text" v-else>{{
+									o.name?.slice(0, 1)
+								}}</span>
 								<span class="name"
 									>{{ o.name
 									}}<span v-if="o.roster">({{ o.roster }})</span></span
@@ -153,8 +169,14 @@
 								v-for="item in searchResultList"
 								:key="item"
 								@click="addOneUser(item)">
-								<img class="choose-avatar-img" v-if="item.avatar" :src="item.avatar" alt="" />
-			                    <span class="choose-avatar-text" v-else>{{ item.name?.slice(0, 1) }}</span>
+								<img
+									class="choose-avatar-img"
+									v-if="item.avatar"
+									:src="item.avatar"
+									alt="" />
+								<span class="choose-avatar-text" v-else>{{
+									item.name?.slice(0, 1)
+								}}</span>
 								<span class="name"
 									>{{ item.name
 									}}<span v-if="item.roster">({{ item.roster }})</span></span
@@ -223,10 +245,10 @@ export default {
 			type: Boolean,
 			required: true,
 		},
-        zIndex: {
-            type: Number,
-            default: 1000
-        },
+		zIndex: {
+			type: Number,
+			default: 1000,
+		},
 		filterSelf: {
 			type: Boolean,
 			default: false,
@@ -317,12 +339,12 @@ export default {
 		 * }
 		 * */
 		getDeptInfo(deptId) {
-            const params = {
+			const params = {
 				tpf: 1,
 				appId: G_APPID,
 				corpId: G_CORPID,
 				deptId: deptId,
-			}
+			};
 			GET_DEPT_INFO(params)
 				.then((res) => {
 					if (res.code == 1) {
