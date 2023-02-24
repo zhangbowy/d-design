@@ -28,16 +28,19 @@
 					@handelCheckedCallback="handelCheckedCallback"
 					v-if="tabs.includes('OKR')"
 					:info="info"
+					:defaultChecked="defaultChecked.okrDefaultCheck"
 					v-show="curTab == 'OKR'" />
 				<Project
 					v-if="tabs.includes('PROJECT')"
 					:info="info"
 					v-show="curTab == 'PROJECT'"
+					:defaultChecked="defaultChecked.projectDefaultCheck"
 					@handelCheckedCallback="handelCheckedCallback" />
 				<Task
 					v-if="tabs.includes('TASK')"
 					:info="info"
 					v-show="curTab == 'TASK'"
+					:defaultChecked="defaultChecked.taskDefaultCheck"
 					@handelCheckedCallback="handelCheckedCallback" />
 			</main>
 		</a-config-provider>
@@ -107,11 +110,21 @@ const props = defineProps({
 		type: Boolean,
 		default: true,
 	},
+	// 默认勾选
+	defaultChecked: {
+		type: Object,
+		default: {
+			okrDefaultCheck: [],
+			taskDefaultCheck: [],
+			projectDefaultCheck: [],
+		},
+	},
 	zIndex: {
 		type: Number,
 		default: 1000,
 	},
 });
+console.log('props', props);
 const curTab = ref(props.tabs[0]);
 const confirmLoading = ref(false);
 const allRelation = ref({});

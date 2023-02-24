@@ -27,10 +27,12 @@
 							<div class="checkbox-group">
 								<!-- <a-checkbox :value="item.id" :disabled="item?.disabled"> -->
 								<ul class="o-wrapper">
-									<li class="O">O{{ item.importance }}</li>
-									<li>{{ item.content }}</li>
-									<li class="o-create" v-if="item.assist">
-										创建人：{{ item.creator.name }}
+									<li class="O">O{{ item.indexId }}</li>
+									<li>
+										{{ item.content }}
+										<span class="o-create" v-if="item.assist">
+											创建人：{{ item.creator.name }}
+										</span>
 									</li>
 								</ul>
 								<!-- </a-checkbox> -->
@@ -77,15 +79,13 @@
 <script setup lang='ts'>
 import PeriodList from '@/components/periodList/src/index.vue';
 import {GET_OKRLIST_BY_USERID, GET_CORRELATION_INFO} from '@/api/api';
-import {computed, onMounted, ref, toRaw} from 'vue';
-import {ProfileOutlined} from '@ant-design/icons-vue';
+import {onMounted, ref, toRaw, watch} from 'vue';
 import {CheckboxChangeEvent} from 'ant-design-vue/es/checkbox/interface';
 
 const okrData = ref([]); //okr数据
 const checkList = ref([]); //选中的数据
 const loading = ref(true);
 const relatedMeCheckbox = ref(false); // 与我相关checkbox
-const headerRef = ref();
 const props = defineProps({
 	info: {
 		type: Object,
@@ -94,6 +94,10 @@ const props = defineProps({
 			relevanceType: '',
 			relevanceCategory: '',
 		},
+	},
+	defaultChecked: {
+		type: Array,
+		default: [],
 	},
 });
 const emit = defineEmits(['handelRelationCallback', 'handelCheckedCallback']);

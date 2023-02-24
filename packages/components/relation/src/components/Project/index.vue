@@ -41,7 +41,16 @@
 
 <script setup lang='ts'>
 import {debounce} from '@/utils/utils';
-import {computed, onMounted, reactive, ref, toRaw, toRefs, watch} from 'vue';
+import {
+	computed,
+	onMounted,
+	reactive,
+	ref,
+	toRaw,
+	toRefs,
+	watch,
+	watchEffect,
+} from 'vue';
 import {PROJECT_STATUS} from '../../enum';
 import {GET_PROJECT} from '@/api/api';
 import {ITableColumns, Key} from '../../type';
@@ -96,12 +105,16 @@ const props = defineProps({
 			id: 0,
 		},
 	},
+	defaultChecked: {
+		type: Array,
+		default: [],
+	},
 });
 const emit = defineEmits(['handelCheckedCallback']);
 const curStatus = ref('');
 const projectName = ref('');
 const tableData = ref<ITableColumns[]>([]);
-const state = reactive({
+const state = reactive<{loading: boolean; selectedRowKeys: Key[]}>({
 	loading: true,
 	selectedRowKeys: [],
 });
@@ -135,9 +148,10 @@ const getProjectList = async () => {
 	const res = await GET_PROJECT(params);
 	if (res.code == 1) {
 		tableData.value = res.data;
-		state.selectedRowKeys = res.data
+		const disableId = res.data
 			.filter((item) => !item.link)
 			.map((list) => list.projectId);
+		state.selectedRowKeys = [...disableId, ...(props.defaultChecked as Key[])];
 		state.loading = false;
 	}
 };

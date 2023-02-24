@@ -115,6 +115,7 @@
 		v-model:visible="show"
 		:tabs="tabs"
 		:info="relationInfo"
+		:default-checked="defaultChecked"
 		@refreshList="initRequest" />
 	<CreateTask
 		v-if="createTaskVisible"
@@ -158,11 +159,11 @@ const props = defineProps({
 		default: {
 			avatar: '',
 			name: '暂无',
-			type: 'TASK_MAIN', // 当前类型
+			type: 'KR', // 当前类型
 			indexId: 1,
 			content: 'mock',
-			id: 6071,
-			sourceType: 'TASK', // 目标来源   OKR  TASK  PROJECT
+			id: 6111,
+			sourceType: 'OKR', // 目标来源   OKR  TASK  PROJECT
 			status: '', // 当前O的状态
 		},
 	},
@@ -194,6 +195,15 @@ const props = defineProps({
 	isOperate: {
 		type: Boolean,
 		default: true,
+	},
+	// 关联弹窗默认选中
+	defaultChecked: {
+		type: Object,
+		default: {
+			okrDefaultCheck: [],
+			taskDefaultCheck: [],
+			projectDefaultCheck: [],
+		},
 	},
 	width: {
 		type: Number,

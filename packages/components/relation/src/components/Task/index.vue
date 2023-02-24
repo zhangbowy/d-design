@@ -75,20 +75,11 @@
 </template>
 
 <script setup lang='ts'>
-import {
-	ref,
-	watch,
-	onMounted,
-	computed,
-	reactive,
-	toRaw,
-	toRefs,
-	watchEffect,
-} from 'vue';
+import {ref, watch, computed, reactive, toRaw, toRefs, onMounted} from 'vue';
 import {GET_TASK_LIST} from '@/api/api';
 import {taskStatusEnum} from '../../enum';
 import {debounce} from '@/utils/utils';
-import {SearchOutlined, ProfileOutlined} from '@ant-design/icons-vue';
+import {SearchOutlined} from '@ant-design/icons-vue';
 import {ITaskTableColumns, Key} from '../../type';
 
 const props = defineProps({
@@ -97,6 +88,10 @@ const props = defineProps({
 		default: {
 			id: 0,
 		},
+	},
+	defaultChecked: {
+		type: Array,
+		default: [],
 	},
 });
 const emit = defineEmits(['handelCheckedCallback', 'handelRelationCallback']);
@@ -221,9 +216,10 @@ const getTaskList = async () => {
 	const res = await GET_TASK_LIST(params);
 	if (res.code == 1) {
 		tableData.value = res.data.resultList;
-		state.selectedRowKeys = res.data.resultList
+		const disableId = res.data.resultList
 			.filter((item) => !item.link)
 			.map((list) => list.id);
+		state.selectedRowKeys = [...disableId, ...(props.defaultChecked as Key[])];
 		state.loading = false;
 		pagination.totalNum = res.data.totalItem;
 	}
@@ -233,6 +229,7 @@ const selectPopover = (val) => {
 	filterContent.curSort = val;
 };
 const searchName = debounce(getTaskList, 500);
+
 // onMounted(() => {
 // 	getTaskList();
 // 	//   getTaskCount();
@@ -243,6 +240,7 @@ watch(
 		() => filterContent.curAngle,
 		() => filterContent.curSort,
 		() => pagination.current,
+		() => pagination.pageSize,
 	],
 	() => {
 		getTaskList();

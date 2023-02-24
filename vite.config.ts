@@ -51,9 +51,6 @@ const multipleScopeVars = [
     },
 ];
 
-// console.log(getLess({
-//     implementation: (lessOptions) => multipleScopeVars
-// }).render())
 export default defineConfig(() => {
     return {
         server: {
