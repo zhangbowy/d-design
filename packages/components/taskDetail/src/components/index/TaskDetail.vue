@@ -260,8 +260,8 @@
 		<!-- add correlation -->
 		<div v-if="trait !== 'QZP'" class="add-correlation">
 			<span class="public-title">关联项</span>
-			<div v-if="!renderCorText() && (trait === 'OKR' || trait === 'INTE')" class="add-cor-btn"
-				@click="handleAddRelation()">
+			<div v-if="!renderCorText() && judgeCorBtnShow()"
+				class="add-cor-btn" @click="handleAddRelation()">
 				<iconpark-icon name="guanlian"></iconpark-icon>
 				<span>添加关联</span>
 			</div>
@@ -309,7 +309,8 @@
 	<Relation v-model:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :info="relation.info"
 		@successCallback="relationConfirm" />
 	<LookRelation v-model:visible="lookRelation.visible" :tabs="['OKR', 'PROJECT']" :info="lookRelation.info"
-		:isSureRelation="trait !== 'PROJECT'" @lookDetailCallback="lookDetailCallback" @refreshList="refreshList" />
+		:isSureRelation="trait !== 'PROJECT'" :isOperate="taskDetail?.role != 'INDEPENDENT'"
+		@lookDetailCallback="lookDetailCallback" @refreshList="refreshList" />
 </template>
 
 <script setup>
@@ -1290,6 +1291,17 @@ const refreshList = () => {
 	getRelevanceCnt();
 };
 
+const judgeCorBtnShow = () => {
+	let bol = false;
+	if(props.trait === 'OKR' || props.trait === 'INTE') {
+		if(taskDetail?.role != 'EXECUTE' && taskDetail?.role != 'INDEPENDENT') {
+			bol = true;
+		}
+	} else if (props.trait === 'WEEKLY') {
+		bol = true;
+	}
+	return bol;
+};
 const {
 	content,
 	createUser,

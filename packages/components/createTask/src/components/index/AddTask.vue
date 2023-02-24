@@ -611,6 +611,8 @@ const handleDeleteSub = (index) => {
  * handle create task event
  */
 const handleCreateTask = async () => {
+	console.log(props.trait);
+	// return
 	let resCode = 0,
 		resData = null;
 	loading.value = true;
@@ -629,7 +631,7 @@ const handleCreateTask = async () => {
 	taskFrom.accessory.ossAccessoryList.forEach((el) => {
 		el.ossId = el.ossMaterialId;
 	});
-	if (props.trait == 'PROJECT') {
+	if (props.trait === 'PROJECT') {
 		const { code, data } = await CREATE_PROJECT_TASK({
 			content: taskFrom.content,
 			createUser: taskFrom.createUser,
