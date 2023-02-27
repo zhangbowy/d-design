@@ -979,20 +979,8 @@ const relationConfirm = (data) => {
 		Object.keys(relation.defaultChecked).map(i => {
 			if (i.includes(el.relevanceCategory.toLowerCase())) relation.defaultChecked[i].push(el.id)
 		})
-		// switch(el.relevanceCategory) {
-		// 	case 'OKR':
-		// 		relation.defaultChecked.okrDefaultCheck.push(el.id);
-		// 		break;
-		// 	case 'TASK':
-		// 		relation.defaultChecked.taskDefaultCheck.push(el.id);
-		// 		break;
-		// 	case 'PROJECT':
-		// 		relation.defaultChecked.projectDefaultCheck.push(el.id);
-		// 		break;
-		// 	default:
-		// 		break;
-		// }
 	})
+	console.log(relation.defaultChecked);
 };
 
 /**
