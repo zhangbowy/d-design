@@ -75,7 +75,16 @@
 </template>
 
 <script setup lang='ts'>
-import {ref, watch, computed, reactive, toRaw, toRefs, onMounted} from 'vue';
+import {
+	ref,
+	watch,
+	computed,
+	reactive,
+	toRaw,
+	toRefs,
+	onMounted,
+	watchEffect,
+} from 'vue';
 import {GET_TASK_LIST} from '@/api/api';
 import {taskStatusEnum} from '../../enum';
 import {debounce} from '@/utils/utils';
@@ -166,6 +175,7 @@ const columns = [
 	},
 ];
 const tableData = ref([]);
+const disableCheck = ref([]);
 const filterContent = reactive({
 	curAngle: 'ALL',
 	taskName: '',
@@ -219,7 +229,7 @@ const getTaskList = async () => {
 		const disableId = res.data.resultList
 			.filter((item) => !item.link)
 			.map((list) => list.id);
-		state.selectedRowKeys = [...disableId, ...(props.defaultChecked as Key[])];
+		disableCheck.value = disableId;
 		state.loading = false;
 		pagination.totalNum = res.data.totalItem;
 	}
@@ -229,7 +239,14 @@ const selectPopover = (val) => {
 	filterContent.curSort = val;
 };
 const searchName = debounce(getTaskList, 500);
-
+watchEffect(() => {
+	if (props.defaultChecked) {
+		state.selectedRowKeys = [
+			...disableCheck.value,
+			...(props.defaultChecked as Key[]),
+		];
+	}
+});
 // onMounted(() => {
 // 	getTaskList();
 // 	//   getTaskCount();

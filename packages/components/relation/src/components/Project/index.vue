@@ -114,6 +114,7 @@ const emit = defineEmits(['handelCheckedCallback']);
 const curStatus = ref('');
 const projectName = ref('');
 const tableData = ref<ITableColumns[]>([]);
+const disableCheck = ref([]);
 const state = reactive<{loading: boolean; selectedRowKeys: Key[]}>({
 	loading: true,
 	selectedRowKeys: [],
@@ -151,13 +152,21 @@ const getProjectList = async () => {
 		const disableId = res.data
 			.filter((item) => !item.link)
 			.map((list) => list.projectId);
-		state.selectedRowKeys = [...disableId, ...(props.defaultChecked as Key[])];
+		disableCheck.value = disableId;
 		state.loading = false;
 	}
 };
 const searchName = debounce(getProjectList, 500);
 watch(projectName, searchName);
 watch([curStatus], getProjectList);
+watchEffect(() => {
+	if (props.defaultChecked) {
+		state.selectedRowKeys = [
+			...disableCheck.value,
+			...(props.defaultChecked as Key[]),
+		];
+	}
+});
 onMounted(() => {
 	getProjectList();
 });
