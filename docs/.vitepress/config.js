@@ -57,19 +57,29 @@ function sidebarComponent() {
 			items: [{text: 'Getting Started', link: '/guide'}],
 		},
 		{
-			text: '组件列表',
+			text: '基座类',
 			items: [
 				{text: 'avatar', link: '/components/avatar/index'},
-				{text: 'CreateTask', link: '/components/CreateTask/index'},
-				{text: 'TaskDetail', link: '/components/TaskDetail/index'},
-				{text: 'TaskTrace', link: '/components/TaskTrace/index'},
-				{text: 'RenewTask', link: '/components/RenewTask/index'},
-				{text: 'OssUpload', link: '/components/OssUpload/index'},
-				{text: 'DDUpload', link: '/components/DDUpload/index'},
-				{text: '关联', link: '/components/relation/index'},
-				{text: '查看关联', link: '/components/lookRelation/index'},
-				{text: '周期', link: '/components/periodList/index'},
 			],
 		},
+        {
+            text: '通用功能',
+            items: [
+                {text: 'OssUpload', link: '/components/OssUpload/index'},
+                {text: 'DDUpload', link: '/components/DDUpload/index'},
+                {text: '周期', link: '/components/periodList/index'},
+            ],
+        },
+        {
+            text: '一体化（业务组件）',
+            items: [
+                {text: 'CreateTask', link: '/components/CreateTask/index'},
+                {text: 'TaskDetail', link: '/components/TaskDetail/index'},
+                {text: 'TaskTrace', link: '/components/TaskTrace/index'},
+                {text: 'RenewTask', link: '/components/RenewTask/index'},
+                {text: '关联', link: '/components/relation/index'},
+                {text: '查看关联', link: '/components/lookRelation/index'},
+            ],
+        },
 	];
 }
