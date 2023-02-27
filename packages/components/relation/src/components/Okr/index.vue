@@ -79,13 +79,14 @@
 <script setup lang='ts'>
 import PeriodList from '@/components/periodList/src/index.vue';
 import {GET_OKRLIST_BY_USERID, GET_CORRELATION_INFO} from '@/api/api';
-import {onMounted, ref, toRaw, watch} from 'vue';
+import {computed, onMounted, ref, toRaw, watch, watchEffect} from 'vue';
 import {CheckboxChangeEvent} from 'ant-design-vue/es/checkbox/interface';
 
 const okrData = ref([]); //okr数据
 const checkList = ref([]); //选中的数据
 const loading = ref(true);
 const relatedMeCheckbox = ref(false); // 与我相关checkbox
+const disableCheckbox = ref([]); // 禁止选中的
 const props = defineProps({
 	info: {
 		type: Object,
@@ -135,7 +136,7 @@ const getOkrList = async (periodId?: string) => {
 			const relationIdArr = okrRelationLen[0].infoList.map((list) =>
 				Number(list.id)
 			);
-			checkList.value = relationIdArr;
+			disableCheckbox.value = relationIdArr;
 			okrData.value.forEach((item) => {
 				// if (relationIdArr.includes(item.id)) {
 				// 	item.disabled = true;
@@ -171,6 +172,11 @@ const handelCheckboxChange = (e: number[]) => {
 const handelRelatedChange = (e: CheckboxChangeEvent) => {
 	getOkrList();
 };
+watchEffect(() => {
+	if (props.defaultChecked) {
+		checkList.value = [...props.defaultChecked, ...disableCheckbox.value];
+	}
+});
 onMounted(() => {
 	getOkrList();
 });

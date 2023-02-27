@@ -124,7 +124,7 @@ const props = defineProps({
 		default: 1000,
 	},
 });
-console.log('props', props);
+
 const curTab = ref(props.tabs[0]);
 const confirmLoading = ref(false);
 const allRelation = ref({});
