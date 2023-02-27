@@ -101,7 +101,7 @@
 					<OssUploadVue
 						v-if="status == 'NOT_BEGIN'"
 						class="upload-icon"
-						:taskId="returnSnow()"
+						:bizId="returnSnow()"
 						@startUpload="startUpload"
 						@endUpload="endUpload">
 						<iconpark-icon class="icon" name="fujian"></iconpark-icon>
@@ -413,7 +413,13 @@
 			</div>
 		</div>
 		<!-- add correlation -->
-		<div v-if="trait !== 'QZP'" class="add-correlation">
+		<div
+			v-if="
+				trait !== 'QZP' &&
+				(taskDetail.type == 'MAIN_TASK' ||
+					(taskDetail.type == 'SUB_TASK' && renderCorText()))
+			"
+			class="add-correlation">
 			<span class="public-title">关联项</span>
 			<div
 				v-if="!renderCorText() && judgeCorBtnShow()"
@@ -512,7 +518,7 @@
 		v-model:visible="relation.visible"
 		:tabs="['OKR', 'PROJECT']"
 		:info="relation.info"
-		@successCallback="relationConfirm" />
+		@refreshList="relationConfirm" />
 	<LookRelation
 		v-model:visible="lookRelation.visible"
 		:tabs="['OKR', 'PROJECT']"
@@ -1342,7 +1348,7 @@ const deleteFile = (arr, id, type) => {
 		if (el.fileId === id && type === 'dd') {
 			arr.splice(index, 1);
 		}
-		if (el.id === id && type === 'oss') {
+		if (el.ossMaterialId === id && type === 'oss') {
 			arr.splice(index, 1);
 		}
 	});
@@ -1453,8 +1459,7 @@ const getRelevanceCnt = async () => {
  * handle add link callback
  * @param {Object} data
  */
-const relationConfirm = (data) => {
-	relationCallback.value = data;
+const relationConfirm = () => {
 	getRelevanceCnt();
 };
 

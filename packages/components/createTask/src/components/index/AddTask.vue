@@ -1025,7 +1025,7 @@ const deleteFile = (arr, id, type) => {
 		if (el.fileId === id && type === 'dd') {
 			arr.splice(index, 1);
 		}
-		if (el.id === id && type === 'oss') {
+		if (el.ossMaterialId === id && type === 'oss') {
 			arr.splice(index, 1);
 		}
 	});
