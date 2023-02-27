@@ -390,6 +390,7 @@
 	<ExcListVue
 		:visible="excList.visible"
 		:groupId="excList.groupId"
+		:trait="trait"
 		:taskData="taskData"
 		@closeExcList="closeExcList" />
 	<!-- key event component -->
