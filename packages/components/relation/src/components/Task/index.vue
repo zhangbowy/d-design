@@ -90,6 +90,7 @@ import {taskStatusEnum} from '../../enum';
 import {debounce} from '@/utils/utils';
 import {SearchOutlined} from '@ant-design/icons-vue';
 import {ITaskTableColumns, Key} from '../../type';
+import mitt from '@/utils/eventBus';
 
 const props = defineProps({
 	info: {
@@ -230,6 +231,7 @@ const getTaskList = async () => {
 			.filter((item) => !item.link)
 			.map((list) => list.id);
 		disableCheck.value = disableId;
+		updateCheck();
 		state.loading = false;
 		pagination.totalNum = res.data.totalItem;
 	}
@@ -239,18 +241,16 @@ const selectPopover = (val) => {
 	filterContent.curSort = val;
 };
 const searchName = debounce(getTaskList, 500);
-watchEffect(() => {
-	if (props.info.id) {
-		state.selectedRowKeys = [
-			...disableCheck.value,
-			...(props.defaultChecked as Key[]),
-		];
-	}
+
+const updateCheck = (defaultChecked = props.defaultChecked) => {
+	state.selectedRowKeys = [...disableCheck.value, ...defaultChecked];
+};
+
+onMounted(() => {
+	// 	getTaskList();
+	// 	//   getTaskCount();
+	mitt.on('updateTaskCheck', updateCheck);
 });
-// onMounted(() => {
-// 	getTaskList();
-// 	//   getTaskCount();
-// });
 
 watch(
 	[

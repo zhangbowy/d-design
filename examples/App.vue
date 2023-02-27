@@ -25,7 +25,6 @@
 		v-model:visible="visible"
 		:isDirectAdd="false"
 		:info="info"
-		curPeriodId="20230304"
 		:tabs="['OKR', 'PROJECT', 'TASK']" />
 	<a-button type="primary" @click="visible = !visible">测试</a-button>
 </template>

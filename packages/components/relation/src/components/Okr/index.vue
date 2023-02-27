@@ -82,6 +82,7 @@ import PeriodList from '@/components/periodList/src/index.vue';
 import {GET_OKRLIST_BY_USERID, GET_CORRELATION_INFO} from '@/api/api';
 import {computed, onMounted, ref, toRaw, watch, watchEffect} from 'vue';
 import {CheckboxChangeEvent} from 'ant-design-vue/es/checkbox/interface';
+import mitt from '@/utils/eventBus';
 
 const okrData = ref([]); //okr数据
 const checkList = ref([]); //选中的数据
@@ -117,7 +118,6 @@ const queryOKRByUserId = (info: {curPeriodId: string}) => {
 };
 // 获取列表
 const getOkrList = async (periodId?: string) => {
-	console.log('periodId', periodId);
 	loading.value = true;
 	const params = {
 		periodId: periodId || props.curPeriodId,
@@ -147,6 +147,7 @@ const getOkrList = async (periodId?: string) => {
 				Number(list.id)
 			);
 			disableCheckbox.value = relationIdArr;
+
 			okrData.value.forEach((item) => {
 				// if (relationIdArr.includes(item.id)) {
 				// 	item.disabled = true;
@@ -157,6 +158,7 @@ const getOkrList = async (periodId?: string) => {
 			});
 		}
 	}
+	updateCheck();
 };
 // checkChange
 const handelCheckboxChange = (e: number[]) => {
@@ -182,13 +184,14 @@ const handelCheckboxChange = (e: number[]) => {
 const handelRelatedChange = (e: CheckboxChangeEvent) => {
 	getOkrList();
 };
-watchEffect(() => {
-	if (props.info.id) {
-		checkList.value = [...props.defaultChecked, ...disableCheckbox.value];
-	}
-});
+
+const updateCheck = (defaultChecked = props.defaultChecked) => {
+	checkList.value = [...disableCheckbox.value, ...defaultChecked];
+};
+
 onMounted(() => {
 	getOkrList();
+	mitt.on('updateOkrCheck', updateCheck);
 });
 </script>
 
