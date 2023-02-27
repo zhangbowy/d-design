@@ -12,7 +12,7 @@
 						class="operation-icon"></iconpark-icon>
 				</a-popover> -->
                 <a-popover
-                    v-if="taskDetail.status === 'NOT_BEGIN' || (isShowDelete && (role === 'CREATE' || role === 'FOR_CREATE'))"
+                    v-if="taskDetail?.status === 'NOT_BEGIN' || (isShowDelete && (role === 'CREATE' || role === 'FOR_CREATE'))"
                     :getPopupContainer="(triggerNode) => triggerNode.parentNode"
                     trigger="click"
                 >
@@ -20,7 +20,7 @@
                         <ul class="task-action">
                             <li>
                             <span
-                                v-if="taskDetail.status === 'NOT_BEGIN'"
+                                v-if="taskDetail?.status === 'NOT_BEGIN'"
                                 class="termination-task"
                                 @click="handleReloadTask(true)"
                                 >终止任务</span
@@ -35,7 +35,7 @@
                         </ul>
                     </template>
                     <iconpark-icon
-                        v-if="taskDetail.status === 'NOT_BEGIN' || isShowDelete"
+                        v-if="taskDetail?.status === 'NOT_BEGIN' || isShowDelete"
                         name="gengduo"
                         class="operation-icon"
                     ></iconpark-icon>
@@ -47,7 +47,7 @@
 			<a-textarea v-model:value="content" class="detail-textarea" placeholder="请填写任务内容"
 				:auto-size="{ minRows: 1 }" :maxlength="150" :autoFocus="true"
 				:disabled="role == 'EXECUTE' || status != 'NOT_BEGIN'" />
-			<a-spin v-if="taskDetail.type === 'MAIN_TASK'" :spinning="spinning">
+			<a-spin v-if="taskDetail?.type === 'MAIN_TASK'" :spinning="spinning">
 				<div class="upload-box">
 					<div class="file-box">
 						<div class="file-list" v-for="item in accessory.ossAccessory" :key="item.ossMaterialId"
@@ -74,8 +74,8 @@
 			</a-spin>
 		</div>
 		<!-- main task text -->
-		<div class="main-task-text" v-if="taskDetail.mainTaskContent">
-			<span class="main-task-content" @click="handleTaskTrace">{{ taskDetail.mainTaskContent }}</span>
+		<div class="main-task-text" v-if="taskDetail?.mainTaskContent">
+			<span class="main-task-content" @click="handleTaskTrace">{{ taskDetail?.mainTaskContent }}</span>
 			<div v-if="accessory.ossAccessory.length > 0" class="file-btn" @click="handleCheckFiles">
 				<iconpark-icon name="uploadIcon"></iconpark-icon>
 				<span>附件{{ accessory.ossAccessory.length }}个</span>
@@ -1339,7 +1339,7 @@ const refreshList = () => {
 const judgeCorBtnShow = () => {
 	let bol = false;
 	if(props.trait === 'OKR' || props.trait === 'INTE') {
-		if(taskDetail?.role != 'EXECUTE' && taskDetail?.role != 'INDEPENDENT') {
+		if(props.taskDetail?.role != 'EXECUTE' && props.taskDetail?.role != 'INDEPENDENT') {
 			bol = true;
 		}
 	} else if (props.trait === 'WEEKLY') {
@@ -1347,7 +1347,6 @@ const judgeCorBtnShow = () => {
 	}
 	return bol;
 };
-
 
 /****
  * 删除任务
