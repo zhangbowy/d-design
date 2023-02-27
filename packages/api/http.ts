@@ -21,7 +21,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
     (config: any) => {
         // 请求头 token配置
-        const token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ7XCJhZG1pblwiOjEsXCJhcHBJZFwiOlwiMV8xMDgzNzlcIixcImJpelVzZXJJZFwiOlwiMDE0NDMzNTI1NzMwNjc2MTU0XCIsXCJjb3JwSWRcIjpcImRpbmcyODExYmY4OGI1ZDI5NWU3YmM5NjFhNmNiNzgzNDU1YlwiLFwidGhpcmRQbGF0Rm9ybVwiOjF9IiwiZXhwIjoxNjc4NDI4Mjk1fQ.8yEyRObbRZGGHlsI-_91N71h1JZxGnz0qSxX2iLNGL0';
+        const token = localStorage.getItem("G_TOKEN");
         if (token) {
             config.headers = {
                 ...config.headers,
