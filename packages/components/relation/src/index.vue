@@ -28,6 +28,7 @@
 					@handelCheckedCallback="handelCheckedCallback"
 					v-if="tabs.includes('OKR')"
 					:info="info"
+					:curPeriodId="curPeriodId"
 					:defaultChecked="defaultChecked.okrDefaultCheck"
 					v-show="curTab == 'OKR'" />
 				<Project
@@ -48,7 +49,7 @@
 </template>
 
 <script setup lang='ts'>
-import {ref} from 'vue';
+import {ref, watch} from 'vue';
 import {TABS_ENUM} from './enum';
 import {ADD_RELATION, ADD_OKR_RELATION} from '@/api/api';
 import Project from './components/Project/index.vue';
@@ -58,6 +59,7 @@ import {relevanceType, reverseTabEnum, TABS_ENUM_ICON} from './enum';
 import {message} from 'ant-design-vue';
 import zhCN from 'ant-design-vue/es/locale/zh_CN';
 import {ICheckedCallback, OperationType, RelevanceType} from './type';
+import mitt from '@/utils/eventBus';
 defineOptions({
 	name: 'Relation',
 });
@@ -119,12 +121,17 @@ const props = defineProps({
 			projectDefaultCheck: [],
 		},
 	},
+	// 周期id
+	curPeriodId: {
+		type: String,
+		default: '',
+	},
 	zIndex: {
 		type: Number,
 		default: 1000,
 	},
 });
-console.log('props', props);
+
 const curTab = ref(props.tabs[0]);
 const confirmLoading = ref(false);
 const allRelation = ref({});
@@ -174,6 +181,19 @@ const handelCancel = () => {
 	emit('close');
 	allRelation.value = {};
 };
+watch(
+	() => props.visible,
+	() => {
+		if (props.visible) {
+			props.tabs.includes('OKR') &&
+				mitt.emit('updateOkrCheck', props.defaultChecked.okrDefaultCheck);
+			props.tabs.includes('PROJECT') &&
+				mitt.emit('updateProjectCheck', props.defaultChecked.taskDefaultCheck);
+			props.tabs.includes('TASK') &&
+				mitt.emit('updateTaskCheck', props.defaultChecked.projectDefaultCheck);
+		}
+	}
+);
 </script>
 
 <style scoped lang='less'>

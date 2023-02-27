@@ -22,6 +22,10 @@ export const handleRemindDD = (
     let appUrl = `dingtalk://dingtalkclient/action/openapp?corpid=${corpId}&container_type=work_platform&app_id=${ddAppId}&redirect_type=emit_params&params=&redirect_url=${encodeURIComponent(
         `https://qzz-static.forwe.store/public-assets/coolapp.html?corpId=${corpId}&appId=${appId}&clientId=${clientId}&taskId=${taskId}&app=${trait}&mode=${import.meta.env.MODE}`
     )}`;
+    console.log(appUrl,user,
+        content,
+        taskId,
+        trait,);
 
     if (user instanceof Array) {
         user.map((el) => {

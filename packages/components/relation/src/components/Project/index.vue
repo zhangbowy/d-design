@@ -55,6 +55,7 @@ import {PROJECT_STATUS} from '../../enum';
 import {GET_PROJECT} from '@/api/api';
 import {ITableColumns, Key} from '../../type';
 import {SearchOutlined} from '@ant-design/icons-vue';
+import mitt from '@/utils/eventBus';
 
 const columns = [
 	{
@@ -114,6 +115,7 @@ const emit = defineEmits(['handelCheckedCallback']);
 const curStatus = ref('');
 const projectName = ref('');
 const tableData = ref<ITableColumns[]>([]);
+const disableCheck = ref([]);
 const state = reactive<{loading: boolean; selectedRowKeys: Key[]}>({
 	loading: true,
 	selectedRowKeys: [],
@@ -151,15 +153,21 @@ const getProjectList = async () => {
 		const disableId = res.data
 			.filter((item) => !item.link)
 			.map((list) => list.projectId);
-		state.selectedRowKeys = [...disableId, ...(props.defaultChecked as Key[])];
-		state.loading = false;
+		disableCheck.value = disableId;
+		updateCheck();
 	}
 };
 const searchName = debounce(getProjectList, 500);
 watch(projectName, searchName);
 watch([curStatus], getProjectList);
+
+const updateCheck = (defaultChecked = props.defaultChecked) => {
+	state.selectedRowKeys = [...disableCheck.value, ...defaultChecked];
+};
+
 onMounted(() => {
 	getProjectList();
+	mitt.on('updateProjectCheck', updateCheck);
 });
 const {loading} = toRefs(state);
 </script>

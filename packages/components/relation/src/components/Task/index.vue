@@ -75,12 +75,22 @@
 </template>
 
 <script setup lang='ts'>
-import {ref, watch, computed, reactive, toRaw, toRefs, onMounted} from 'vue';
+import {
+	ref,
+	watch,
+	computed,
+	reactive,
+	toRaw,
+	toRefs,
+	onMounted,
+	watchEffect,
+} from 'vue';
 import {GET_TASK_LIST} from '@/api/api';
 import {taskStatusEnum} from '../../enum';
 import {debounce} from '@/utils/utils';
 import {SearchOutlined} from '@ant-design/icons-vue';
 import {ITaskTableColumns, Key} from '../../type';
+import mitt from '@/utils/eventBus';
 
 const props = defineProps({
 	info: {
@@ -166,6 +176,7 @@ const columns = [
 	},
 ];
 const tableData = ref([]);
+const disableCheck = ref([]);
 const filterContent = reactive({
 	curAngle: 'ALL',
 	taskName: '',
@@ -219,7 +230,8 @@ const getTaskList = async () => {
 		const disableId = res.data.resultList
 			.filter((item) => !item.link)
 			.map((list) => list.id);
-		state.selectedRowKeys = [...disableId, ...(props.defaultChecked as Key[])];
+		disableCheck.value = disableId;
+		updateCheck();
 		state.loading = false;
 		pagination.totalNum = res.data.totalItem;
 	}
@@ -230,10 +242,15 @@ const selectPopover = (val) => {
 };
 const searchName = debounce(getTaskList, 500);
 
-// onMounted(() => {
-// 	getTaskList();
-// 	//   getTaskCount();
-// });
+const updateCheck = (defaultChecked = props.defaultChecked) => {
+	state.selectedRowKeys = [...disableCheck.value, ...defaultChecked];
+};
+
+onMounted(() => {
+	// 	getTaskList();
+	// 	//   getTaskCount();
+	mitt.on('updateTaskCheck', updateCheck);
+});
 
 watch(
 	[
