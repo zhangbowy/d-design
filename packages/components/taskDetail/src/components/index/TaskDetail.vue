@@ -343,8 +343,8 @@
 </template>
 
 <script setup>
-import { ref, reactive, toRefs, watch, onMounted, onBeforeUnmount } from 'vue';
-import { UP_DATA_TASK, GET_RELEVANCE_CNT } from '../../api';
+import { ref, reactive, toRefs, watch } from 'vue';
+import { UP_DATA_TASK, GET_RELEVANCE_CNT, DELETE_TASK } from '../../api';
 import {
 	checkNullObj,
 	formatDate,
