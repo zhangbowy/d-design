@@ -12,7 +12,7 @@
 						class="operation-icon"></iconpark-icon>
 				</a-popover> -->
                 <a-popover
-                    v-if="taskDetail.status === 'PROCESS' || (isShowDelete && (role === 'CREATE' || role === 'FOR_CREATE'))"
+                    v-if="taskDetail.status === 'NOT_BEGIN' || (isShowDelete && (role === 'CREATE' || role === 'FOR_CREATE'))"
                     :getPopupContainer="(triggerNode) => triggerNode.parentNode"
                     trigger="click"
                 >
@@ -20,7 +20,7 @@
                         <ul class="task-action">
                             <li>
                             <span
-                                v-if="taskDetail.status === 'PROCESS'"
+                                v-if="taskDetail.status === 'NOT_BEGIN'"
                                 class="termination-task"
                                 @click="handleReloadTask(true)"
                                 >终止任务</span
@@ -35,7 +35,7 @@
                         </ul>
                     </template>
                     <iconpark-icon
-                        v-if="taskDetail.status === 'PROCESS' || isShowDelete"
+                        v-if="taskDetail.status === 'NOT_BEGIN' || isShowDelete"
                         name="gengduo"
                         class="operation-icon"
                     ></iconpark-icon>
@@ -338,7 +338,7 @@
 	<Relation v-model:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :info="relation.info"
 		@successCallback="relationConfirm" />
 	<LookRelation v-model:visible="lookRelation.visible" :tabs="['OKR', 'PROJECT']" :info="lookRelation.info"
-		:isSureRelation="trait !== 'PROJECT'" :isOperate="taskDetail?.role != 'INDEPENDENT'"
+		:isSureRelation="trait !== 'PROJECT'" :isOperate="taskDetail?.role != 'INDEPENDENT' && taskDetail?.role != 'EXECUTE'"
 		@lookDetailCallback="lookDetailCallback" @refreshList="refreshList" />
 </template>
 
@@ -368,6 +368,7 @@ import LookRelation from '@/components/lookRelation/index';
 import * as dd from 'dingtalk-jsapi';
 
 dayjs.locale('zh-cn');
+let timer = null;
 
 const props = defineProps({
 	visible: Boolean,
@@ -547,6 +548,20 @@ const customCycleValue = ref(''); //save custom cycle value
 const spinning = ref(false); //upload files loading control
 const relationCallback = ref({});
 const relationArr = ref([]);
+const isShowDelete = ref(false);
+
+// onMounted(()=> {
+//     // setTimeout(()=> {
+//     //     // const lsgStr = localStorage.getItem('QZP_GLOBAL_CFG') || ''
+//     //     // const lsg = lsgStr && JSON.parse(lsgStr)
+//     //     // isShowDelete.value = lsg.deletePermissionsCommand?.open || false;
+// 	// 	isShowDelete.value = false;
+//     // }, 500)
+
+// })
+// onBeforeUnmount(()=> {
+//     // timer && clearTimeout(timer)
+// })
 
 watch(
 	() => props.visible,
@@ -714,7 +729,7 @@ const handleDeletePri = () => {
 const confirmDeadline = (time) => {
 	taskFrom.abortTime = formatDate(new Date(time));
 	taskFrom.dayFormat = dayjs(taskFrom.abortTime);
-    remindOptions.value[0].choose = true
+    remindOptions.value[0].choose = true;
 };
 
 /**
@@ -1337,19 +1352,6 @@ const judgeCorBtnShow = () => {
 /****
  * 删除任务
  * ****/
- let timer = null
-onMounted(()=> {
-    setTimeout(()=> {
-        const lsgStr = localStorage.getItem('QZP_GLOBAL_CFG') || ''
-        const lsg = lsgStr && JSON.parse(lsgStr)
-        isShowDelete.value = lsg.deletePermissionsCommand?.open || false
-    }, 500)
-
-})
-onBeforeUnmount(()=> {
-    timer && clearTimeout(timer)
-})
-const isShowDelete = ref(false)
 const handleDeleteTask = (row) => {
     Modal.confirm({
         title: `确认要删除此任务及其子任务吗？`,
@@ -1360,11 +1362,10 @@ const handleDeleteTask = (row) => {
             }
             const { code, data } =  await DELETE_TASK(params)
             if(code === 1) {
-                emit("closeDrawer");
+                emit("successChange");
+				emit("saveCurTaskId", null)
                 message.success("删除成功");
                 loading.value = false;
-                mitt.emit("reloadTask");
-                store.commit("UPDATE_TASK_ID", null);
             }
         }
     })
