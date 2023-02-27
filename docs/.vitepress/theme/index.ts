@@ -12,14 +12,14 @@ import DefaultTheme from 'vitepress/theme'
 import { computed, defineAsyncComponent } from 'vue'
 import { inBrowser } from 'vitepress'
 // const Ddesign = defineAsyncComponent(() => import('../../../dist/pu-ui.es.js'))
-import  Ddesign from '../../../dist/pu-ui.es.js'
+// import  Ddesign from '../../../dist/pu-ui.es.js'
 // const Ddesign = import('../../../dist/pu-ui.es.js')
 
 export default {
     ...DefaultTheme,
     enhanceApp({Vue, app }) {
         app.use(DevUI)
-        app.use(Ddesign)
+        // app.use(Ddesign)
         // Ddesign = import('../../../dist/pu-ui.es.js').then(m => {
         // })
         registerComponents(app)
