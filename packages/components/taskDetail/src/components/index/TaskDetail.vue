@@ -287,7 +287,7 @@
 			</div>
 		</div>
 		<!-- add correlation -->
-		<div v-if="trait !== 'QZP'" class="add-correlation">
+		<div v-if="trait !== 'QZP' && (taskDetail.type == 'MAIN_TASK' || (taskDetail.type == 'SUB_TASK' && renderCorText()))" class="add-correlation">
 			<span class="public-title">关联项</span>
 			<div v-if="!renderCorText() && judgeCorBtnShow()"
 				class="add-cor-btn" @click="handleAddRelation()">
