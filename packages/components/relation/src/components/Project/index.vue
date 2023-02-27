@@ -160,7 +160,7 @@ const searchName = debounce(getProjectList, 500);
 watch(projectName, searchName);
 watch([curStatus], getProjectList);
 watchEffect(() => {
-	if (props.defaultChecked) {
+	if (props.info.id) {
 		state.selectedRowKeys = [
 			...disableCheck.value,
 			...(props.defaultChecked as Key[]),

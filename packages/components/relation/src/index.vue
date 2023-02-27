@@ -28,6 +28,7 @@
 					@handelCheckedCallback="handelCheckedCallback"
 					v-if="tabs.includes('OKR')"
 					:info="info"
+					:curPeriodId="curPeriodId"
 					:defaultChecked="defaultChecked.okrDefaultCheck"
 					v-show="curTab == 'OKR'" />
 				<Project
@@ -118,6 +119,11 @@ const props = defineProps({
 			taskDefaultCheck: [],
 			projectDefaultCheck: [],
 		},
+	},
+	// 周期id
+	curPeriodId: {
+		type: String,
+		default: '',
 	},
 	zIndex: {
 		type: Number,

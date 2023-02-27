@@ -127,15 +127,20 @@ export default {
 		timer = setTimeout(() => {
 			this.renderPeriod = renderPeriod(this.all, this.renderAll);
 			this.$nextTick(() => {
-				if (this.immediate) {
-					this.initPeriod();
+				if (this.all) {
+					this.currentPeriodId = this.curPeriodId || this.curYear + '0000';
 				} else {
-					if (this.all) {
-						this.currentPeriodId = this.curPeriodId || this.curYear + '0000';
-					} else {
-						this.currentPeriodId = this.curPeriodId || this.curYear + '0101';
-					}
+					this.currentPeriodId = this.curPeriodId || this.curYear + '0101';
 				}
+				// if (this.immediate) {
+				// 	this.initPeriod();
+				// } else {
+				// 	if (this.all) {
+				// 		this.currentPeriodId = this.curPeriodId || this.curYear + '0000';
+				// 	} else {
+				// 		this.currentPeriodId = this.curPeriodId || this.curYear + '0101';
+				// 	}
+				// }
 			});
 		}, 500);
 	},
@@ -326,14 +331,14 @@ export default {
 		 * 后续操作
 		 * */
 		nextDo() {
-			if (this.immediate) {
-				//存储VUEX
-				this.$store.dispatch('setPeriodInfo', {
-					curPeriodId: this.currentPeriodId,
-					curYear: this.curYear,
-					curPeriodText: this.curPeriodText,
-				});
-			}
+			// if (this.immediate) {
+			// 	//存储VUEX
+			// 	this.$store.dispatch('setPeriodInfo', {
+			// 		curPeriodId: this.currentPeriodId,
+			// 		curYear: this.curYear,
+			// 		curPeriodText: this.curPeriodText,
+			// 	});
+			// }
 			//初始化OKR列表
 			this.$emit('updatePeriodInfo', {
 				curPeriodId: this.currentPeriodId,
@@ -354,8 +359,8 @@ export default {
 			//选中之后弹层消失
 			this.visible = false;
 			// 仅在我的OKR页面中 存储在localStorage
-			this.immediate &&
-				localStorage.setItem('QZZ_CURPERIOD', this.currentPeriodId);
+			// this.immediate &&
+			// 	localStorage.setItem('QZZ_CURPERIOD', this.currentPeriodId);
 			//存储操作
 			this.nextDo();
 			// 我的指派选择周期之后刷新

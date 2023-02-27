@@ -4,6 +4,7 @@
 			<PeriodList
 				id="myokr-period"
 				:all="false"
+				:curPeriodId="curPeriodId"
 				@updatePeriodInfo="queryOKRByUserId"
 				icon="qzz_icon_guize1">
 				<template #rightIcon>
@@ -100,17 +101,26 @@ const props = defineProps({
 		type: Array,
 		default: [],
 	},
+	curPeriodId: {
+		type: String,
+		default: '',
+	},
 });
-const emit = defineEmits(['handelRelationCallback', 'handelCheckedCallback']);
+const emit = defineEmits([
+	'handelRelationCallback',
+	'handelCheckedCallback',
+	'updateCheckList',
+]);
 // 周期改变
 const queryOKRByUserId = (info: {curPeriodId: string}) => {
 	getOkrList(info.curPeriodId);
 };
 // 获取列表
 const getOkrList = async (periodId?: string) => {
+	console.log('periodId', periodId);
 	loading.value = true;
 	const params = {
-		periodId,
+		periodId: periodId || props.curPeriodId,
 		processStatus: 'OKR_PURSUE',
 		curPage: 1,
 		pageSize: 1000,
@@ -173,7 +183,7 @@ const handelRelatedChange = (e: CheckboxChangeEvent) => {
 	getOkrList();
 };
 watchEffect(() => {
-	if (props.defaultChecked) {
+	if (props.info.id) {
 		checkList.value = [...props.defaultChecked, ...disableCheckbox.value];
 	}
 });

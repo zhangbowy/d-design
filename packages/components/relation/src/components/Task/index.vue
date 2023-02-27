@@ -240,7 +240,7 @@ const selectPopover = (val) => {
 };
 const searchName = debounce(getTaskList, 500);
 watchEffect(() => {
-	if (props.defaultChecked) {
+	if (props.info.id) {
 		state.selectedRowKeys = [
 			...disableCheck.value,
 			...(props.defaultChecked as Key[]),
