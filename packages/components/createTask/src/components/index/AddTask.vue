@@ -504,6 +504,8 @@ const handleDeletePri = () => {
 const confirmDeadline = (time) => {
 	taskFrom.abortTime = formatDate(new Date(time));
 	taskFrom.dayFormat = dayjs(taskFrom.abortTime);
+    remindOptions.value[0].choose = true
+    taskFrom.selectArr = ['10']
 };
 
 /**
@@ -519,6 +521,9 @@ const confirmStartTime = (time) => {
 const handleDelAbortTime = () => {
 	taskFrom.abortTime = '';
 	taskFrom.dayFormat = null;
+    remindOptions.value.forEach((el) => {
+		el.choose = false
+	});
 };
 /**
  * handle select option change event

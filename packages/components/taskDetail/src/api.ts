@@ -24,3 +24,8 @@ export const UP_DATA_TASK = (data) => {
 export const GET_RELEVANCE_CNT = (params) => {
     return http("/api/spf-cc/qzp/getRelevanceCount", { method: "get", params });
 };
+
+/****删除任务******/
+export const DELETE_TASK = (params) => {
+    return http("/api/spf-cc/qzp/deleteTask", { method: "get", params });
+}

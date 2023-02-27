@@ -4,13 +4,42 @@
 		<template #title>
 			<div class="task-detail-title">
 				<span>{{ title }}</span>
-				<a-popover :getPopupContainer="(triggerNode) => triggerNode.parentNode" trigger="click">
+				<!-- <a-popover :getPopupContainer="(triggerNode) => triggerNode.parentNode" trigger="click">
 					<template #content>
 						<span class="termination-task" @click="handleReloadTask(true)">终止任务</span>
 					</template>
 					<iconpark-icon v-if="taskDetail.status === 'NOT_BEGIN'" name="gengduo"
 						class="operation-icon"></iconpark-icon>
-				</a-popover>
+				</a-popover> -->
+                <a-popover
+                    v-if="taskDetail.status === 'PROCESS' || (isShowDelete && (role === 'CREATE' || role === 'FOR_CREATE'))"
+                    :getPopupContainer="(triggerNode) => triggerNode.parentNode"
+                    trigger="click"
+                >
+                    <template #content>
+                        <ul class="task-action">
+                            <li>
+                            <span
+                                v-if="taskDetail.status === 'PROCESS'"
+                                class="termination-task"
+                                @click="handleReloadTask(true)"
+                                >终止任务</span
+                            >
+                            </li>
+                            <li v-if="isShowDelete && (role === 'CREATE' || role === 'FOR_CREATE')">
+                                <span
+                                    class="termination-task delete-task-btn"
+                                    @click="handleDeleteTask"
+                                >删除任务</span>
+                            </li>
+                        </ul>
+                    </template>
+                    <iconpark-icon
+                        v-if="taskDetail.status === 'PROCESS' || isShowDelete"
+                        name="gengduo"
+                        class="operation-icon"
+                    ></iconpark-icon>
+                </a-popover>
 			</div>
 		</template>
 		<!-- input box -->
@@ -314,7 +343,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, toRefs, watch } from 'vue';
+import { ref, reactive, toRefs, watch, onMounted, onBeforeUnmount } from 'vue';
 import { UP_DATA_TASK, GET_RELEVANCE_CNT } from '../../api';
 import {
 	checkNullObj,
@@ -685,6 +714,7 @@ const handleDeletePri = () => {
 const confirmDeadline = (time) => {
 	taskFrom.abortTime = formatDate(new Date(time));
 	taskFrom.dayFormat = dayjs(taskFrom.abortTime);
+    remindOptions.value[0].choose = true
 };
 
 /**
@@ -1218,7 +1248,7 @@ const getRelevanceCnt = async () => {
 
 /**
  * handle add link callback
- * @param {Object} data 
+ * @param {Object} data
  */
 const relationConfirm = (data) => {
 	relationCallback.value = data;
@@ -1277,8 +1307,8 @@ const handleCheckRelation = () => {
 
 /**
  * handle check relation detail event
- * @param {Object} item 
- * @param {String} type 
+ * @param {Object} item
+ * @param {String} type
  */
 const lookDetailCallback = (item, type) => {
 	emit("checkRelationDetail", item, type);
@@ -1302,6 +1332,45 @@ const judgeCorBtnShow = () => {
 	}
 	return bol;
 };
+
+
+/****
+ * 删除任务
+ * ****/
+ let timer = null
+onMounted(()=> {
+    setTimeout(()=> {
+        const lsgStr = localStorage.getItem('QZP_GLOBAL_CFG') || ''
+        const lsg = lsgStr && JSON.parse(lsgStr)
+        isShowDelete.value = lsg.deletePermissionsCommand?.open || false
+    }, 500)
+
+})
+onBeforeUnmount(()=> {
+    timer && clearTimeout(timer)
+})
+const isShowDelete = ref(false)
+const handleDeleteTask = (row) => {
+    Modal.confirm({
+        title: `确认要删除此任务及其子任务吗？`,
+        content: '（任务删除后不可恢复，请谨慎操作）',
+        onOk: async()=>{
+            const params = {
+                taskId: taskFrom.id
+            }
+            const { code, data } =  await DELETE_TASK(params)
+            if(code === 1) {
+                emit("closeDrawer");
+                message.success("删除成功");
+                loading.value = false;
+                mitt.emit("reloadTask");
+                store.commit("UPDATE_TASK_ID", null);
+            }
+        }
+    })
+}
+
+
 const {
 	content,
 	createUser,

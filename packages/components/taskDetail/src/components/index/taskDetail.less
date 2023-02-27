@@ -832,4 +832,16 @@
             }
         }
     }
+    // 删除
+    .task-action{
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        .delete-task-btn{
+            color: @error;
+            &.termination-task:hover {
+                color: @error !important;
+            }
+        }
+    }
 }
