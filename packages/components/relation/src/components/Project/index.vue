@@ -55,6 +55,7 @@ import {PROJECT_STATUS} from '../../enum';
 import {GET_PROJECT} from '@/api/api';
 import {ITableColumns, Key} from '../../type';
 import {SearchOutlined} from '@ant-design/icons-vue';
+import mitt from '@/utils/eventBus';
 
 const columns = [
 	{
@@ -153,22 +154,20 @@ const getProjectList = async () => {
 			.filter((item) => !item.link)
 			.map((list) => list.projectId);
 		disableCheck.value = disableId;
-		state.loading = false;
+		updateCheck();
 	}
 };
 const searchName = debounce(getProjectList, 500);
 watch(projectName, searchName);
 watch([curStatus], getProjectList);
-watchEffect(() => {
-	if (props.info.id) {
-		state.selectedRowKeys = [
-			...disableCheck.value,
-			...(props.defaultChecked as Key[]),
-		];
-	}
-});
+
+const updateCheck = (defaultChecked = props.defaultChecked) => {
+	state.selectedRowKeys = [...disableCheck.value, ...defaultChecked];
+};
+
 onMounted(() => {
 	getProjectList();
+	mitt.on('updateProjectCheck', updateCheck);
 });
 const {loading} = toRefs(state);
 </script>
