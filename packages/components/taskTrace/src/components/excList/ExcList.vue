@@ -273,7 +273,7 @@ const handlePress = () => {
 		users,
 		content,
 		props.taskData.id,
-		porps.trait,
+		props.trait,
 		true,
 		keyEventUrgeCommand
 	);
