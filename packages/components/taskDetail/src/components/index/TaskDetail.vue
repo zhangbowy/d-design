@@ -336,7 +336,7 @@
 	<!-- upload file list -->
 	<FileListVue :appendixShow="files.show" :accessory="files.accessory" @hideFiles="hideCommentFiles" />
 	<Relation v-model:visible="relation.visible" :tabs="['OKR', 'PROJECT']" :info="relation.info"
-		@successCallback="relationConfirm" />
+		@refreshList="relationConfirm" />
 	<LookRelation v-model:visible="lookRelation.visible" :tabs="['OKR', 'PROJECT']" :info="lookRelation.info"
 		:isSureRelation="trait !== 'PROJECT'" :isOperate="taskDetail?.role != 'INDEPENDENT' && taskDetail?.role != 'EXECUTE'"
 		@lookDetailCallback="lookDetailCallback" @refreshList="refreshList" />
@@ -1265,8 +1265,7 @@ const getRelevanceCnt = async () => {
  * handle add link callback
  * @param {Object} data
  */
-const relationConfirm = (data) => {
-	relationCallback.value = data;
+const relationConfirm = () => {
 	getRelevanceCnt();
 };
 
