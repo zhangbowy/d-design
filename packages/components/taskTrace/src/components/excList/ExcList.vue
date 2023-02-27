@@ -103,6 +103,11 @@ const props = defineProps({
 	groupId: String,
 	taskData: Object,
 	trait: String,
+	env: {
+		type: String,
+		default: 'prod',
+		required: false
+	}
 });
 
 const emit = defineEmits(['closeExcList']);
@@ -250,7 +255,7 @@ const handleUnread = () => {
 		if (index == 0) content = el.content;
 		if (!el.read) users.push(el.userDTO);
 	});
-	handleRemindDD(users, content, props.taskData.id, props.trait);
+	handleRemindDD(users, content, props.taskData.id, props.trait, props.env);
 };
 
 /**
@@ -274,6 +279,7 @@ const handlePress = () => {
 		content,
 		props.taskData.id,
 		props.trait,
+		props.env,
 		true,
 		keyEventUrgeCommand
 	);

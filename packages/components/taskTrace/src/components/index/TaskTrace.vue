@@ -390,6 +390,7 @@
 	<ExcListVue
 		:visible="excList.visible"
 		:groupId="excList.groupId"
+		:trait="trait"
 		:taskData="taskData"
 		@closeExcList="closeExcList" />
 	<!-- key event component -->
@@ -443,6 +444,11 @@ const props = defineProps({
 		default: 'QZP',
 		required: true,
 	},
+	env: {
+		type: String,
+		default: 'prod',
+		required: false
+	}
 });
 const showComment = ref(true);
 const commentValue = ref('');
@@ -791,6 +797,7 @@ const handleDDRemind = (user, content, read = true) => {
 		content,
 		props.taskData.id,
 		props.trait,
+		props.env,
 		true,
 		keyEventUrgeCommand
 	);
