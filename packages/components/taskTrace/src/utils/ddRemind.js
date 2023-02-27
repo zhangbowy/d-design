@@ -11,6 +11,7 @@ export const handleRemindDD = (
     content,
     taskId,
     trait,
+    env,
     press = false,
     keyEventUrgeCommand = null
 ) => {
@@ -20,7 +21,7 @@ export const handleRemindDD = (
     let clientId = getQueryVariable("clientId");
     let ddAppId = appId.substring(2);
     let appUrl = `dingtalk://dingtalkclient/action/openapp?corpid=${corpId}&container_type=work_platform&app_id=${ddAppId}&redirect_type=emit_params&params=&redirect_url=${encodeURIComponent(
-        `https://qzz-static.forwe.store/public-assets/coolapp.html?corpId=${corpId}&appId=${appId}&clientId=${clientId}&taskId=${taskId}&app=${trait}&mode=${import.meta.env.MODE}`
+        `https://qzz-static.forwe.store/public-assets/coolapp.html?corpId=${corpId}&appId=${appId}&clientId=${clientId}&taskId=${taskId}&app=${trait}&mode=${env}`
     )}`;
     console.log(appUrl,user,
         content,

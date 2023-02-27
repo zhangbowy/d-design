@@ -386,7 +386,7 @@ const props = defineProps({
 	width: {
 		type: Number,
 		default: 480,
-	},
+	}
 });
 const emit = defineEmits(['closeDrawer', 'successCreate']);
 

@@ -444,6 +444,11 @@ const props = defineProps({
 		default: 'QZP',
 		required: true,
 	},
+	env: {
+		type: String,
+		default: 'prod',
+		required: false
+	}
 });
 const showComment = ref(true);
 const commentValue = ref('');
@@ -792,6 +797,7 @@ const handleDDRemind = (user, content, read = true) => {
 		content,
 		props.taskData.id,
 		props.trait,
+		props.env,
 		true,
 		keyEventUrgeCommand
 	);
